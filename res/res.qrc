@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/"/>
+    <qresource prefix="/icon">
+        <file>server-icon.png</file>
+        <file>server-icon_16.png</file>
+    </qresource>
+    <qresource prefix="/tr">
+        <file>sm_de.qm</file>
+        <file>qt_de.qm</file>
+        <file>qtbase_de.qm</file>
+        <file>qtmultimedia_de.qm</file>
+    </qresource>
+</RCC>
