@@ -27,11 +27,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     frmServerManager.cpp \
-    frmIcon.cpp
+    frmIcon.cpp \
+    ServerManager.cpp
 
 HEADERS  += frmServerManager.h \
     frmIcon.h \
-    config.h
+    config.h \
+    ServerManager.h
 
 FORMS    += frmServerManager.ui \
     frmIcon.ui
