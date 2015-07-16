@@ -25,7 +25,7 @@ TARGET = ServerManager
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
     frmServerManager.cpp \
     frmIcon.cpp \
     ServerManager.cpp
