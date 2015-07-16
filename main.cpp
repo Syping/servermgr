@@ -16,13 +16,15 @@
 *****************************************************************************/
 
 #include "frmServerManager.h"
+#include "ServerManager.h"
+#include "config.h"
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
 #include <QDebug>
 #include <QFile>
 #include <QDir>
-#include "config.h"
 
 int main(int argc, char *argv[])
 {
