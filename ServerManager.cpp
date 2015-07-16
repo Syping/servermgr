@@ -24,14 +24,300 @@
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
     configFile = new QSettings(ProductVendor,ProductName);
+    ServerManagerMode = LocalMode;
 }
 
 QStringList ServerManager::getServerList()
 {
-    return configFile->value("serverList",QStringList()).toStringList();
+    if (ServerManagerMode == LocalMode)
+    {
+        return getServerListLocal();
+    }
+    else
+    {
+
+    }
 }
 
 QString ServerManager::getIconPath(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getIconPathLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::addServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return addServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::deleteServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        deleteServerLocal(serverName);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getStartCommand(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getStartCommandLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setStartCommand(QString serverName, QString startCommand)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setStartCommandLocal(serverName, startCommand);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getStopCommand(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getStopCommandLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setStopCommand(QString serverName, QString stopCommand)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setStopCommandLocal(serverName, stopCommand);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getConfigCommand(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getConfigCommandLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setConfigCommand(QString serverName, QString configCommand)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setConfigCommandLocal(serverName, configCommand);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getUpdateCommand(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getUpdateCommandLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setUpdateCommand(QString serverName, QString updateCommand)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setUpdateCommandLocal(serverName, updateCommand);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getAttachCommand(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getAttachCommandLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setAttachCommand(QString serverName, QString attachCommand)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setAttachCommandLocal(serverName, attachCommand);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::startServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return startServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::stopServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return stopServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::configServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return configServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::updateServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return updateServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::attachServer(QString serverName)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return attachServerLocal(serverName);
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setIconPath(QString serverName, QString iconPath)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setIconPathLocal(serverName, iconPath);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QString ServerManager::getAdminPasswordHash()
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getAdminPasswordHashLocal();
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setAdminPasswordHash(QString passwordHash)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setAdminPasswordHashLocal(passwordHash);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+bool ServerManager::setAdminPassword(QString password)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        setAdminPasswordLocal(password);
+        return true;
+    }
+    else
+    {
+
+    }
+}
+
+QStringList ServerManager::getServerListLocal()
+{
+    return configFile->value("serverList",QStringList()).toStringList();
+}
+
+QString ServerManager::getIconPathLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString iconPath = configFile->value("icon",ProductImg).toString();
@@ -39,7 +325,7 @@ QString ServerManager::getIconPath(QString serverName)
     return iconPath;
 }
 
-bool ServerManager::addServer(QString serverName)
+bool ServerManager::addServerLocal(QString serverName)
 {
     QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
     if (!serverList.contains(serverName))
@@ -51,7 +337,7 @@ bool ServerManager::addServer(QString serverName)
     return false;
 }
 
-void ServerManager::deleteServer(QString serverName)
+void ServerManager::deleteServerLocal(QString serverName)
 {
     QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
     serverList.removeAll(serverName);
@@ -65,7 +351,7 @@ void ServerManager::deleteServer(QString serverName)
     configFile->endGroup();
 }
 
-QString ServerManager::getStartCommand(QString serverName)
+QString ServerManager::getStartCommandLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverStart = configFile->value("start").toString();
@@ -73,14 +359,14 @@ QString ServerManager::getStartCommand(QString serverName)
     return serverStart;
 }
 
-void ServerManager::setStartCommand(QString serverName, QString startCommand)
+void ServerManager::setStartCommandLocal(QString serverName, QString startCommand)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("start", startCommand);
     configFile->endGroup();
 }
 
-QString ServerManager::getStopCommand(QString serverName)
+QString ServerManager::getStopCommandLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverStop = configFile->value("stop").toString();
@@ -88,14 +374,14 @@ QString ServerManager::getStopCommand(QString serverName)
     return serverStop;
 }
 
-void ServerManager::setStopCommand(QString serverName, QString stopCommand)
+void ServerManager::setStopCommandLocal(QString serverName, QString stopCommand)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("stop", stopCommand);
     configFile->endGroup();
 }
 
-QString ServerManager::getConfigCommand(QString serverName)
+QString ServerManager::getConfigCommandLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverConfig = configFile->value("config").toString();
@@ -103,14 +389,14 @@ QString ServerManager::getConfigCommand(QString serverName)
     return serverConfig;
 }
 
-void ServerManager::setConfigCommand(QString serverName, QString configCommand)
+void ServerManager::setConfigCommandLocal(QString serverName, QString configCommand)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("config", configCommand);
     configFile->endGroup();
 }
 
-QString ServerManager::getUpdateCommand(QString serverName)
+QString ServerManager::getUpdateCommandLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverUpdate = configFile->value("update").toString();
@@ -118,14 +404,14 @@ QString ServerManager::getUpdateCommand(QString serverName)
     return serverUpdate;
 }
 
-void ServerManager::setUpdateCommand(QString serverName, QString updateCommand)
+void ServerManager::setUpdateCommandLocal(QString serverName, QString updateCommand)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("update", updateCommand);
     configFile->endGroup();
 }
 
-QString ServerManager::getAttachCommand(QString serverName)
+QString ServerManager::getAttachCommandLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverAttach = configFile->value("attach").toString();
@@ -133,14 +419,14 @@ QString ServerManager::getAttachCommand(QString serverName)
     return serverAttach;
 }
 
-void ServerManager::setAttachCommand(QString serverName, QString attachCommand)
+void ServerManager::setAttachCommandLocal(QString serverName, QString attachCommand)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("attach", attachCommand);
     configFile->endGroup();
 }
 
-bool ServerManager::startServer(QString serverName)
+bool ServerManager::startServerLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverStart = configFile->value("start","").toString();
@@ -154,7 +440,7 @@ bool ServerManager::startServer(QString serverName)
     return false;
 }
 
-bool ServerManager::stopServer(QString serverName)
+bool ServerManager::stopServerLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverStop = configFile->value("stop","").toString();
@@ -168,7 +454,7 @@ bool ServerManager::stopServer(QString serverName)
     return false;
 }
 
-bool ServerManager::configServer(QString serverName)
+bool ServerManager::configServerLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverConfig = configFile->value("config","").toString();
@@ -182,7 +468,7 @@ bool ServerManager::configServer(QString serverName)
     return false;
 }
 
-bool ServerManager::updateServer(QString serverName)
+bool ServerManager::updateServerLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverUpdate = configFile->value("update","").toString();
@@ -196,7 +482,7 @@ bool ServerManager::updateServer(QString serverName)
     return false;
 }
 
-bool ServerManager::attachServer(QString serverName)
+bool ServerManager::attachServerLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
     QString serverAttach = configFile->value("attach","").toString();
@@ -210,14 +496,14 @@ bool ServerManager::attachServer(QString serverName)
     return false;
 }
 
-void ServerManager::setIconPath(QString serverName, QString iconPath)
+void ServerManager::setIconPathLocal(QString serverName, QString iconPath)
 {
     configFile->beginGroup("server " + serverName);
     configFile->setValue("icon", iconPath);
     configFile->endGroup();
 }
 
-QString ServerManager::getAdminPasswordHash()
+QString ServerManager::getAdminPasswordHashLocal()
 {
     configFile->beginGroup("auth");
     QString passwordHash = configFile->value("password","").toString();
@@ -225,14 +511,14 @@ QString ServerManager::getAdminPasswordHash()
     return passwordHash;
 }
 
-void ServerManager::setAdminPasswordHash(QString passwordHash)
+void ServerManager::setAdminPasswordHashLocal(QString passwordHash)
 {
     configFile->beginGroup("auth");
     configFile->setValue("password", passwordHash);
     configFile->endGroup();
 }
 
-void ServerManager::setAdminPassword(QString password)
+void ServerManager::setAdminPasswordLocal(QString password)
 {
     configFile->beginGroup("auth");
     configFile->setValue("password", getPasswordHashFromString(password));
