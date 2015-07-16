@@ -22,6 +22,12 @@
 #include <QSettings>
 #include <QObject>
 
+#ifdef DISABLE_SSL
+#include <QTcpSocket>
+#else
+#include <QSslSocket>
+#endif
+
 class ServerManager : public QObject
 {
     Q_OBJECT
@@ -29,6 +35,8 @@ class ServerManager : public QObject
 
 public:
     explicit ServerManager(QObject *parent = 0);
+
+    // Server Manager Public
     QStringList getServerList();
     QString getIconPath(QString serverName);
     bool addServer(QString serverName);
@@ -53,6 +61,8 @@ public:
     bool setAdminPasswordHash(QString passwordHash);
     bool setAdminPassword(QString password);
     QString getPasswordHashFromString(QString password);
+    bool isConnected();
+    bool isConnecting();
 
     // Server Manager Mode
     enum SMMode
@@ -63,6 +73,8 @@ public:
     SMMode ServerManagerMode;
 
 private:
+
+    // Server Manager LocalMode
     QStringList getServerListLocal();
     QString getIconPathLocal(QString serverName);
     bool addServerLocal(QString serverName);
@@ -87,12 +99,38 @@ private:
     void setAdminPasswordHashLocal(QString passwordHash);
     void setAdminPasswordLocal(QString password);
 
-signals:
-
-public slots:
+    // Server Manager RemoteMode
+    QStringList getServerListRemote();
+    QString getIconPathRemote(QString serverName);
+    bool addServerRemote(QString serverName);
+    bool deleteServerRemote(QString serverName);
+    QString getStartCommandRemote(QString serverName);
+    bool setStartCommandRemote(QString serverName, QString startCommand);
+    QString getStopCommandRemote(QString serverName);
+    bool setStopCommandRemote(QString serverName, QString stopCommand);
+    QString getConfigCommandRemote(QString serverName);
+    bool setConfigCommandRemote(QString serverName, QString configCommand);
+    QString getUpdateCommandRemote(QString serverName);
+    bool setUpdateCommandRemote(QString serverName, QString updateCommand);
+    QString getAttachCommandRemote(QString serverName);
+    bool setAttachCommandRemote(QString serverName, QString attachCommand);
+    bool startServerRemote(QString serverName);
+    bool stopServerRemote(QString serverName);
+    bool configServerRemote(QString serverName);
+    bool updateServerRemote(QString serverName);
+    bool attachServerRemote(QString serverName);
+    bool setIconPathRemote(QString serverName, QString iconPath);
+    QString getAdminPasswordHashRemote();
+    bool setAdminPasswordHashRemote(QString passwordHash);
+    bool setAdminPasswordRemote(QString password);
 
 private:
     QSettings *configFile;
+#ifdef DISABLE_SSL
+    QTcpSocket *tcpSocket;
+#else
+    QSslSocket *tcpSocket;
+#endif
 };
 
 #endif // SERVERMANAGER_H

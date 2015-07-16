@@ -24,8 +24,15 @@
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
     configFile = new QSettings(ProductVendor,ProductName);
+#ifdef DISABLE_SSL
+    tcpSocket = new QTcpSocket();
+#else
+    tcpSocket = new QSslSocket();
+#endif
     ServerManagerMode = LocalMode;
 }
+
+// Server Manager Public
 
 QStringList ServerManager::getServerList()
 {
@@ -35,7 +42,7 @@ QStringList ServerManager::getServerList()
     }
     else
     {
-
+        return getServerListRemote();
     }
 }
 
@@ -47,7 +54,7 @@ QString ServerManager::getIconPath(QString serverName)
     }
     else
     {
-
+        return getIconPathRemote(serverName);
     }
 }
 
@@ -59,7 +66,7 @@ bool ServerManager::addServer(QString serverName)
     }
     else
     {
-
+        return addServerRemote(serverName);
     }
 }
 
@@ -72,7 +79,7 @@ bool ServerManager::deleteServer(QString serverName)
     }
     else
     {
-
+        return deleteServerRemote(serverName);
     }
 }
 
@@ -84,7 +91,7 @@ QString ServerManager::getStartCommand(QString serverName)
     }
     else
     {
-
+        return getStartCommandRemote(serverName);
     }
 }
 
@@ -97,7 +104,7 @@ bool ServerManager::setStartCommand(QString serverName, QString startCommand)
     }
     else
     {
-
+        return setStartCommandRemote(serverName, startCommand);
     }
 }
 
@@ -109,7 +116,7 @@ QString ServerManager::getStopCommand(QString serverName)
     }
     else
     {
-
+        return getStopCommandRemote(serverName);
     }
 }
 
@@ -122,7 +129,7 @@ bool ServerManager::setStopCommand(QString serverName, QString stopCommand)
     }
     else
     {
-
+        return setStopCommandRemote(serverName, stopCommand);
     }
 }
 
@@ -134,7 +141,7 @@ QString ServerManager::getConfigCommand(QString serverName)
     }
     else
     {
-
+        return getConfigCommandRemote(serverName);
     }
 }
 
@@ -147,7 +154,7 @@ bool ServerManager::setConfigCommand(QString serverName, QString configCommand)
     }
     else
     {
-
+        return setConfigCommandRemote(serverName, configCommand);
     }
 }
 
@@ -159,7 +166,7 @@ QString ServerManager::getUpdateCommand(QString serverName)
     }
     else
     {
-
+        return getUpdateCommandRemote(serverName);
     }
 }
 
@@ -172,7 +179,7 @@ bool ServerManager::setUpdateCommand(QString serverName, QString updateCommand)
     }
     else
     {
-
+        return setUpdateCommandRemote(serverName, updateCommand);
     }
 }
 
@@ -184,7 +191,7 @@ QString ServerManager::getAttachCommand(QString serverName)
     }
     else
     {
-
+        return getAttachCommandRemote(serverName);
     }
 }
 
@@ -197,7 +204,7 @@ bool ServerManager::setAttachCommand(QString serverName, QString attachCommand)
     }
     else
     {
-
+        return setAttachCommandRemote(serverName, attachCommand);
     }
 }
 
@@ -209,7 +216,7 @@ bool ServerManager::startServer(QString serverName)
     }
     else
     {
-
+        return startServerRemote(serverName);
     }
 }
 
@@ -221,7 +228,7 @@ bool ServerManager::stopServer(QString serverName)
     }
     else
     {
-
+        return stopServerRemote(serverName);
     }
 }
 
@@ -233,7 +240,7 @@ bool ServerManager::configServer(QString serverName)
     }
     else
     {
-
+        return configServerRemote(serverName);
     }
 }
 
@@ -245,7 +252,7 @@ bool ServerManager::updateServer(QString serverName)
     }
     else
     {
-
+        return updateServerRemote(serverName);
     }
 }
 
@@ -257,7 +264,7 @@ bool ServerManager::attachServer(QString serverName)
     }
     else
     {
-
+        return attachServerRemote(serverName);
     }
 }
 
@@ -270,7 +277,7 @@ bool ServerManager::setIconPath(QString serverName, QString iconPath)
     }
     else
     {
-
+        return setIconPathRemote(serverName, iconPath);
     }
 }
 
@@ -282,7 +289,7 @@ QString ServerManager::getAdminPasswordHash()
     }
     else
     {
-
+        return getAdminPasswordHashRemote();
     }
 }
 
@@ -295,7 +302,7 @@ bool ServerManager::setAdminPasswordHash(QString passwordHash)
     }
     else
     {
-
+        return setAdminPasswordRemote(passwordHash);
     }
 }
 
@@ -308,9 +315,64 @@ bool ServerManager::setAdminPassword(QString password)
     }
     else
     {
-
+        return setAdminPasswordRemote(password);
     }
 }
+
+QString ServerManager::getPasswordHashFromString(QString password)
+{
+    QCryptographicHash *pwHash = new QCryptographicHash(QCryptographicHash::Md4);
+    pwHash->addData(password.toUtf8());
+    QString hashString = QString::fromUtf8(pwHash->result().toBase64());
+    return hashString;
+}
+
+bool ServerManager::isConnected()
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return true;
+    }
+    else
+    {
+        if (tcpSocket->state() == QAbstractSocket::ConnectedState)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+bool ServerManager::isConnecting()
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return true;
+    }
+    else
+    {
+        if (tcpSocket->state() == QAbstractSocket::ConnectedState)
+        {
+            return true;
+        }
+        else
+        {
+            if (tcpSocket->state() == QAbstractSocket::ConnectingState)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+
+// Server Manager LocalMode
 
 QStringList ServerManager::getServerListLocal()
 {
@@ -525,10 +587,143 @@ void ServerManager::setAdminPasswordLocal(QString password)
     configFile->endGroup();
 }
 
-QString ServerManager::getPasswordHashFromString(QString password)
+// Server Manager RemoteMode
+
+QStringList ServerManager::getServerListRemote()
 {
-    QCryptographicHash *pwHash = new QCryptographicHash(QCryptographicHash::Md4);
-    pwHash->addData(password.toUtf8());
-    QString hashString = QString::fromUtf8(pwHash->result().toBase64());
-    return hashString;
+    // Not finished
+    return QStringList();
 }
+
+QString ServerManager::getIconPathRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::addServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::deleteServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getStartCommandRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setStartCommandRemote(QString serverName, QString startCommand)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getStopCommandRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setStopCommandRemote(QString serverName, QString stopCommand)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getConfigCommandRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setConfigCommandRemote(QString serverName, QString configCommand)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getUpdateCommandRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setUpdateCommandRemote(QString serverName, QString updateCommand)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getAttachCommandRemote(QString serverName)
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setAttachCommandRemote(QString serverName, QString attachCommand)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::startServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::stopServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::configServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::updateServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::attachServerRemote(QString serverName)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::setIconPathRemote(QString serverName, QString iconPath)
+{
+    // Not finished
+    return false;
+}
+
+QString ServerManager::getAdminPasswordHashRemote()
+{
+    // Not finished
+    return QString("");
+}
+
+bool ServerManager::setAdminPasswordHashRemote(QString passwordHash)
+{
+    // Not finished
+    return false;
+}
+
+bool ServerManager::setAdminPasswordRemote(QString password)
+{
+    // Not finished
+    return false;
+}
+
