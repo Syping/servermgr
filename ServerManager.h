@@ -57,7 +57,6 @@ signals:
 public slots:
 
 private:
-    bool isAdmin;
     QSettings *configFile;
 };
 
