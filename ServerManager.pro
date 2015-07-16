@@ -15,7 +15,7 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-QT       += core gui
+QT       += core gui network
 isEqual(QT_MAJOR_VERSION, 5): QT += widgets
 
 isEqual(QT_MAJOR_VERSION, 4): DEFINES += "QT4"
@@ -23,7 +23,6 @@ isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
 TARGET = ServerManager
 TEMPLATE = app
-
 
 SOURCES += main.cpp \
     frmServerManager.cpp \
@@ -43,3 +42,5 @@ RESOURCES += \
 
 TRANSLATIONS += \
     res/sm_de.ts
+
+CONFIG(DisableSSL): DEFINES += DISABLE_SSL
