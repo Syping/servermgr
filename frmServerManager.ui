@@ -104,9 +104,9 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-130</y>
+             <y>0</y>
              <width>143</width>
-             <height>437</height>
+             <height>443</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="vlSawcRight">
@@ -197,7 +197,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="cmdChooseUpdate">
+             <widget class="QPushButton" name="cmdCUpdate">
               <property name="text">
                <string>Choose Update</string>
               </property>

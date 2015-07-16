@@ -20,9 +20,10 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include "ServerManager.h"
 
 namespace Ui {
-class frmServerManager;
+    class frmServerManager;
 }
 
 class frmServerManager : public QMainWindow
@@ -40,7 +41,7 @@ private slots:
     void on_cmdCStart_clicked();
     void on_cmdCStop_clicked();
     void on_cmdCConfig_clicked();
-    void on_cmdChooseUpdate_clicked();
+    void on_cmdCUpdate_clicked();
     void on_cmdStart_clicked();
     void on_cmdStop_clicked();
     void on_cmdConfig_clicked();
@@ -53,7 +54,7 @@ private slots:
 
 private:
     Ui::frmServerManager *ui;
-    QSettings *configFile;
+    ServerManager *smgr;
     QIcon standardIcon;
     bool noAdmin;
 };

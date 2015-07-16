@@ -33,14 +33,13 @@ frmServerManager::frmServerManager(QWidget *parent) :
     ui(new Ui::frmServerManager)
 {
     ui->setupUi(this);
-    configFile = new QSettings(ProductVendor,ProductName);
-    QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
+    smgr = new ServerManager(this);
     standardIcon = QIcon(ProductImg);
     this->setWindowIcon(QIcon(ProductIcon));
+    QStringList serverList = smgr->getServerList();
     foreach (const QString &serverName, serverList)
     {
-        configFile->beginGroup("server " + serverName);
-        QString iconPath = configFile->value("icon",ProductImg).toString();
+        QString iconPath = smgr->getIconPath(serverName);
         QIcon serverIcon;
         if (QFile::exists(iconPath))
         {
@@ -57,7 +56,6 @@ frmServerManager::frmServerManager(QWidget *parent) :
         QListWidgetItem *newItem = new QListWidgetItem(serverName);
         newItem->setIcon(serverIcon);
         ui->lwServer->addItem(newItem);
-        configFile->endGroup();
     }
     setAdminMode(false);
 }
@@ -74,14 +72,11 @@ void frmServerManager::on_cmdNewServer_clicked()
     serverName = QInputDialog::getText(this,tr("New Server"),tr("Please type a name for this server"),QLineEdit::Normal,"",&snok);
     if (snok)
     {
-        QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
-        if (!serverList.contains(serverName))
+        if (smgr->addServer(serverName))
         {
             QListWidgetItem *newItem = new QListWidgetItem(serverName);
             newItem->setIcon(standardIcon);
             ui->lwServer->addItem(newItem);
-            serverList.append(serverName);
-            configFile->setValue("serverList",serverList);
         }
         else
         {
@@ -100,16 +95,7 @@ void frmServerManager::on_cmdDeleteServer_clicked()
         int retb = QMessageBox::question(this,tr("Delete Server"),tr("Are you sure to remove %1 from the server list?").arg(serverName),QMessageBox::Yes | QMessageBox::No,QMessageBox::No);
         if (retb == QMessageBox::Yes)
         {
-            QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
-            serverList.removeAll(serverName);
-            configFile->setValue("serverList",serverList);
-            configFile->beginGroup("server " + serverName);
-            configFile->remove("start");
-            configFile->remove("stop");
-            configFile->remove("config");
-            configFile->remove("update");
-            configFile->remove("icon");
-            configFile->endGroup();
+            smgr->deleteServer(serverName);
             delete serverItem;
         }
     }
@@ -127,14 +113,12 @@ void frmServerManager::on_cmdCStart_clicked()
         bool snok;
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStart = configFile->value("start").toString();
+        QString serverStart = smgr->getStartCommand(serverName);
         serverStart = QInputDialog::getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok);
         if (snok)
         {
-            configFile->setValue("start",serverStart);
+            smgr->setStartCommand(serverName, serverStart);
         }
-        configFile->endGroup();
     }
     else
     {
@@ -150,14 +134,12 @@ void frmServerManager::on_cmdCStop_clicked()
         bool snok;
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStop = configFile->value("stop").toString();
+        QString serverStop = smgr->getStopCommand(serverName);
         serverStop = QInputDialog::getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok);
         if (snok)
         {
-            configFile->setValue("stop",serverStop);
+            smgr->setStopCommand(serverName, serverStop);
         }
-        configFile->endGroup();
     }
     else
     {
@@ -173,14 +155,12 @@ void frmServerManager::on_cmdCConfig_clicked()
         bool snok;
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverConfig = configFile->value("config").toString();
+        QString serverConfig = smgr->getConfigCommand(serverName);
         serverConfig = QInputDialog::getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok);
         if (snok)
         {
-            configFile->setValue("config",serverConfig);
+            smgr->setConfigCommand(serverName, serverConfig);
         }
-        configFile->endGroup();
     }
     else
     {
@@ -188,7 +168,7 @@ void frmServerManager::on_cmdCConfig_clicked()
     }
 }
 
-void frmServerManager::on_cmdChooseUpdate_clicked()
+void frmServerManager::on_cmdCUpdate_clicked()
 {
     QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
     if (selectedItems.length() == 1)
@@ -196,18 +176,37 @@ void frmServerManager::on_cmdChooseUpdate_clicked()
         bool snok;
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverUpdate = configFile->value("update").toString();
+        QString serverUpdate = smgr->getUpdateCommand(serverName);
         serverUpdate = QInputDialog::getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok);
         if (snok)
         {
-            configFile->setValue("update",serverUpdate);
+            smgr->setUpdateCommand(serverName, serverUpdate);
         }
-        configFile->endGroup();
     }
     else
     {
         QMessageBox::information(this,tr("Choose Update"),tr("No server is selected"));
+    }
+}
+
+void frmServerManager::on_cmdCAttach_clicked()
+{
+    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+    if (selectedItems.length() == 1)
+    {
+        bool snok;
+        QListWidgetItem *serverItem = selectedItems.at(0);
+        QString serverName = serverItem->text();
+        QString serverAttach = smgr->getAttachCommand(serverName);
+        serverAttach = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok);
+        if (snok)
+        {
+            smgr->setAttachCommand(serverName, serverAttach);
+        }
+    }
+    else
+    {
+        QMessageBox::information(this,tr("Choose Attach"),tr("No server is selected"));
     }
 }
 
@@ -218,18 +217,10 @@ void frmServerManager::on_cmdStart_clicked()
     {
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStart = configFile->value("start","").toString();
-        if (serverStart != "")
-        {
-            QProcess serverProcess;
-            serverProcess.startDetached(serverStart);
-        }
-        else
+        if (!smgr->startServer(serverName))
         {
             QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
         }
-        configFile->endGroup();
     }
     else
     {
@@ -244,18 +235,10 @@ void frmServerManager::on_cmdStop_clicked()
     {
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStop = configFile->value("stop","").toString();
-        if (serverStop != "")
-        {
-            QProcess serverProcess;
-            serverProcess.startDetached(serverStop);
-        }
-        else
+        if (!smgr->stopServer(serverName))
         {
             QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
         }
-        configFile->endGroup();
     }
     else
     {
@@ -270,18 +253,10 @@ void frmServerManager::on_cmdConfig_clicked()
     {
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverConfig = configFile->value("config","").toString();
-        if (serverConfig != "")
-        {
-            QProcess serverProcess;
-            serverProcess.startDetached(serverConfig);
-        }
-        else
+        if (!smgr->configServer(serverName))
         {
             QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
         }
-        configFile->endGroup();
     }
     else
     {
@@ -296,22 +271,32 @@ void frmServerManager::on_cmdUpdate_clicked()
     {
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverUpdate = configFile->value("update","").toString();
-        if (serverUpdate != "")
-        {
-            QProcess serverProcess;
-            serverProcess.startDetached(serverUpdate);
-        }
-        else
+        if (!smgr->updateServer(serverName))
         {
             QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
         }
-        configFile->endGroup();
     }
     else
     {
         QMessageBox::information(this,tr("Update"),tr("No server is selected"));
+    }
+}
+
+void frmServerManager::on_cmdAttach_clicked()
+{
+    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+    if (selectedItems.length() == 1)
+    {
+        QListWidgetItem *serverItem = selectedItems.at(0);
+        QString serverName = serverItem->text();
+        if (!smgr->attachServer(serverName))
+        {
+            QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
+        }
+    }
+    else
+    {
+        QMessageBox::information(this,tr("Attach"),tr("No server is selected"));
     }
 }
 
@@ -326,7 +311,7 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdCStop->setVisible(true);
         ui->cmdCConfig->setVisible(true);
         ui->cmdCIcon->setVisible(true);
-        ui->cmdChooseUpdate->setVisible(true);
+        ui->cmdCUpdate->setVisible(true);
         ui->cmdNewServer->setVisible(true);
         ui->cmdDeleteServer->setVisible(true);
         ui->cmdAdmin->setVisible(false);
@@ -345,7 +330,7 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdCStop->setVisible(false);
         ui->cmdCConfig->setVisible(false);
         ui->cmdCIcon->setVisible(false);
-        ui->cmdChooseUpdate->setVisible(false);
+        ui->cmdCUpdate->setVisible(false);
         ui->cmdNewServer->setVisible(false);
         ui->cmdDeleteServer->setVisible(false);
         ui->cmdAdmin->setVisible(true);
@@ -359,18 +344,14 @@ void frmServerManager::setAdminMode(bool admin)
 
 void frmServerManager::on_cmdAdmin_clicked()
 {
-    configFile->beginGroup("auth");
-    QString password = configFile->value("password","").toString();
-    if (password == "")
+    QString passwordHash = smgr->getAdminPasswordHash();
+    if (passwordHash == "")
     {
         bool ok;
         QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
         if (ok)
         {
-            QCryptographicHash *pwHash = new QCryptographicHash(QCryptographicHash::Md4);
-            pwHash->addData(pwInput.toUtf8());
-            QString hashString = QString::fromUtf8(pwHash->result().toBase64());
-            configFile->setValue("password",hashString);
+            smgr->setAdminPassword(pwInput);
             setAdminMode(true);
         }
     }
@@ -380,10 +361,7 @@ void frmServerManager::on_cmdAdmin_clicked()
         QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
         if (ok)
         {
-            QCryptographicHash *pwHash = new QCryptographicHash(QCryptographicHash::Md4);
-            pwHash->addData(pwInput.toUtf8());
-            QString hashString = QString::fromUtf8(pwHash->result().toBase64());
-            if (password == hashString)
+            if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
             {
                 setAdminMode(true);
             }
@@ -393,61 +371,11 @@ void frmServerManager::on_cmdAdmin_clicked()
             }
         }
     }
-    configFile->endGroup();
 }
 
 void frmServerManager::on_cmdDAdmin_clicked()
 {
     setAdminMode(false);
-}
-
-void frmServerManager::on_cmdAttach_clicked()
-{
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
-    {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStart = configFile->value("attach","").toString();
-        if (serverStart != "")
-        {
-            QProcess serverProcess;
-            serverProcess.startDetached(serverStart);
-        }
-        else
-        {
-            QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
-        }
-        configFile->endGroup();
-    }
-    else
-    {
-        QMessageBox::information(this,tr("Attach"),tr("No server is selected"));
-    }
-}
-
-void frmServerManager::on_cmdCAttach_clicked()
-{
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
-    {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString serverStart = configFile->value("attach").toString();
-        serverStart = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverStart,&snok);
-        if (snok)
-        {
-            configFile->setValue("attach",serverStart);
-        }
-        configFile->endGroup();
-    }
-    else
-    {
-        QMessageBox::information(this,tr("Choose Attach"),tr("No server is selected"));
-    }
 }
 
 void frmServerManager::on_cmdCIcon_clicked()
@@ -457,8 +385,7 @@ void frmServerManager::on_cmdCIcon_clicked()
     {
         QListWidgetItem *serverItem = selectedItems.at(0);
         QString serverName = serverItem->text();
-        configFile->beginGroup("server " + serverName);
-        QString iconPath = configFile->value("icon",ProductImg).toString();
+        QString iconPath = smgr->getIconPath(serverName);
         QIcon tempIcon;
         if (QFile::exists(iconPath))
         {
@@ -484,9 +411,8 @@ void frmServerManager::on_cmdCIcon_clicked()
             iconPath = iconWindow->getCurrentIconPath();
             tempIcon = iconWindow->getCurrentIcon();
             serverItem->setIcon(tempIcon);
-            configFile->setValue("icon",iconPath);
+            smgr->setIconPath(serverName, iconPath);
         }
-        configFile->endGroup();
         iconWindow->deleteLater();
         delete iconWindow;
     }
