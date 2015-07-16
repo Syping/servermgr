@@ -67,7 +67,7 @@
 #define ProductVendor "Syping Gaming Team"
 #endif
 #ifndef ProductVersion
-#define ProductVersion "1.0.0"
+#define ProductVersion "1.1.0"
 #endif
 #ifndef ProductImg
 #define ProductImg ":/icon/server-icon.png"
