@@ -25,6 +25,7 @@
 class ServerManager : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ServerManager(QObject *parent = 0);
     QStringList getServerList();
