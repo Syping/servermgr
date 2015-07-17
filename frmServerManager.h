@@ -51,11 +51,20 @@ private slots:
     void on_cmdAttach_clicked();
     void on_cmdCAttach_clicked();
     void on_cmdCIcon_clicked();
+    void on_timerLB_ticked();
+    void setWidgetDesign();
+    void connectToServer();
+
+    void on_labDesignedLogin_mouseRelease(QMouseEvent *);
+
+    void on_cmdDisconnect_clicked();
 
 private:
     Ui::frmServerManager *ui;
     ServerManager *smgr;
     QIcon standardIcon;
+    bool mouseOverLogin;
+    bool autoLogin;
     bool noAdmin;
 };
 

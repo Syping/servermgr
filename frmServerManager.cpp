@@ -20,12 +20,17 @@
 #include "frmIcon.h"
 #include "config.h"
 #include <QCryptographicHash>
+#include <QStyleFactory>
+#include <QCommonStyle>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QSettings>
 #include <QProcess>
+#include <QTimer>
+#include <QStyle>
 #include <QDebug>
 #include <QFile>
+#include <QFont>
 #include <QIcon>
 
 frmServerManager::frmServerManager(QWidget *parent) :
@@ -33,9 +38,86 @@ frmServerManager::frmServerManager(QWidget *parent) :
     ui(new Ui::frmServerManager)
 {
     ui->setupUi(this);
+    autoLogin = false;
     smgr = new ServerManager(this);
     standardIcon = QIcon(ProductImg);
-    this->setWindowIcon(QIcon(ProductIcon));
+    QIcon windowIcon = QIcon(ProductIcon);
+    windowIcon.addPixmap(QPixmap(ProductImg));
+    windowIcon.addPixmap(QPixmap(ProductPixmap));
+    this->setWindowIcon(windowIcon);
+
+    // Change Visibles
+    ui->swSM->setCurrentIndex(1);
+    ui->labDesignedLoginDes->setVisible(false);
+    setAdminMode(false);
+
+    // Change Designed Mode Font size
+    QFont designedFont;
+    designedFont.setPixelSize(15);
+    ui->txtHostnameDesigned->setFont(designedFont);
+    ui->txtPasswordDesigned->setFont(designedFont);
+    ui->labDesignedLogin->setFont(designedFont);
+    ui->labDesignedLoginDes->setFont(designedFont);
+    ui->cbStayLoggedInDesigned->setFont(designedFont);
+    ui->cbUseEncryptedConnectionDesigned->setFont(designedFont);
+    mouseOverLogin = false;
+#ifdef DISABLE_SSL
+    ui->cbUseEncryptedConnectionDesigned->setVisible(false);
+#endif
+
+    // Start Timer
+    QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
+
+    // Check for Autologin
+    if (smgr->autologinEnabled())
+    {
+        autoLogin = true;
+        connectToServer();
+    }
+
+}
+
+frmServerManager::~frmServerManager()
+{
+    delete ui;
+}
+
+void frmServerManager::connectToServer()
+{
+    if (autoLogin)
+    {
+        bool connectionSuccess = smgr->connectToServerWithAutologin();
+        if (!connectionSuccess)
+        {
+            QMessageBox::warning(this,tr("Server Manager"),tr("Can't connnect to %1 Server!").arg("Server Manager"));
+            return;
+        }
+    }
+    else if (ui->txtHostnameDesigned->text() == "SM_LOCAL")
+    {
+        smgr->ServerManagerMode = ServerManager::LocalMode;
+        if (ui->cbStayLoggedInDesigned->isChecked())
+        {
+            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+        }
+    }
+    else
+    {
+        smgr->ServerManagerMode = ServerManager::RemoteMode;
+        bool connectionSuccess = smgr->connectToServer(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+        if (!connectionSuccess)
+        {
+            QMessageBox::warning(this,tr("Server Manager"),tr("Can't connnect to %1 Server!").arg("Server Manager"));
+            return;
+        }
+        if (ui->cbStayLoggedInDesigned->isChecked())
+        {
+            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+        }
+    }
+
+    ui->swSM->setCurrentIndex(0);
+
     QStringList serverList = smgr->getServerList();
     foreach (const QString &serverName, serverList)
     {
@@ -57,12 +139,6 @@ frmServerManager::frmServerManager(QWidget *parent) :
         newItem->setIcon(serverIcon);
         ui->lwServer->addItem(newItem);
     }
-    setAdminMode(false);
-}
-
-frmServerManager::~frmServerManager()
-{
-    delete ui;
 }
 
 void frmServerManager::on_cmdNewServer_clicked()
@@ -310,7 +386,10 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdCStart->setVisible(true);
         ui->cmdCStop->setVisible(true);
         ui->cmdCConfig->setVisible(true);
-        ui->cmdCIcon->setVisible(true);
+        if (smgr->isConnectionLocal())
+        {
+            ui->cmdCIcon->setVisible(true);
+        }
         ui->cmdCUpdate->setVisible(true);
         ui->cmdNewServer->setVisible(true);
         ui->cmdDeleteServer->setVisible(true);
@@ -320,6 +399,7 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdStop->setVisible(false);
         ui->cmdConfig->setVisible(false);
         ui->cmdUpdate->setVisible(false);
+        ui->cmdDisconnect->setVisible(false);
     }
     else
     {
@@ -339,37 +419,45 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdStop->setVisible(true);
         ui->cmdConfig->setVisible(true);
         ui->cmdUpdate->setVisible(true);
+        ui->cmdDisconnect->setVisible(true);
     }
 }
 
 void frmServerManager::on_cmdAdmin_clicked()
 {
-    QString passwordHash = smgr->getAdminPasswordHash();
-    if (passwordHash == "")
+    if (smgr->ServerManagerMode == ServerManager::LocalMode)
     {
-        bool ok;
-        QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
-        if (ok)
+        QString passwordHash = smgr->getAdminPasswordHash();
+        if (passwordHash == "")
         {
-            smgr->setAdminPassword(pwInput);
-            setAdminMode(true);
+            bool ok;
+            QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
+            if (ok)
+            {
+                smgr->setAdminPassword(pwInput);
+                setAdminMode(true);
+            }
+        }
+        else
+        {
+            bool ok;
+            QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
+            if (ok)
+            {
+                if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
+                {
+                    setAdminMode(true);
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Server Manager Admin"),tr("Incorrect password"));
+                }
+            }
         }
     }
     else
     {
-        bool ok;
-        QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
-        if (ok)
-        {
-            if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
-            {
-                setAdminMode(true);
-            }
-            else
-            {
-                QMessageBox::warning(this,tr("Server Manager Admin"),tr("Incorrect password"));
-            }
-        }
+        setAdminMode(true);
     }
 }
 
@@ -419,5 +507,68 @@ void frmServerManager::on_cmdCIcon_clicked()
     else
     {
         QMessageBox::information(this,tr("Choose Icon"),tr("No server is selected"));
+    }
+}
+
+void frmServerManager::setWidgetDesign()
+{
+#ifdef QT4
+    QStyle *KMStyle = QStyleFactory::create("cleanlooks");
+#else
+#ifdef QT5
+    QStyle *KMStyle = QStyleFactory::create("fusion");
+#else
+    QCommonStyle *KMStyle = new QCommonStyle();
+#endif
+#endif
+    ui->labDesignedLogin->setStyle(KMStyle);
+}
+
+void frmServerManager::on_timerLB_ticked()
+{
+    if (ui->labDesignedLogin->rect().contains(ui->labDesignedLogin->mapFromGlobal(QCursor::pos())))
+    {
+        if (!mouseOverLogin)
+        {
+            ui->labDesignedLogin->setStyleSheet("background-color: rgb(255, 255, 255); border-color: rgb(215, 120, 50); color: rgb(215, 70, 25);");
+        }
+        mouseOverLogin = true;
+    }
+    else
+    {
+        if (mouseOverLogin)
+        {
+            ui->labDesignedLogin->setStyleSheet("background-color: rgb(215, 70, 25); border-color: rgb(215, 120, 50);");
+        }
+        mouseOverLogin = false;
+    }
+    QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
+}
+
+void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *)
+{
+    if (ui->labDesignedLogin->rect().contains(ui->labDesignedLogin->mapFromGlobal(QCursor::pos())))
+    {
+        connectToServer();
+    }
+}
+
+void frmServerManager::on_cmdDisconnect_clicked()
+{
+    autoLogin = false;
+    smgr->disconnectFromServer();
+    smgr->setAutologinDisabled();
+    ui->swSM->setCurrentIndex(1);
+    ui->lwServer->clear();
+    ui->txtPasswordDesigned->clear();
+    ui->cbStayLoggedInDesigned->setChecked(false);
+    ui->cbUseEncryptedConnectionDesigned->setChecked(false);
+    if (ui->txtHostnameDesigned->text() == "")
+    {
+        ui->txtHostnameDesigned->setFocus();
+    }
+    else
+    {
+        ui->txtPasswordDesigned->setFocus();
     }
 }
