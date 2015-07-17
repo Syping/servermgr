@@ -552,7 +552,7 @@ bool ServerManager::isConnectionLocal()
     {
         if (isConnected())
         {
-            if (tcpSocket->peerAddress() == QHostAddress::LocalHost || tcpSocket->peerAddress() == QHostAddress::LocalHostIPv6)
+            if (tcpSocket->peerAddress() == QHostAddress::LocalHost || tcpSocket->peerAddress() == QHostAddress::LocalHostIPv6 || tcpSocket->peerAddress() == tcpSocket->localAddress())
             {
                 return true;
             }
