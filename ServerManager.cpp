@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <QCryptographicHash>
+#include <QHostAddress>
 #include <QProcess>
 
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
@@ -372,6 +373,199 @@ bool ServerManager::isConnecting()
     }
 }
 
+bool ServerManager::connectToServer(QString hostname, QString password, int port, bool useSSL)
+{
+    if (ServerManagerMode == RemoteMode)
+    {
+#ifdef DISABLE_SSL
+        tcpSocket = new QTcpSocket();
+        tcpSocket->connectToHost(hostname, port);
+        Q_UNUSED(useSSL);
+#else
+        tcpSocket = new QSslSocket();
+        if (useSSL)
+        {
+            tcpSocket->connectToHostEncrypted(hostname, port);
+        }
+        else
+        {
+            tcpSocket->connectToHost(hostname, port);
+        }
+#endif
+        bool wfc;
+        wfc = tcpSocket->waitForConnected(30000);
+#ifndef DISABLE_SSL
+        if (useSSL)
+        {
+            wfc = tcpSocket->waitForEncrypted(30000);
+        }
+#endif
+        if (wfc)
+        {
+            QString spw = password;
+            tcpSocket->write("SM/1.1 login");
+            tcpSocket->write(" --password=");
+            spw = spw.replace("&","&amp;");
+            spw = spw.replace(" ","&nbsp;");
+            tcpSocket->write(spw.toUtf8());
+            tcpSocket->write("\n");
+            tcpSocket->flush();
+            tcpSocket->waitForReadyRead(5000);
+            if (tcpSocket->canReadLine())
+            {
+                QByteArray readed = tcpSocket->readLine().trimmed();
+                QString readstr = QString::fromUtf8(readed);
+                QStringList readlist = readstr.split(" ");
+                QString description;
+                int id = 500;
+                if (readlist.length() >= 2)
+                {
+                    if (readlist.at(0) == "SM/1.1" && readlist.at(1) == "return")
+                    {
+                        foreach(QString argstr,readlist)
+                        {
+                            if (argstr.left(5) == "--id=")
+                            {
+                                id = QVariant(argstr.remove(0,5).replace("&nbsp;"," ").replace("&amp;","&")).toInt();
+                            }
+                            if (argstr.left(14) == "--description=")
+                            {
+                                description = QVariant(argstr.remove(0,14).replace("&nbsp;"," ").replace("&amp;","&")).toInt();
+                            }
+                        }
+                        if (id == 200)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void ServerManager::disconnectFromServer()
+{
+    if (ServerManagerMode == ServerManager::RemoteMode)
+    {
+        if (isConnected())
+        {
+            tcpSocket->write("SM/1.1 disconnect\n");
+            tcpSocket->flush();
+            tcpSocket->waitForBytesWritten(1000);
+            tcpSocket->disconnectFromHost();
+        }
+        else if (isConnecting())
+        {
+            tcpSocket->disconnectFromHost();
+        }
+    }
+}
+
+bool ServerManager::autologinEnabled()
+{
+    configFile->beginGroup("autologin");
+    bool autologin = configFile->value("enabled", false).toBool();
+    configFile->endGroup();
+    return autologin;
+}
+
+void ServerManager::setAutologinEnabled(QString hostname, QString password, int port, bool useSSL)
+{
+    configFile->beginGroup("autologin");
+    configFile->setValue("enabled", true);
+    configFile->setValue("hostname", hostname);
+    configFile->setValue("password", password.toUtf8().toBase64().toHex().toBase64());
+    configFile->setValue("port", port);
+    configFile->setValue("useSSL", useSSL);
+    configFile->endGroup();
+}
+
+void ServerManager::setAutologinDisabled()
+{
+    configFile->beginGroup("autologin");
+    configFile->setValue("enabled", false);
+    configFile->remove("hostname");
+    configFile->remove("password");
+    configFile->remove("port");
+    configFile->remove("useSSL");
+    configFile->endGroup();
+}
+
+bool ServerManager::connectToServerWithAutologin()
+{
+    configFile->beginGroup("autologin");
+    QString hostname = configFile->value("hostname","").toString();
+    if (hostname.isEmpty())
+    {
+        configFile->endGroup();
+        return false;
+    }
+    else if (hostname == "SM_LOCAL")
+    {
+        configFile->endGroup();
+        ServerManagerMode = LocalMode;
+        return true;
+    }
+    QByteArray pwArray = configFile->value("password","").toByteArray();
+    QString password;
+    if (pwArray.isEmpty())
+    {
+        configFile->endGroup();
+        return false;
+    }
+    password = QString::fromUtf8(QByteArray::fromBase64(QByteArray::fromHex(QByteArray::fromBase64(pwArray))));
+    int port = configFile->value("port", 9509).toInt();
+    bool useSSL = configFile->value("useSSL", false).toBool();
+    configFile->endGroup();
+    ServerManagerMode = RemoteMode;
+    return connectToServer(hostname, password, port, useSSL);
+}
+
+bool ServerManager::isConnectionLocal()
+{
+    if (ServerManagerMode == RemoteMode)
+    {
+        if (isConnected())
+        {
+            if (tcpSocket->peerAddress() == QHostAddress::LocalHost || tcpSocket->peerAddress() == QHostAddress::LocalHostIPv6)
+            {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 // Server Manager LocalMode
 
 QStringList ServerManager::getServerListLocal()
@@ -591,139 +785,549 @@ void ServerManager::setAdminPasswordLocal(QString password)
 
 QStringList ServerManager::getServerListRemote()
 {
-    // Not finished
-    return QStringList();
+    if (isConnected())
+    {
+        tcpSocket->write("SM/1.1 request --rq=getserverlist\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2).split("&sms;");
+        }
+        else
+        {
+            return QStringList("ERROR_NORETURN");
+        }
+    }
+    return QStringList("ERROR_DISCONNECTED");
 }
 
 QString ServerManager::getIconPathRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = serverName.replace("&","&amp;");
+        arg1 = serverName.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=geticonpath --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::addServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=addserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::deleteServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=delserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getStartCommandRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=getstartcmd --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setStartCommandRemote(QString serverName, QString startCommand)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = startCommand;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setstartcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getStopCommandRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=getstopcmd --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setStopCommandRemote(QString serverName, QString stopCommand)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = stopCommand;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setstopcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getConfigCommandRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=getconfigcmd --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setConfigCommandRemote(QString serverName, QString configCommand)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = configCommand;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setconfigcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getUpdateCommandRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=getupdatecmd --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setUpdateCommandRemote(QString serverName, QString updateCommand)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = updateCommand;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setupdatecmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getAttachCommandRemote(QString serverName)
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 request --rq=getattachcmd --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setAttachCommandRemote(QString serverName, QString attachCommand)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = attachCommand;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setattachcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::startServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=startserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::stopServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=stopserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::configServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=configserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::updateServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=updateserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::attachServerRemote(QString serverName)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=attachserver --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::setIconPathRemote(QString serverName, QString iconPath)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        QString arg2 = iconPath;
+        arg2 = arg2.replace("&","&amp;");
+        arg2 = arg2.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=seticonpath --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 QString ServerManager::getAdminPasswordHashRemote()
 {
-    // Not finished
-    return QString("");
+    if (isConnected())
+    {
+        tcpSocket->write("SM/1.1 request --rq=getadminpwhash\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
 }
 
 bool ServerManager::setAdminPasswordHashRemote(QString passwordHash)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = passwordHash;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setadminpwhash --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 bool ServerManager::setAdminPasswordRemote(QString password)
 {
-    // Not finished
+    if (isConnected())
+    {
+        QString arg1 = password;
+        arg1 = arg1.replace("&","&amp;");
+        arg1 = arg1.replace(" ","&nbsp;");
+        tcpSocket->write("SM/1.1 action --at=setadminpw --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            if (args.at(1) == "200")
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
+QStringList ServerManager::getArgsFromReturnRemote()
+{
+    QStringList retlist;
+    tcpSocket->waitForReadyRead(5000);
+    if (tcpSocket->canReadLine())
+    {
+        QByteArray readed = tcpSocket->readLine().trimmed();
+        QString readstr = QString::fromUtf8(readed);
+        QStringList readlist = readstr.split(" ");
+        QString atrq;
+        QString arg1;
+        QString arg2;
+        QString reid;
+        foreach(QString argstr, readlist)
+        {
+            if (argstr.left(5) == "--at=")
+            {
+                atrq = argstr.remove(0,5).replace("&nbsp;"," ").replace("&amp;","&");
+            }
+            if (argstr.left(5) == "--rq=")
+            {
+                atrq = argstr.remove(0,5).replace("&nbsp;"," ").replace("&amp;","&");
+            }
+            if (argstr.left(5) == "--id=")
+            {
+                reid = argstr.remove(0,5).replace("&nbsp;"," ").replace("&amp;","&");
+            }
+            if (argstr.left(7) == "--arg1=")
+            {
+                arg1 = argstr.remove(0,7).replace("&nbsp;"," ").replace("&amp;","&");
+            }
+            if (argstr.left(7) == "--arg2=")
+            {
+                arg2 = argstr.remove(0,7).replace("&nbsp;"," ").replace("&amp;","&");
+            }
+        }
+        retlist.append(atrq);
+        retlist.append(reid);
+        retlist.append(arg1);
+        retlist.append(arg2);
+        return retlist;
+    }
+    retlist.append("ERROR_NORETURN");
+    return retlist;
+}

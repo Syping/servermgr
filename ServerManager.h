@@ -63,6 +63,13 @@ public:
     QString getPasswordHashFromString(QString password);
     bool isConnected();
     bool isConnecting();
+    bool connectToServer(QString hostname, QString password, int port = 9509, bool useSSL = false);
+    void disconnectFromServer();
+    bool autologinEnabled();
+    void setAutologinEnabled(QString hostname, QString password, int port = 9509, bool useSSL = false);
+    void setAutologinDisabled();
+    bool connectToServerWithAutologin();
+    bool isConnectionLocal();
 
     // Server Manager Mode
     enum SMMode
@@ -123,6 +130,7 @@ private:
     QString getAdminPasswordHashRemote();
     bool setAdminPasswordHashRemote(QString passwordHash);
     bool setAdminPasswordRemote(QString password);
+    QStringList getArgsFromReturnRemote();
 
 private:
     QSettings *configFile;
