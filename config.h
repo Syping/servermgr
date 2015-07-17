@@ -69,6 +69,9 @@
 #ifndef ProductVersion
 #define ProductVersion "1.1.0"
 #endif
+#ifndef ProductPixmap
+#define ProductPixmap ":/pixmap/server-pixmap.png"
+#endif
 #ifndef ProductImg
 #define ProductImg ":/icon/server-icon.png"
 #endif
