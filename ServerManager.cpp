@@ -394,12 +394,10 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
 #endif
         bool wfc;
         wfc = tcpSocket->waitForConnected(30000);
-        qDebug() << wfc;
 #ifndef DISABLE_SSL
         if (useSSL)
         {
             wfc = tcpSocket->waitForEncrypted(30000);
-            qDebug() << wfc;
         }
 #endif
         if (wfc)
