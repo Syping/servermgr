@@ -90,6 +90,7 @@ void frmServerManager::connectToServer()
         if (!connectionSuccess)
         {
             QMessageBox::warning(this,tr("Server Manager"),tr("Can't connnect to %1 Server!").arg("Server Manager"));
+            autoLogin = false;
             return;
         }
     }
