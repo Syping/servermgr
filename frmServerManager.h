@@ -36,6 +36,7 @@ public:
     ~frmServerManager();
 
 private slots:
+    void on_labDesignedLogin_mouseRelease(QMouseEvent *);
     void on_cmdNewServer_clicked();
     void on_cmdDeleteServer_clicked();
     void on_cmdCStart_clicked();
@@ -54,9 +55,6 @@ private slots:
     void on_timerLB_ticked();
     void setWidgetDesign();
     void connectToServer();
-
-    void on_labDesignedLogin_mouseRelease(QMouseEvent *);
-
     void on_cmdDisconnect_clicked();
 
 private:
