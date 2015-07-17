@@ -61,6 +61,7 @@ frmServerManager::frmServerManager(QWidget *parent) :
     ui->cbStayLoggedInDesigned->setFont(designedFont);
     ui->cbUseEncryptedConnectionDesigned->setFont(designedFont);
     mouseOverLogin = false;
+    setWidgetDesign();
 #ifdef DISABLE_SSL
     ui->cbUseEncryptedConnectionDesigned->setVisible(false);
 #endif
