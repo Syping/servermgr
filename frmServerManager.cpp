@@ -145,236 +145,320 @@ void frmServerManager::connectToServer()
 
 void frmServerManager::on_cmdNewServer_clicked()
 {
-    bool snok;
-    QString serverName;
-    serverName = QInputDialog::getText(this,tr("New Server"),tr("Please type a name for this server"),QLineEdit::Normal,"",&snok);
-    if (snok)
+    if (smgr->isConnected())
     {
-        if (smgr->addServer(serverName))
+        bool snok;
+        QString serverName;
+        serverName = QInputDialog::getText(this,tr("New Server"),tr("Please type a name for this server"),QLineEdit::Normal,"",&snok);
+        if (snok)
         {
-            QListWidgetItem *newItem = new QListWidgetItem(serverName);
-            newItem->setIcon(standardIcon);
-            ui->lwServer->addItem(newItem);
+            if (smgr->addServer(serverName))
+            {
+                QListWidgetItem *newItem = new QListWidgetItem(serverName);
+                newItem->setIcon(standardIcon);
+                ui->lwServer->addItem(newItem);
+            }
+            else
+            {
+                QMessageBox::information(this,tr("New Server"),tr("Server already exists"));
+            }
         }
-        else
-        {
-            QMessageBox::information(this,tr("New Server"),tr("Server already exists"));
-        }
+    }
+    else
+    {
+        QMessageBox::warning(this,tr("New Server"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdDeleteServer_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        int retb = QMessageBox::question(this,tr("Delete Server"),tr("Are you sure to remove %1 from the server list?").arg(serverName),QMessageBox::Yes | QMessageBox::No,QMessageBox::No);
-        if (retb == QMessageBox::Yes)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->deleteServer(serverName);
-            delete serverItem;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            int retb = QMessageBox::question(this,tr("Delete Server"),tr("Are you sure to remove %1 from the server list?").arg(serverName),QMessageBox::Yes | QMessageBox::No,QMessageBox::No);
+            if (retb == QMessageBox::Yes)
+            {
+                smgr->deleteServer(serverName);
+                delete serverItem;
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Delete Server"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Delete Server"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Delete Server"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdCStart_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString serverStart = smgr->getStartCommand(serverName);
-        serverStart = QInputDialog::getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok);
-        if (snok)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->setStartCommand(serverName, serverStart);
+            bool snok;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString serverStart = smgr->getStartCommand(serverName);
+            serverStart = QInputDialog::getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok);
+            if (snok)
+            {
+                smgr->setStartCommand(serverName, serverStart);
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Choose Start"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Start"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Server"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdCStop_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString serverStop = smgr->getStopCommand(serverName);
-        serverStop = QInputDialog::getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok);
-        if (snok)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->setStopCommand(serverName, serverStop);
+            bool snok;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString serverStop = smgr->getStopCommand(serverName);
+            serverStop = QInputDialog::getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok);
+            if (snok)
+            {
+                smgr->setStopCommand(serverName, serverStop);
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Choose Stop"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Stop"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Server"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdCConfig_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString serverConfig = smgr->getConfigCommand(serverName);
-        serverConfig = QInputDialog::getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok);
-        if (snok)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->setConfigCommand(serverName, serverConfig);
+            bool snok;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString serverConfig = smgr->getConfigCommand(serverName);
+            serverConfig = QInputDialog::getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok);
+            if (snok)
+            {
+                smgr->setConfigCommand(serverName, serverConfig);
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Choose Config"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Config"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Config"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdCUpdate_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString serverUpdate = smgr->getUpdateCommand(serverName);
-        serverUpdate = QInputDialog::getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok);
-        if (snok)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->setUpdateCommand(serverName, serverUpdate);
+            bool snok;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString serverUpdate = smgr->getUpdateCommand(serverName);
+            serverUpdate = QInputDialog::getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok);
+            if (snok)
+            {
+                smgr->setUpdateCommand(serverName, serverUpdate);
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Choose Update"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Update"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Update"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdCAttach_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        bool snok;
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString serverAttach = smgr->getAttachCommand(serverName);
-        serverAttach = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok);
-        if (snok)
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            smgr->setAttachCommand(serverName, serverAttach);
+            bool snok;
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString serverAttach = smgr->getAttachCommand(serverName);
+            serverAttach = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok);
+            if (snok)
+            {
+                smgr->setAttachCommand(serverName, serverAttach);
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Choose Attach"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Attach"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Attach"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdStart_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        if (!smgr->startServer(serverName))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            if (!smgr->startServer(serverName))
+            {
+                QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Start"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Start"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Start"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdStop_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        if (!smgr->stopServer(serverName))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            if (!smgr->stopServer(serverName))
+            {
+                QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Stop"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Stop"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Stop"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdConfig_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        if (!smgr->configServer(serverName))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            if (!smgr->configServer(serverName))
+            {
+                QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Config"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Config"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Config"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdUpdate_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        if (!smgr->updateServer(serverName))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            if (!smgr->updateServer(serverName))
+            {
+                QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Update"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Update"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Update"),tr("Server Manager connection lost"));
     }
 }
 
 void frmServerManager::on_cmdAttach_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        if (!smgr->attachServer(serverName))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            if (!smgr->attachServer(serverName))
+            {
+                QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
+            }
+        }
+        else
+        {
+            QMessageBox::information(this,tr("Attach"),tr("No server is selected"));
         }
     }
     else
     {
-        QMessageBox::information(this,tr("Attach"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Attach"),tr("Server Manager connection lost"));
     }
 }
 
@@ -427,39 +511,46 @@ void frmServerManager::setAdminMode(bool admin)
 
 void frmServerManager::on_cmdAdmin_clicked()
 {
-    if (smgr->ServerManagerMode == ServerManager::LocalMode)
+    if (smgr->isConnected())
     {
-        QString passwordHash = smgr->getAdminPasswordHash();
-        if (passwordHash == "")
+        if (smgr->ServerManagerMode == ServerManager::LocalMode)
         {
-            bool ok;
-            QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
-            if (ok)
+            QString passwordHash = smgr->getAdminPasswordHash();
+            if (passwordHash == "")
             {
-                smgr->setAdminPassword(pwInput);
-                setAdminMode(true);
+                bool ok;
+                QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
+                if (ok)
+                {
+                    smgr->setAdminPassword(pwInput);
+                    setAdminMode(true);
+                }
+            }
+            else
+            {
+                bool ok;
+                QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
+                if (ok)
+                {
+                    if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
+                    {
+                        setAdminMode(true);
+                    }
+                    else
+                    {
+                        QMessageBox::warning(this,tr("Server Manager Admin"),tr("Incorrect password"));
+                    }
+                }
             }
         }
         else
         {
-            bool ok;
-            QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
-            if (ok)
-            {
-                if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
-                {
-                    setAdminMode(true);
-                }
-                else
-                {
-                    QMessageBox::warning(this,tr("Server Manager Admin"),tr("Incorrect password"));
-                }
-            }
+            setAdminMode(true);
         }
     }
     else
     {
-        setAdminMode(true);
+        QMessageBox::warning(this,tr("Server Manager Admin"),tr("Server Manager connection lost"));
     }
 }
 
@@ -470,45 +561,52 @@ void frmServerManager::on_cmdDAdmin_clicked()
 
 void frmServerManager::on_cmdCIcon_clicked()
 {
-    QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
-    if (selectedItems.length() == 1)
+    if (smgr->isConnected())
     {
-        QListWidgetItem *serverItem = selectedItems.at(0);
-        QString serverName = serverItem->text();
-        QString iconPath = smgr->getIconPath(serverName);
-        QIcon tempIcon;
-        if (QFile::exists(iconPath))
+        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        if (selectedItems.length() == 1)
         {
-            tempIcon = QIcon(iconPath);
-            if (tempIcon.isNull())
+            QListWidgetItem *serverItem = selectedItems.at(0);
+            QString serverName = serverItem->text();
+            QString iconPath = smgr->getIconPath(serverName);
+            QIcon tempIcon;
+            if (QFile::exists(iconPath))
+            {
+                tempIcon = QIcon(iconPath);
+                if (tempIcon.isNull())
+                {
+                    iconPath = ProductImg;
+                    tempIcon = QIcon(iconPath);
+                }
+            }
+            else
             {
                 iconPath = ProductImg;
                 tempIcon = QIcon(iconPath);
             }
+            frmIcon *iconWindow = new frmIcon(this);
+            iconWindow->setWindowIcon(this->windowIcon());
+            iconWindow->setCurrentIcon(tempIcon,iconPath);
+            iconWindow->show();
+            iconWindow->exec();
+            if (iconWindow->isIconChanged())
+            {
+                iconPath = iconWindow->getCurrentIconPath();
+                tempIcon = iconWindow->getCurrentIcon();
+                serverItem->setIcon(tempIcon);
+                smgr->setIconPath(serverName, iconPath);
+            }
+            iconWindow->deleteLater();
+            delete iconWindow;
         }
         else
         {
-            iconPath = ProductImg;
-            tempIcon = QIcon(iconPath);
+            QMessageBox::information(this,tr("Choose Icon"),tr("No server is selected"));
         }
-        frmIcon *iconWindow = new frmIcon(this);
-        iconWindow->setWindowIcon(this->windowIcon());
-        iconWindow->setCurrentIcon(tempIcon,iconPath);
-        iconWindow->show();
-        iconWindow->exec();
-        if (iconWindow->isIconChanged())
-        {
-            iconPath = iconWindow->getCurrentIconPath();
-            tempIcon = iconWindow->getCurrentIcon();
-            serverItem->setIcon(tempIcon);
-            smgr->setIconPath(serverName, iconPath);
-        }
-        iconWindow->deleteLater();
-        delete iconWindow;
     }
     else
     {
-        QMessageBox::information(this,tr("Choose Icon"),tr("No server is selected"));
+        QMessageBox::warning(this,tr("Choose Icon"),tr("Server Manager connection lost"));
     }
 }
 
