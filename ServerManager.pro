@@ -25,13 +25,15 @@ TARGET = ServerManager
 TEMPLATE = app
 
 SOURCES += main.cpp \
+    KPTLabel.cpp \
     frmServerManager.cpp \
     frmIcon.cpp \
     ServerManager.cpp
 
-HEADERS  += frmServerManager.h \
+HEADERS  += config.h \
+    KPTLabel.h \
+    frmServerManager.h \
     frmIcon.h \
-    config.h \
     ServerManager.h
 
 FORMS    += frmServerManager.ui \
