@@ -32,14 +32,14 @@
    <item>
     <layout class="QHBoxLayout" name="hlCurrent">
      <item>
-      <widget class="QLabel" name="labCurrentIconDes">
+      <widget class="KPTLabel" name="labCurrentIconDes">
        <property name="text">
         <string>Current Icon:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="imgCurrentIcon">
+      <widget class="KPTLabel" name="imgCurrentIcon">
        <property name="minimumSize">
         <size>
          <width>24</width>
@@ -85,7 +85,9 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset theme="dialog-ok"/>
+        <iconset theme="dialog-ok">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -137,7 +139,9 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset theme="list-add"/>
+        <iconset theme="list-add">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -159,7 +163,9 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset theme="list-remove"/>
+        <iconset theme="list-remove">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -188,7 +194,9 @@
         <string>Cancel</string>
        </property>
        <property name="icon">
-        <iconset theme="dialog-cancel"/>
+        <iconset theme="dialog-cancel">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -196,6 +204,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPTLabel</class>
+   <extends>QLabel</extends>
+   <header>KPTLabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
