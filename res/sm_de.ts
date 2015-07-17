@@ -19,7 +19,7 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../frmIcon.ui" line="188"/>
+        <location filename="../frmIcon.ui" line="194"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -75,117 +75,154 @@
     <name>frmServerManager</name>
     <message>
         <location filename="../frmServerManager.ui" line="26"/>
-        <location filename="../frmServerManager.ui" line="33"/>
+        <location filename="../frmServerManager.ui" line="70"/>
+        <location filename="../frmServerManager.cpp" line="92"/>
+        <location filename="../frmServerManager.cpp" line="106"/>
         <source>Server Manager</source>
         <translation>Server Manager</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="132"/>
-        <location filename="../frmServerManager.cpp" line="420"/>
-        <location filename="../frmServerManager.cpp" line="426"/>
+        <location filename="../frmServerManager.ui" line="169"/>
+        <location filename="../frmServerManager.cpp" line="367"/>
+        <location filename="../frmServerManager.cpp" line="372"/>
         <source>Attach</source>
         <translation>Anheften</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="139"/>
-        <location filename="../frmServerManager.cpp" line="230"/>
-        <location filename="../frmServerManager.cpp" line="236"/>
+        <location filename="../frmServerManager.ui" line="176"/>
+        <location filename="../frmServerManager.cpp" line="295"/>
+        <location filename="../frmServerManager.cpp" line="300"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="146"/>
-        <location filename="../frmServerManager.cpp" line="256"/>
-        <location filename="../frmServerManager.cpp" line="262"/>
+        <location filename="../frmServerManager.ui" line="183"/>
+        <location filename="../frmServerManager.cpp" line="313"/>
+        <location filename="../frmServerManager.cpp" line="318"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="153"/>
-        <location filename="../frmServerManager.cpp" line="282"/>
-        <location filename="../frmServerManager.cpp" line="288"/>
+        <location filename="../frmServerManager.ui" line="190"/>
+        <location filename="../frmServerManager.cpp" line="331"/>
+        <location filename="../frmServerManager.cpp" line="336"/>
         <source>Config</source>
         <translation>Konfiguration</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="160"/>
-        <location filename="../frmServerManager.cpp" line="308"/>
-        <location filename="../frmServerManager.cpp" line="314"/>
+        <location filename="../frmServerManager.ui" line="197"/>
+        <location filename="../frmServerManager.cpp" line="349"/>
+        <location filename="../frmServerManager.cpp" line="354"/>
         <source>Update</source>
         <translation>Updaten</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="167"/>
+        <location filename="../frmServerManager.ui" line="204"/>
         <source>Admin</source>
         <translation>Admin</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="174"/>
-        <location filename="../frmServerManager.cpp" line="440"/>
-        <location filename="../frmServerManager.cpp" line="449"/>
+        <location filename="../frmServerManager.ui" line="211"/>
+        <source>Disconnect</source>
+        <translation>Trennen</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="218"/>
+        <location filename="../frmServerManager.cpp" line="274"/>
+        <location filename="../frmServerManager.cpp" line="282"/>
         <source>Choose Attach</source>
         <translation>Wähle Attach</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="181"/>
-        <location filename="../frmServerManager.cpp" line="132"/>
-        <location filename="../frmServerManager.cpp" line="141"/>
+        <location filename="../frmServerManager.ui" line="225"/>
+        <location filename="../frmServerManager.cpp" line="190"/>
+        <location filename="../frmServerManager.cpp" line="198"/>
         <source>Choose Start</source>
         <translation>Wähle Start</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="188"/>
-        <location filename="../frmServerManager.cpp" line="155"/>
-        <location filename="../frmServerManager.cpp" line="164"/>
+        <location filename="../frmServerManager.ui" line="232"/>
+        <location filename="../frmServerManager.cpp" line="211"/>
+        <location filename="../frmServerManager.cpp" line="219"/>
         <source>Choose Stop</source>
         <translation>Wähle Stop</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="195"/>
-        <location filename="../frmServerManager.cpp" line="178"/>
-        <location filename="../frmServerManager.cpp" line="187"/>
+        <location filename="../frmServerManager.ui" line="239"/>
+        <location filename="../frmServerManager.cpp" line="232"/>
+        <location filename="../frmServerManager.cpp" line="240"/>
         <source>Choose Config</source>
         <translation>Wähle Config</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="202"/>
-        <location filename="../frmServerManager.cpp" line="201"/>
-        <location filename="../frmServerManager.cpp" line="210"/>
+        <location filename="../frmServerManager.ui" line="246"/>
+        <location filename="../frmServerManager.cpp" line="253"/>
+        <location filename="../frmServerManager.cpp" line="261"/>
         <source>Choose Update</source>
         <translation>Wähle Update</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="209"/>
-        <location filename="../frmServerManager.cpp" line="495"/>
+        <location filename="../frmServerManager.ui" line="253"/>
+        <location filename="../frmServerManager.cpp" line="503"/>
         <source>Choose Icon</source>
         <translation>Wähle Icon</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="216"/>
-        <location filename="../frmServerManager.cpp" line="74"/>
-        <location filename="../frmServerManager.cpp" line="88"/>
+        <location filename="../frmServerManager.ui" line="260"/>
+        <location filename="../frmServerManager.cpp" line="145"/>
+        <location filename="../frmServerManager.cpp" line="156"/>
         <source>New Server</source>
         <translation>Neuer Server</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="223"/>
-        <location filename="../frmServerManager.cpp" line="100"/>
-        <location filename="../frmServerManager.cpp" line="118"/>
+        <location filename="../frmServerManager.ui" line="267"/>
+        <location filename="../frmServerManager.cpp" line="168"/>
+        <location filename="../frmServerManager.cpp" line="177"/>
         <source>Delete Server</source>
         <translation>Server löschen</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.ui" line="230"/>
+        <location filename="../frmServerManager.ui" line="274"/>
         <source>Disable Admin</source>
         <translation>Benutzer Modus</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="74"/>
+        <location filename="../frmServerManager.ui" line="333"/>
+        <source>Welcome to Syping&apos;s Server Manager</source>
+        <translation>Willkommen zu Syping&apos;s Server Manager</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="407"/>
+        <source>Hostname</source>
+        <translation>Hostname</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="432"/>
+        <source>Password</source>
+        <translation>Passwort</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="439"/>
+        <source>Stay logged in</source>
+        <translation>Angemeldet bleiben</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="446"/>
+        <source>Use encrypted connection</source>
+        <translation>Verschlüsselte Verbindung</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.ui" line="488"/>
+        <source>Login</source>
+        <translation>Anmelden</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.cpp" line="145"/>
         <source>Please type a name for this server</source>
         <translation>Bitte ein Namen für diesen Server wählen</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="88"/>
+        <location filename="../frmServerManager.cpp" line="156"/>
         <source>Server already exists</source>
         <translation>Server existiert bereits</translation>
     </message>
@@ -194,95 +231,101 @@
         <translation type="obsolete">Bist du Sicher %1 zu löschen?</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="100"/>
+        <location filename="../frmServerManager.cpp" line="168"/>
         <source>Are you sure to remove %1 from the server list?</source>
         <translation>Möchtest du wirklich %1 von der Serverliste entfernen?</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="118"/>
-        <location filename="../frmServerManager.cpp" line="141"/>
-        <location filename="../frmServerManager.cpp" line="164"/>
-        <location filename="../frmServerManager.cpp" line="187"/>
-        <location filename="../frmServerManager.cpp" line="210"/>
-        <location filename="../frmServerManager.cpp" line="236"/>
-        <location filename="../frmServerManager.cpp" line="262"/>
-        <location filename="../frmServerManager.cpp" line="288"/>
-        <location filename="../frmServerManager.cpp" line="314"/>
-        <location filename="../frmServerManager.cpp" line="426"/>
-        <location filename="../frmServerManager.cpp" line="449"/>
-        <location filename="../frmServerManager.cpp" line="495"/>
+        <location filename="../frmServerManager.cpp" line="177"/>
+        <location filename="../frmServerManager.cpp" line="198"/>
+        <location filename="../frmServerManager.cpp" line="219"/>
+        <location filename="../frmServerManager.cpp" line="240"/>
+        <location filename="../frmServerManager.cpp" line="261"/>
+        <location filename="../frmServerManager.cpp" line="282"/>
+        <location filename="../frmServerManager.cpp" line="300"/>
+        <location filename="../frmServerManager.cpp" line="318"/>
+        <location filename="../frmServerManager.cpp" line="336"/>
+        <location filename="../frmServerManager.cpp" line="354"/>
+        <location filename="../frmServerManager.cpp" line="372"/>
+        <location filename="../frmServerManager.cpp" line="503"/>
         <source>No server is selected</source>
         <translation>Kein Server wurde ausgewählt</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="132"/>
+        <location filename="../frmServerManager.cpp" line="190"/>
         <source>Please type in start command</source>
         <translation>Bitte tippe Start Befehl ein</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="155"/>
+        <location filename="../frmServerManager.cpp" line="211"/>
         <source>Please type in stop command</source>
         <translation>Bitte tippe Stop Befehl ein</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="178"/>
+        <location filename="../frmServerManager.cpp" line="232"/>
         <source>Please type in config command</source>
         <translation>Bitte Tippe Konfiguration Befehl ein</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="201"/>
+        <location filename="../frmServerManager.cpp" line="253"/>
         <source>Please type in update command</source>
         <translation>Bitte tippe Update Befehl ein</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="230"/>
+        <location filename="../frmServerManager.cpp" line="295"/>
         <source>No command registered for start</source>
         <translation>Kein Befehl registriert für Start</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="256"/>
+        <location filename="../frmServerManager.cpp" line="313"/>
         <source>No command registered for stop</source>
         <translation>Kein Befehl registriert für Stop</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="282"/>
+        <location filename="../frmServerManager.cpp" line="331"/>
         <source>No command registered for config</source>
         <translation>Kein Befehl registriert für Konfiguration</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="308"/>
+        <location filename="../frmServerManager.cpp" line="349"/>
         <source>No command registered for update</source>
         <translation>Kein Befehl registriert für Update</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="367"/>
-        <location filename="../frmServerManager.cpp" line="380"/>
-        <location filename="../frmServerManager.cpp" line="392"/>
+        <location filename="../frmServerManager.cpp" line="428"/>
+        <location filename="../frmServerManager.cpp" line="438"/>
+        <location filename="../frmServerManager.cpp" line="447"/>
         <source>Server Manager Admin</source>
         <translation>Server Manager Admin</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="367"/>
+        <location filename="../frmServerManager.cpp" line="428"/>
         <source>Type a password for the admin mode</source>
         <translation>Bitte Tippe ein Passwort für Admin Modus</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="380"/>
+        <location filename="../frmServerManager.cpp" line="438"/>
         <source>Please type the admin password</source>
         <translation>Bitte tippe das Admin Passwort ein</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="392"/>
+        <location filename="../frmServerManager.cpp" line="447"/>
         <source>Incorrect password</source>
         <translation>Falsches Passwort</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="420"/>
+        <location filename="../frmServerManager.cpp" line="367"/>
         <source>No command registered for attach</source>
         <translation>Kein Befehl registriert für Anheften</translation>
     </message>
     <message>
-        <location filename="../frmServerManager.cpp" line="440"/>
+        <location filename="../frmServerManager.cpp" line="92"/>
+        <location filename="../frmServerManager.cpp" line="106"/>
+        <source>Can&apos;t connnect to %1 Server!</source>
+        <translation>Kann zum %1 Server nicht verbinden!</translation>
+    </message>
+    <message>
+        <location filename="../frmServerManager.cpp" line="274"/>
         <source>Please type in attach command</source>
         <translation>Bitte tippe Attach Befehl ein</translation>
     </message>
