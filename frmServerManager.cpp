@@ -211,7 +211,10 @@ void frmServerManager::on_cmdCStart_clicked()
             serverStart = QInputDialog::getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok);
             if (snok)
             {
-                smgr->setStartCommand(serverName, serverStart);
+                if (!smgr->setStartCommand(serverName, serverStart))
+                {
+                    QMessageBox::warning(this,tr("Choose Start"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -221,7 +224,7 @@ void frmServerManager::on_cmdCStart_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Server"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Start"),tr("Server Manager connection lost"));
     }
 }
 
@@ -239,7 +242,10 @@ void frmServerManager::on_cmdCStop_clicked()
             serverStop = QInputDialog::getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok);
             if (snok)
             {
-                smgr->setStopCommand(serverName, serverStop);
+                if (!smgr->setStopCommand(serverName, serverStop))
+                {
+                    QMessageBox::warning(this,tr("Choose Stop"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -267,7 +273,10 @@ void frmServerManager::on_cmdCConfig_clicked()
             serverConfig = QInputDialog::getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok);
             if (snok)
             {
-                smgr->setConfigCommand(serverName, serverConfig);
+                if (!smgr->setConfigCommand(serverName, serverConfig))
+                {
+                    QMessageBox::warning(this,tr("Choose Config"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -295,7 +304,10 @@ void frmServerManager::on_cmdCUpdate_clicked()
             serverUpdate = QInputDialog::getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok);
             if (snok)
             {
-                smgr->setUpdateCommand(serverName, serverUpdate);
+                if (!smgr->setUpdateCommand(serverName, serverUpdate))
+                {
+                    QMessageBox::warning(this,tr("Choose Update"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -323,7 +335,10 @@ void frmServerManager::on_cmdCAttach_clicked()
             serverAttach = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok);
             if (snok)
             {
-                smgr->setAttachCommand(serverName, serverAttach);
+                if (!smgr->setAttachCommand(serverName, serverAttach))
+                {
+                    QMessageBox::warning(this,tr("Choose Attach"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -594,7 +609,10 @@ void frmServerManager::on_cmdCIcon_clicked()
                 iconPath = iconWindow->getCurrentIconPath();
                 tempIcon = iconWindow->getCurrentIcon();
                 serverItem->setIcon(tempIcon);
-                smgr->setIconPath(serverName, iconPath);
+                if (!smgr->setIconPath(serverName, iconPath))
+                {
+                    QMessageBox::warning(this,tr("Choose Icon"),tr("Server Manager server-side error"));
+                }
             }
             iconWindow->deleteLater();
             delete iconWindow;

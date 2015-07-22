@@ -455,7 +455,7 @@ selection-color: rgb(215, 90, 0);
           <property name="sizeHint" stdset="0">
            <size>
             <width>0</width>
-            <height>3</height>
+            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -507,6 +507,8 @@ border-color: rgb(215, 120, 50);</string>
    <header>KPTLabel.h</header>
    <slots>
     <signal>mouseRelease(QMouseEvent*)</signal>
+    <signal>mousePress(QMouseEvent*)</signal>
+    <signal>mouseMove(QMouseEvent*)</signal>
    </slots>
   </customwidget>
  </customwidgets>
