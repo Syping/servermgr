@@ -674,7 +674,12 @@ void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *ev)
 void frmServerManager::on_cmdDisconnect_clicked()
 {
     autoLogin = false;
+
     iconWT->terminate();
+    iconWT->deleteLater();
+    iconWTDefined = false;
+    delete iconWT;
+
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
     ui->swSM->setCurrentIndex(1);
@@ -697,12 +702,15 @@ void frmServerManager::setServerIcon(QString serverName, QByteArray iconBytes)
     QList<QListWidgetItem*> itemsToReplace = ui->lwServer->findItems(serverName, Qt::MatchExactly);
     if (itemsToReplace.count() == 1)
     {
-        QIcon serverIcon;
+        QPixmap serverPixmap;
         QBuffer iconBuffer(&iconBytes);
         iconBuffer.open(QIODevice::ReadOnly);
         QDataStream iconIn(&iconBuffer);
-        iconIn >> serverIcon;
+        iconIn >> serverPixmap;
         iconBuffer.close();
+
+        QIcon serverIcon;
+        serverIcon.addPixmap(serverPixmap);
 
         QListWidgetItem *itemToReplace = itemsToReplace.at(0);
         itemToReplace->setIcon(serverIcon);
