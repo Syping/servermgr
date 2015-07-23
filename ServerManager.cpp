@@ -1326,7 +1326,6 @@ QStringList ServerManager::getArgsFromReturnRemote()
         retlist.append(reid);
         retlist.append(arg1);
         retlist.append(arg2);
-        qDebug() << reid;
         return retlist;
     }
     retlist.append("ERROR_NORETURN");
