@@ -28,13 +28,15 @@ SOURCES += main.cpp \
     KPTLabel.cpp \
     frmServerManager.cpp \
     frmIcon.cpp \
-    ServerManager.cpp
+    ServerManager.cpp \
+    IconThread.cpp
 
 HEADERS  += config.h \
     KPTLabel.h \
     frmServerManager.h \
     frmIcon.h \
-    ServerManager.h
+    ServerManager.h \
+    IconThread.h
 
 FORMS    += frmServerManager.ui \
     frmIcon.ui
