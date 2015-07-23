@@ -23,6 +23,7 @@
 class KPTLabel : public QLabel
 {
     Q_OBJECT
+
 public:
     explicit KPTLabel(QWidget *parent = 0);
 
