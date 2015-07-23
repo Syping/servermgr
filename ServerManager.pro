@@ -25,18 +25,18 @@ TARGET = ServerManager
 TEMPLATE = app
 
 SOURCES += main.cpp \
+    IconThread.cpp \
     KPTLabel.cpp \
     frmServerManager.cpp \
     frmIcon.cpp \
-    ServerManager.cpp \
-    IconThread.cpp
+    ServerManager.cpp
 
 HEADERS  += config.h \
+    IconThread.h \
     KPTLabel.h \
     frmServerManager.h \
     frmIcon.h \
-    ServerManager.h \
-    IconThread.h
+    ServerManager.h
 
 FORMS    += frmServerManager.ui \
     frmIcon.ui
