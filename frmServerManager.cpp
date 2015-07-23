@@ -15,8 +15,9 @@
 * limitations under the License.
 *****************************************************************************/
 
-#include "frmServerManager.h"
 #include "ui_frmServerManager.h"
+#include "frmServerManager.h"
+#include "IconThread.h"
 #include "frmIcon.h"
 #include "config.h"
 #include <QCryptographicHash>
@@ -24,8 +25,10 @@
 #include <QCommonStyle>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QByteArray>
 #include <QSettings>
 #include <QProcess>
+#include <QBuffer>
 #include <QTimer>
 #include <QStyle>
 #include <QDebug>
@@ -39,6 +42,7 @@ frmServerManager::frmServerManager(QWidget *parent) :
 {
     ui->setupUi(this);
     autoLogin = false;
+    iconWTDefined = false;
     smgr = new ServerManager(this);
     standardIcon = QIcon(ProductImg);
     QIcon windowIcon = QIcon(ProductIcon);
@@ -123,23 +127,18 @@ void frmServerManager::connectToServer()
     QStringList serverList = smgr->getServerList();
     foreach (const QString &serverName, serverList)
     {
-        QString iconPath = smgr->getIconPath(serverName);
-        QIcon serverIcon;
-        if (QFile::exists(iconPath))
-        {
-            QIcon tempIcon = QIcon(iconPath);
-            if (!tempIcon.isNull())
-            {
-                serverIcon = tempIcon;
-            }
-        }
-        else
-        {
-            serverIcon = standardIcon;
-        }
         QListWidgetItem *newItem = new QListWidgetItem(serverName);
-        newItem->setIcon(serverIcon);
+        newItem->setIcon(standardIcon);
         ui->lwServer->addItem(newItem);
+    }
+
+    if (serverList.length() != 0)
+    {
+        iconWT = new IconThread(smgr, serverList, this);
+        iconWTDefined = true;
+
+        connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
+        iconWT->start(QThread::LowPriority);
     }
 }
 
@@ -663,8 +662,9 @@ void frmServerManager::on_timerLB_ticked()
     QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
 }
 
-void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *)
+void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *ev)
 {
+    Q_UNUSED(ev);
     if (ui->labDesignedLogin->rect().contains(ui->labDesignedLogin->mapFromGlobal(QCursor::pos())))
     {
         connectToServer();
@@ -674,6 +674,7 @@ void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *)
 void frmServerManager::on_cmdDisconnect_clicked()
 {
     autoLogin = false;
+    iconWT->terminate();
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
     ui->swSM->setCurrentIndex(1);
@@ -689,4 +690,31 @@ void frmServerManager::on_cmdDisconnect_clicked()
     {
         ui->txtPasswordDesigned->setFocus();
     }
+}
+
+void frmServerManager::setServerIcon(QString serverName, QByteArray iconBytes)
+{
+    QList<QListWidgetItem*> itemsToReplace = ui->lwServer->findItems(serverName, Qt::MatchExactly);
+    if (itemsToReplace.count() == 1)
+    {
+        QIcon serverIcon;
+        QBuffer iconBuffer(&iconBytes);
+        iconBuffer.open(QIODevice::ReadOnly);
+        QDataStream iconIn(&iconBuffer);
+        iconIn >> serverIcon;
+        iconBuffer.close();
+
+        QListWidgetItem *itemToReplace = itemsToReplace.at(0);
+        itemToReplace->setIcon(serverIcon);
+    }
+}
+
+void frmServerManager::closeEvent(QCloseEvent *ev)
+{
+    Q_UNUSED(ev);
+    if (iconWTDefined)
+    {
+        iconWT->terminate();
+    }
+    qApp->exit(0);
 }

@@ -19,8 +19,10 @@
 #define FRMSERVERMANAGER_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <QSettings>
 #include "ServerManager.h"
+#include "IconThread.h"
 
 namespace Ui {
     class frmServerManager;
@@ -35,8 +37,11 @@ public:
     void setAdminMode(bool admin);
     ~frmServerManager();
 
+public slots:
+    void setServerIcon(QString serverName, QByteArray iconBytes);
+
 private slots:
-    void on_labDesignedLogin_mouseRelease(QMouseEvent *);
+    void on_labDesignedLogin_mouseRelease(QMouseEvent *ev);
     void on_cmdNewServer_clicked();
     void on_cmdDeleteServer_clicked();
     void on_cmdCStart_clicked();
@@ -60,10 +65,15 @@ private slots:
 private:
     Ui::frmServerManager *ui;
     ServerManager *smgr;
+    IconThread *iconWT;
     QIcon standardIcon;
     bool mouseOverLogin;
+    bool iconWTDefined;
     bool autoLogin;
     bool noAdmin;
+
+protected:
+    void closeEvent(QCloseEvent *ev);
 };
 
 #endif // FRMSERVERMANAGER_H
