@@ -45,259 +45,8 @@
     <item>
      <widget class="QStackedWidget" name="swSM">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
-      <widget class="QWidget" name="pServerManager">
-       <layout class="QVBoxLayout" name="vlSM">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="leftMargin">
-         <number>9</number>
-        </property>
-        <property name="topMargin">
-         <number>9</number>
-        </property>
-        <property name="rightMargin">
-         <number>9</number>
-        </property>
-        <property name="bottomMargin">
-         <number>9</number>
-        </property>
-        <item>
-         <widget class="KPTLabel" name="labTop">
-          <property name="text">
-           <string>Server Manager</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hlManager">
-          <item>
-           <layout class="QVBoxLayout" name="vlManagerLeft">
-            <item>
-             <widget class="QScrollArea" name="saLeft">
-              <property name="widgetResizable">
-               <bool>true</bool>
-              </property>
-              <widget class="QWidget" name="sawcLeft">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>256</width>
-                 <height>307</height>
-                </rect>
-               </property>
-               <layout class="QVBoxLayout" name="vlSawcLeft">
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QListWidget" name="lwServer">
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>24</width>
-                    <height>24</height>
-                   </size>
-                  </property>
-                  <property name="verticalScrollMode">
-                   <enum>QAbstractItemView::ScrollPerPixel</enum>
-                  </property>
-                  <property name="horizontalScrollMode">
-                   <enum>QAbstractItemView::ScrollPerPixel</enum>
-                  </property>
-                  <property name="sortingEnabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="vlManagerRight">
-            <item>
-             <widget class="QScrollArea" name="saRight">
-              <property name="widgetResizable">
-               <bool>true</bool>
-              </property>
-              <widget class="QWidget" name="sawcRight">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>143</width>
-                 <height>471</height>
-                </rect>
-               </property>
-               <layout class="QVBoxLayout" name="vlSawcRight">
-                <property name="spacing">
-                 <number>5</number>
-                </property>
-                <item>
-                 <spacer name="vsSMU">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdAttach">
-                  <property name="text">
-                   <string>Attach</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdStart">
-                  <property name="text">
-                   <string>Start</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdStop">
-                  <property name="text">
-                   <string>Stop</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdConfig">
-                  <property name="text">
-                   <string>Config</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdUpdate">
-                  <property name="text">
-                   <string>Update</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdAdmin">
-                  <property name="text">
-                   <string>Admin</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdDisconnect">
-                  <property name="text">
-                   <string>Disconnect</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCAttach">
-                  <property name="text">
-                   <string>Choose Attach</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCStart">
-                  <property name="text">
-                   <string>Choose Start</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCStop">
-                  <property name="text">
-                   <string>Choose Stop</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCConfig">
-                  <property name="text">
-                   <string>Choose Config</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCUpdate">
-                  <property name="text">
-                   <string>Choose Update</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdCIcon">
-                  <property name="text">
-                   <string>Choose Icon</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdNewServer">
-                  <property name="text">
-                   <string>New Server</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdDeleteServer">
-                  <property name="text">
-                   <string>Delete Server</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="cmdDAdmin">
-                  <property name="text">
-                   <string>Disable Admin</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="vsSMD">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="pLoginDesigned">
        <property name="styleSheet">
         <string notr="true">QWidget#pLoginDesigned{
@@ -494,9 +243,322 @@ border-color: rgb(215, 120, 50);</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="pServerManager">
+       <property name="styleSheet">
+        <string notr="true">QWidget#pServerManager{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QWidget#sawcRight{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QWidget#sawcRight{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QCheckBox{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QFrame{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QListWidget{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QPushButton{
+border-style: outset;
+background-color: rgb(215, 70, 25); 
+color: rgb(255, 255, 255);
+border-width: 1px;
+border-radius: 0px;
+border-color: rgb(215, 120, 50);
+padding: 4px;
+}
+QPushButton:hover{
+background-color: rgb(255, 255, 255);
+color: rgb(215, 70, 25);
+}
+QPushButton:pressed{
+background-color: rgb(255, 255, 255);
+color: rgb(215, 70, 25);
+border-style: inset;
+}
+</string>
+       </property>
+       <layout class="QVBoxLayout" name="vlSM">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="leftMargin">
+         <number>9</number>
+        </property>
+        <property name="topMargin">
+         <number>9</number>
+        </property>
+        <property name="rightMargin">
+         <number>9</number>
+        </property>
+        <property name="bottomMargin">
+         <number>9</number>
+        </property>
+        <item>
+         <widget class="KPTLabel" name="labTop">
+          <property name="text">
+           <string>Server Manager</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="hlManager">
+          <item>
+           <layout class="QVBoxLayout" name="vlManagerLeft">
+            <item>
+             <widget class="QScrollArea" name="saLeft">
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="sawcLeft">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>256</width>
+                 <height>287</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="vlSawcLeft">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QListWidget" name="lwServer">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="verticalScrollMode">
+                   <enum>QAbstractItemView::ScrollPerPixel</enum>
+                  </property>
+                  <property name="horizontalScrollMode">
+                   <enum>QAbstractItemView::ScrollPerPixel</enum>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="vlManagerRight">
+            <item>
+             <widget class="QScrollArea" name="saRight">
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="sawcRight">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>-184</y>
+                 <width>143</width>
+                 <height>471</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="vlSawcRight">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
+                <item>
+                 <spacer name="vsSMU">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdAttach">
+                  <property name="text">
+                   <string>Attach</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdStart">
+                  <property name="text">
+                   <string>Start</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdStop">
+                  <property name="text">
+                   <string>Stop</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdConfig">
+                  <property name="text">
+                   <string>Config</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdUpdate">
+                  <property name="text">
+                   <string>Update</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdAdmin">
+                  <property name="text">
+                   <string>Admin</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdDisconnect">
+                  <property name="text">
+                   <string>Disconnect</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCAttach">
+                  <property name="text">
+                   <string>Choose Attach</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCStart">
+                  <property name="text">
+                   <string>Choose Start</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCStop">
+                  <property name="text">
+                   <string>Choose Stop</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCConfig">
+                  <property name="text">
+                   <string>Choose Config</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCUpdate">
+                  <property name="text">
+                   <string>Choose Update</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdCIcon">
+                  <property name="text">
+                   <string>Choose Icon</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdNewServer">
+                  <property name="text">
+                   <string>New Server</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdDeleteServer">
+                  <property name="text">
+                   <string>Delete Server</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdDAdmin">
+                  <property name="text">
+                   <string>Disable Admin</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="vsSMD">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

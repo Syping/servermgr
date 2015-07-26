@@ -51,9 +51,16 @@ frmServerManager::frmServerManager(QWidget *parent) :
     this->setWindowIcon(windowIcon);
 
     // Change Visibles
-    ui->swSM->setCurrentIndex(1);
+    ui->swSM->setCurrentIndex(0);
+    ui->statusBar->setVisible(false);
     ui->labDesignedLoginDes->setVisible(false);
     setAdminMode(false);
+
+    // Add widgets to status bar
+    labStats = new KPTLabel();
+    ui->statusBar->addWidget(labStats,1);
+    ui->statusBar->layout()->setContentsMargins(2,0,6,0);
+    labStats->setText(tr("Welcome to Syping's Server Manager"));
 
     // Change Designed Mode Font size
     QFont designedFont;
@@ -122,8 +129,11 @@ void frmServerManager::connectToServer()
         }
     }
 
-    ui->swSM->setCurrentIndex(0);
+    // Visible things for Server Manager Widget
+    ui->swSM->setCurrentIndex(1);
+    // ui->statusBar->setVisible(true); --- wait with this
 
+    // Get server list
     QStringList serverList = smgr->getServerList();
     foreach (const QString &serverName, serverList)
     {
@@ -682,8 +692,9 @@ void frmServerManager::on_cmdDisconnect_clicked()
 
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
-    ui->swSM->setCurrentIndex(1);
+    ui->swSM->setCurrentIndex(0);
     ui->lwServer->clear();
+    ui->statusBar->setVisible(false);
     ui->txtPasswordDesigned->clear();
     ui->cbStayLoggedInDesigned->setChecked(false);
     ui->cbUseEncryptedConnectionDesigned->setChecked(false);

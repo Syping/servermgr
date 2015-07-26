@@ -23,6 +23,7 @@
 #include <QSettings>
 #include "ServerManager.h"
 #include "IconThread.h"
+#include "KPTLabel.h"
 
 namespace Ui {
     class frmServerManager;
@@ -66,6 +67,7 @@ private:
     Ui::frmServerManager *ui;
     ServerManager *smgr;
     IconThread *iconWT;
+    KPTLabel *labStats;
     QIcon standardIcon;
     bool mouseOverLogin;
     bool iconWTDefined;
