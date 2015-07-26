@@ -35,6 +35,7 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     sessionPasswd = "";
     sessionPort = 9509;
     sessionSSL = false;
+    lastReturn = 0;
 }
 
 // Server Manager Public
@@ -1350,6 +1351,8 @@ QStringList ServerManager::getArgsFromReturnRemote()
                 arg2 = argstr.remove(0,7).replace("&nbsp;"," ").replace("&amp;","&");
             }
         }
+        qDebug () << reid;
+        lastReturn = reid.toInt();
         retlist.append(atrq);
         retlist.append(reid);
         retlist.append(arg1);
@@ -1357,5 +1360,6 @@ QStringList ServerManager::getArgsFromReturnRemote()
         return retlist;
     }
     retlist.append("ERROR_NORETURN");
+    lastReturn = 500;
     return retlist;
 }

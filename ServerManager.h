@@ -147,6 +147,7 @@ private:
     QString sessionPasswd;
     int sessionPort;
     bool sessionSSL;
+    int lastReturn;
 };
 
 #endif // SERVERMANAGER_H

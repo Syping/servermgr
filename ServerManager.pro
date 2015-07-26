@@ -29,6 +29,7 @@ SOURCES += main.cpp \
     KPTLabel.cpp \
     frmServerManager.cpp \
     frmIcon.cpp \
+    PixmapEdit.cpp \
     ServerManager.cpp
 
 HEADERS  += config.h \
@@ -36,6 +37,7 @@ HEADERS  += config.h \
     KPTLabel.h \
     frmServerManager.h \
     frmIcon.h \
+    PixmapEdit.h \
     ServerManager.h
 
 FORMS    += frmServerManager.ui \
