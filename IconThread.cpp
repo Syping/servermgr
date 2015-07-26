@@ -15,13 +15,23 @@ IconThread::IconThread(ServerManager *smgr, QStringList serverList, QObject *par
 
 void IconThread::run()
 {
-    foreach(QString serverName, serverList)
+    if (smgr->ServerManagerMode == ServerManager::RemoteMode)
     {
-        if (smgr->ServerManagerMode == ServerManager::RemoteMode)
+        ServerManager *ismgr = new ServerManager();
+        ismgr->ServerManagerMode = ServerManager::RemoteMode;
+        if (ismgr->connectToServer(smgr->getCurrentSessionHostname(),smgr->getCurrentSessionPassword(),smgr->getCurrentSessionPort(),smgr->getCurrentSessionSSL()))
         {
-            // Working on that
+            ismgr->disconnectFromServer();
+            ismgr->deleteLater();
         }
         else
+        {
+            ismgr->deleteLater();
+        }
+    }
+    else
+    {
+        foreach(QString serverName, serverList)
         {
             QString iconPath = smgr->getIconPath(serverName);
             if (iconPath.left(6) != "ERROR_" && QFile::exists(iconPath))
