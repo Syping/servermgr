@@ -70,6 +70,10 @@ public:
     void setAutologinDisabled();
     bool connectToServerWithAutologin();
     bool isConnectionLocal();
+    QString getCurrentSessionHostname();
+    QString getCurrentSessionPassword();
+    int getCurrentSessionPort();
+    bool getCurrentSessionSSL();
 
     // Server Manager Mode
     enum SMMode
@@ -139,6 +143,10 @@ private:
 #else
     QSslSocket *tcpSocket;
 #endif
+    QString sessionHost;
+    QString sessionPasswd;
+    int sessionPort;
+    bool sessionSSL;
 };
 
 #endif // SERVERMANAGER_H

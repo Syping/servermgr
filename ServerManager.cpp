@@ -31,6 +31,10 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     tcpSocket = new QSslSocket();
 #endif
     ServerManagerMode = LocalMode;
+    sessionHost = "SM_LOCAL";
+    sessionPasswd = "";
+    sessionPort = 9509;
+    sessionSSL = false;
 }
 
 // Server Manager Public
@@ -435,6 +439,10 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
                         }
                         if (id == 200)
                         {
+                            sessionHost = hostname;
+                            sessionPasswd = password;
+                            sessionPort = port;
+                            sessionSSL = useSSL;
                             return true;
                         }
                         else
@@ -564,6 +572,26 @@ bool ServerManager::isConnectionLocal()
     {
         return true;
     }
+}
+
+QString ServerManager::getCurrentSessionHostname()
+{
+    return sessionHost;
+}
+
+QString ServerManager::getCurrentSessionPassword()
+{
+    return sessionPasswd;
+}
+
+int ServerManager::getCurrentSessionPort()
+{
+    return sessionPort;
+}
+
+bool ServerManager::getCurrentSessionSSL()
+{
+    return sessionSSL;
 }
 
 // Server Manager LocalMode
