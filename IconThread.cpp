@@ -1,4 +1,22 @@
+/*****************************************************************************
+* servermgr Syping Gaming Team Server Manager
+* Copyright (C) 2015 Syping Gaming Team
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*****************************************************************************/
+
 #include "IconThread.h"
+#include "PixmapEdit.h"
 #include <QByteArray>
 #include <QPainter>
 #include <QPixmap>
@@ -41,48 +59,10 @@ void IconThread::run()
                 {
                     if (serverPixmap.size() != QSize(24,24))
                     {
-                        if (serverPixmap.size().height() < serverPixmap.size().width())
-                        {
-                            QPixmap scaledWorkPixmap = serverPixmap.scaledToWidth(24,Qt::SmoothTransformation);
-                            if (scaledWorkPixmap.size() != QSize(24,24))
-                            {
-                                int _mx2 = scaledWorkPixmap.size().height() - 24;
-                                int _px2 = abs(_mx2);
-                                double _pxd = _px2 / 2;
-                                int _px = floor(_pxd);
-
-                                QPixmap *finishWorkPixmap = new QPixmap(24,24);
-                                finishWorkPixmap->fill(Qt::transparent);
-                                QPainter drawPainter(finishWorkPixmap);
-                                drawPainter.drawPixmap(0, _px, 24, scaledWorkPixmap.size().height(), scaledWorkPixmap);
-                                serverPixmap = QPixmap(*(finishWorkPixmap));
-                            }
-                            else
-                            {
-                                serverPixmap = scaledWorkPixmap;
-                            }
-                        }
-                        else
-                        {
-                            QPixmap scaledWorkPixmap = serverPixmap.scaledToHeight(24,Qt::SmoothTransformation);
-                            if (scaledWorkPixmap.size() != QSize(24,24))
-                            {
-                                int _mx2 = scaledWorkPixmap.size().width() - 24;
-                                int _px2 = abs(_mx2);
-                                double _pxd = _px2 / 2;
-                                int _px = floor(_pxd);
-
-                                QPixmap *finishWorkPixmap = new QPixmap(24,24);
-                                finishWorkPixmap->fill(Qt::transparent);
-                                QPainter drawPainter(finishWorkPixmap);
-                                drawPainter.drawPixmap(_px, 0, scaledWorkPixmap.size().width(), 24, scaledWorkPixmap);
-                                serverPixmap = QPixmap(*(finishWorkPixmap));
-                            }
-                            else
-                            {
-                                serverPixmap = scaledWorkPixmap;
-                            }
-                        }
+                        PixmapEdit sPixmapEdit;
+                        sPixmapEdit.setPixmap(serverPixmap);
+                        sPixmapEdit.centerPixmapAtSquare(24);
+                        serverPixmap = sPixmapEdit.getPixmap();
                     }
                     QByteArray iconBytes;
                     QBuffer iconBuffer(&iconBytes);
