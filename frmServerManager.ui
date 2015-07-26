@@ -282,7 +282,7 @@ selection-background-color: rgb(255, 255, 255);
 selection-color: rgb(215, 90, 0);
 }
 QPushButton{
-border-style: outset;
+border-style: ridge;
 background-color: rgb(215, 70, 25); 
 color: rgb(255, 255, 255);
 border-width: 1px;
