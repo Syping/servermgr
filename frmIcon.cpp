@@ -38,7 +38,7 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
 
     if (!designedMode)
     {
-#ifndef Q_WS_X11
+#ifndef SM_UNIX
         ui->cmdPlus->setIcon(QIcon(":/icon/plus-icon_c.png"));
         ui->cmdMinus->setIcon(QIcon(":/icon/minus-icon_c.png"));
 #endif
@@ -48,7 +48,7 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
     }
     else
     {
-#ifdef Q_WS_X11
+#ifdef SM_UNIX
         ui->cmdPlus->setIcon(QIcon());
         ui->cmdMinus->setIcon(QIcon());
 #endif
