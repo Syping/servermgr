@@ -18,6 +18,7 @@
 #include "PixmapEdit.h"
 #include <QPainter>
 #include <QPixmap>
+#include <cmath>
 
 PixmapEdit::PixmapEdit(QObject *parent) : QObject(parent)
 {

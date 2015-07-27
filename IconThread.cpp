@@ -23,7 +23,6 @@
 #include <QBuffer>
 #include <QIcon>
 #include <QFile>
-#include <cmath>
 
 IconThread::IconThread(ServerManager *smgr, QStringList serverList, int squareSize, QObject *parent) :
     QThread(parent), smgr(smgr), serverList(serverList), squareSize(squareSize)
