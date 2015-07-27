@@ -21,6 +21,8 @@ isEqual(QT_MAJOR_VERSION, 5): QT += widgets
 isEqual(QT_MAJOR_VERSION, 4): DEFINES += "QT4"
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
+win32: RC_FILE = app.rc
+
 TARGET = ServerManager
 TEMPLATE = app
 
@@ -48,6 +50,10 @@ RESOURCES += \
 
 TRANSLATIONS += \
     res/sm_de.ts
+
+OTHER_FILES += \
+    app.rc \
+    sm.ico
 
 unix: !macx: DEFINES += SM_UNIX
 
