@@ -15,8 +15,9 @@
 * limitations under the License.
 *****************************************************************************/
 
-#include "frmIcon.h"
+#include "PixmapEdit.h"
 #include "ui_frmIcon.h"
+#include "frmIcon.h"
 #include "config.h"
 #include <QImageReader>
 #include <QFileDialog>
@@ -24,9 +25,8 @@
 #include <QIcon>
 #include <QFile>
 
-frmIcon::frmIcon(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::frmIcon)
+frmIcon::frmIcon(QWidget *parent, bool designedMode) :
+    QDialog(parent), ui(new Ui::frmIcon), designedMode(designedMode)
 {
     setWindowFlags(windowFlags()^Qt::WindowContextHelpButtonHint);
     ui->setupUi(this);
@@ -34,15 +34,39 @@ frmIcon::frmIcon(QWidget *parent) :
     configFile = new QSettings(ProductVendor,"Icon Manager");
     currentIcon = QIcon(ProductImg);
     iconChanged = false;
+    squareSize = 24;
+
+    if (!designedMode)
+    {
+#ifndef Q_WS_X11
+        ui->cmdPlus->setIcon(QIcon(":/icon/plus-icon_c.png"));
+        ui->cmdMinus->setIcon(QIcon(":/icon/minus-icon_c.png"));
+#endif
+        ui->cmdPlus->setStyleSheet("");
+        ui->cmdMinus->setStyleSheet("");
+        this->setStyleSheet("");
+    }
+}
+
+void frmIcon::loadIcons()
+{
     iconList = configFile->value("iconList",QStringList(ProductImg)).toStringList();
     iconList.removeDuplicates();
     foreach (const QString &iconPath, iconList)
     {
         if (QFile::exists(iconPath))
         {
-            QIcon tempIcon = QIcon(iconPath);
-            if (!tempIcon.isNull())
+            QPixmap tempPixmap = QPixmap(iconPath);
+            if (!tempPixmap.isNull())
             {
+                if (tempPixmap.size() != QSize(squareSize, squareSize))
+                {
+                    PixmapEdit sPixmapEdit;
+                    sPixmapEdit.setPixmap(tempPixmap);
+                    sPixmapEdit.centerPixmapAtSquare(squareSize, true);
+                    tempPixmap = sPixmapEdit.getPixmap();
+                }
+                QIcon tempIcon = QIcon(tempPixmap);
                 QListWidgetItem *newItem = new QListWidgetItem(iconPath);
                 newItem->setIcon(tempIcon);
                 ui->lwIcons->addItem(newItem);
@@ -58,7 +82,6 @@ frmIcon::frmIcon(QWidget *parent) :
         }
     }
     configFile->setValue("iconList",iconList);
-
 }
 
 void frmIcon::setCurrentIcon(QIcon currentIconA, QString iconPath)
@@ -83,7 +106,7 @@ void frmIcon::setCurrentIcon(QIcon currentIconA, QString iconPath)
             itemToSelect->setSelected(true);
         }
     }
-    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(24,24));
+    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
 }
 
 frmIcon::~frmIcon()
@@ -150,9 +173,17 @@ void frmIcon::on_cmdPlus_clicked()
     {
         if (QFile::exists(fileName))
         {
-            QIcon tempIcon = QIcon(fileName);
-            if (!tempIcon.isNull())
+            QPixmap tempPixmap = QPixmap(fileName);
+            if (!tempPixmap.isNull())
             {
+                if (tempPixmap.size() != QSize(squareSize, squareSize))
+                {
+                    PixmapEdit sPixmapEdit;
+                    sPixmapEdit.setPixmap(tempPixmap);
+                    sPixmapEdit.centerPixmapAtSquare(squareSize, true);
+                    tempPixmap = sPixmapEdit.getPixmap();
+                }
+                QIcon tempIcon = QIcon(tempPixmap);
                 QListWidgetItem *newItem = new QListWidgetItem(fileName);
                 newItem->setIcon(tempIcon);
                 ui->lwIcons->addItem(newItem);
@@ -176,7 +207,7 @@ void frmIcon::on_lwIcons_currentItemChanged(QListWidgetItem *currentItem, QListW
     Q_UNUSED(previousItem);
     currentIcon = currentItem->icon();
     currentIconPath = currentItem->text();
-    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(24,24));
+    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
 }
 
 bool frmIcon::isIconChanged()
@@ -192,5 +223,14 @@ QIcon frmIcon::getCurrentIcon()
 QString frmIcon::getCurrentIconPath()
 {
     return currentIconPath;
+}
+
+void frmIcon::setSquareSize(int _squareSize)
+{
+    squareSize = _squareSize;
+    ui->lwIcons->setIconSize(QSize(squareSize, squareSize));
+    ui->imgCurrentIcon->setMinimumSize(QSize(squareSize, squareSize));
+    ui->imgCurrentIcon->setMaximumSize(QSize(squareSize, squareSize));
+    ui->imgCurrentIcon->setGeometry(ui->imgCurrentIcon->geometry().x(),ui->imgCurrentIcon->y(),squareSize, squareSize);
 }
 

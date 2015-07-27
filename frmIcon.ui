@@ -28,6 +28,63 @@
   <property name="windowTitle">
    <string>Icon Manager</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#frmIcon{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QWidget#sawcRight{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QWidget#sawcRight{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QCheckBox{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QFrame{
+background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QListWidget{
+background-color: rgb(215, 120, 50);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+}
+QPushButton{
+border-style: ridge;
+background-color: rgb(215, 70, 25); 
+color: rgb(255, 255, 255);
+border-width: 1px;
+border-radius: 0px;
+border-color: rgb(215, 120, 50);
+padding: 4px;
+}
+QPushButton:hover{
+background-color: rgb(255, 255, 255);
+color: rgb(215, 70, 25);
+}
+QPushButton:pressed{
+background-color: rgb(255, 255, 255);
+color: rgb(215, 70, 25);
+border-style: inset;
+}
+</string>
+  </property>
   <layout class="QVBoxLayout" name="iconLayout">
    <item>
     <layout class="QHBoxLayout" name="hlCurrent">
@@ -77,7 +134,7 @@
       <widget class="QPushButton" name="cmdOkay">
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>80</width>
          <height>25</height>
         </size>
        </property>
@@ -135,6 +192,14 @@
          <height>25</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+image: url(:/icon/plus-icon.png)
+}
+QPushButton:hover{
+image: url(:/icon/plus-icon_o.png)
+}</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -158,6 +223,14 @@
          <width>16777215</width>
          <height>25</height>
         </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+image: url(:/icon/minus-icon.png)
+}
+QPushButton:hover{
+image: url(:/icon/minus-icon_o.png)
+}</string>
        </property>
        <property name="text">
         <string/>
@@ -186,7 +259,7 @@
       <widget class="QPushButton" name="cmdCancel">
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>80</width>
          <height>25</height>
         </size>
        </property>
@@ -209,6 +282,11 @@
    <class>KPTLabel</class>
    <extends>QLabel</extends>
    <header>KPTLabel.h</header>
+   <slots>
+    <signal>mouseRelease(QMouseEvent*)</signal>
+    <signal>mousePress(QMouseEvent*)</signal>
+    <signal>mouseMove(QMouseEvent*)</signal>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>

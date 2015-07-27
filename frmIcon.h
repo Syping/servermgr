@@ -21,6 +21,7 @@
 #include <QListWidgetItem>
 #include <QStringList>
 #include <QSettings>
+#include <QWidget>
 #include <QDialog>
 #include <QString>
 #include <QIcon>
@@ -34,11 +35,13 @@ class frmIcon : public QDialog
     Q_OBJECT
 
 public:
-    explicit frmIcon(QWidget *parent = 0);
+    explicit frmIcon(QWidget *parent = 0, bool designedMode = true);
     QIcon getCurrentIcon();
     QString getCurrentIconPath();
     void setCurrentIcon(QIcon currentIcon, QString iconPath);
     bool isIconChanged();
+    void setSquareSize(int squareSize);
+    void loadIcons();
     ~frmIcon();
 
 private slots:
@@ -53,7 +56,9 @@ private:
     QString currentIconPath;
     QIcon currentIcon;
     QStringList iconList;
+    bool designedMode;
     bool iconChanged;
+    int squareSize;
     Ui::frmIcon *ui;
 };
 
