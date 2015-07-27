@@ -1365,5 +1365,12 @@ QStringList ServerManager::getArgsFromReturnRemote()
 
 int ServerManager::getLastReturnValue()
 {
-    return lastReturn;
+    if (ServerManagerMode == RemoteMode)
+    {
+        return lastReturn;
+    }
+    else
+    {
+        return 200;
+    }
 }
