@@ -73,6 +73,7 @@ private:
     bool iconWTDefined;
     bool autoLogin;
     bool noAdmin;
+    int izSquare;
 
 protected:
     void closeEvent(QCloseEvent *ev);

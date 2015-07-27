@@ -77,6 +77,10 @@ frmServerManager::frmServerManager(QWidget *parent) :
     ui->cbUseEncryptedConnectionDesigned->setVisible(false);
 #endif
 
+    // Change Icon size
+    izSquare = 24;
+    ui->lwServer->setIconSize(QSize(izSquare, izSquare));
+
     // Start Timer
     QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
 
@@ -144,7 +148,7 @@ void frmServerManager::connectToServer()
 
     if (serverList.length() != 0)
     {
-        iconWT = new IconThread(smgr, serverList, this);
+        iconWT = new IconThread(smgr, serverList, 24, this);
         iconWTDefined = true;
 
         connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
@@ -593,23 +597,11 @@ void frmServerManager::on_cmdCIcon_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString iconPath = smgr->getIconPath(serverName);
-            QIcon tempIcon;
-            if (QFile::exists(iconPath))
-            {
-                tempIcon = QIcon(iconPath);
-                if (tempIcon.isNull())
-                {
-                    iconPath = ProductImg;
-                    tempIcon = QIcon(iconPath);
-                }
-            }
-            else
-            {
-                iconPath = ProductImg;
-                tempIcon = QIcon(iconPath);
-            }
+            QIcon tempIcon = serverItem->icon();
             frmIcon *iconWindow = new frmIcon(this);
             iconWindow->setWindowIcon(this->windowIcon());
+            iconWindow->setSquareSize(izSquare);
+            iconWindow->loadIcons();
             iconWindow->setCurrentIcon(tempIcon,iconPath);
             iconWindow->show();
             iconWindow->exec();
