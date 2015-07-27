@@ -796,7 +796,7 @@ void frmServerManager::closeEvent(QCloseEvent *ev)
 
 void frmServerManager::on_cmdConfigLocal_clicked()
 {
-    frmConfig *configWindow = new frmConfig(languagePath, designedMode, this);
+    frmConfig *configWindow = new frmConfig(this, languagePath, designedMode);
     configWindow->show();
     configWindow->exec();
     configWindow->deleteLater();
