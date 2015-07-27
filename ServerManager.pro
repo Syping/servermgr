@@ -60,5 +60,7 @@ OTHER_FILES += \
     sm.ico
 
 unix: !macx: DEFINES += SM_UNIX
+unix: !macx: target.path = $$(SM_INSTALL_PATH)/bin
+unix: !macx: INSTALLS += target
 
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
