@@ -25,8 +25,8 @@
 #include <QFile>
 #include <cmath>
 
-IconThread::IconThread(ServerManager *smgr, QStringList serverList, QObject *parent) :
-    QThread(parent), smgr(smgr), serverList(serverList)
+IconThread::IconThread(ServerManager *smgr, QStringList serverList, int squareSize, QObject *parent) :
+    QThread(parent), smgr(smgr), serverList(serverList), squareSize(squareSize)
 {
 
 }
@@ -57,11 +57,11 @@ void IconThread::run()
                 QPixmap serverPixmap = QPixmap(iconPath);
                 if (!serverPixmap.isNull())
                 {
-                    if (serverPixmap.size() != QSize(24,24))
+                    if (serverPixmap.size() != QSize(squareSize, squareSize))
                     {
                         PixmapEdit sPixmapEdit;
                         sPixmapEdit.setPixmap(serverPixmap);
-                        sPixmapEdit.centerPixmapAtSquare(24);
+                        sPixmapEdit.centerPixmapAtSquare(squareSize, true);
                         serverPixmap = sPixmapEdit.getPixmap();
                     }
                     QByteArray iconBytes;

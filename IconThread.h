@@ -28,11 +28,12 @@ class IconThread : public QThread
     Q_OBJECT
 
 public:
-    explicit IconThread(ServerManager *smgr, QStringList serverList, QObject *parent = 0);
+    explicit IconThread(ServerManager *smgr, QStringList serverList, int squareSize = 24, QObject *parent = 0);
 
 private:
     ServerManager *smgr;
     QStringList serverList;
+    int squareSize;
 
 signals:
     void setServerIcon(QString serverName, QByteArray iconBytes);
