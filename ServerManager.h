@@ -74,6 +74,7 @@ public:
     QString getCurrentSessionPassword();
     int getCurrentSessionPort();
     bool getCurrentSessionSSL();
+    int getLastReturnValue();
 
     // Server Manager Mode
     enum SMMode

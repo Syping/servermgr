@@ -1351,7 +1351,6 @@ QStringList ServerManager::getArgsFromReturnRemote()
                 arg2 = argstr.remove(0,7).replace("&nbsp;"," ").replace("&amp;","&");
             }
         }
-        qDebug () << reid;
         lastReturn = reid.toInt();
         retlist.append(atrq);
         retlist.append(reid);
@@ -1362,4 +1361,9 @@ QStringList ServerManager::getArgsFromReturnRemote()
     retlist.append("ERROR_NORETURN");
     lastReturn = 500;
     return retlist;
+}
+
+int ServerManager::getLastReturnValue()
+{
+    return lastReturn;
 }
