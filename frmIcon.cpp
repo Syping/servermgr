@@ -50,7 +50,7 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
     {
 #ifdef Q_WS_X11
         ui->cmdPlus->setIcon(QIcon());
-        ui->cmdMinux->setIcon(QIcon());
+        ui->cmdMinus->setIcon(QIcon());
 #endif
     }
 }
