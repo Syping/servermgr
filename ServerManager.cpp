@@ -16,11 +16,14 @@
 *****************************************************************************/
 
 #include "ServerManager.h"
+#include "PixmapEdit.h"
 #include "config.h"
 
 #include <QCryptographicHash>
 #include <QHostAddress>
+#include <QByteArray>
 #include <QProcess>
+#include <QBuffer>
 
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
@@ -61,6 +64,18 @@ QString ServerManager::getIconPath(QString serverName)
     else
     {
         return getIconPathRemote(serverName);
+    }
+}
+
+QString ServerManager::getIconBytes(QString serverName, int squareSize)
+{
+    if (ServerManagerMode == LocalMode)
+    {
+        return getIconBytesLocal(serverName, squareSize);
+    }
+    else
+    {
+        return getIconBytesRemote(serverName, squareSize);
     }
 }
 
@@ -610,6 +625,36 @@ QString ServerManager::getIconPathLocal(QString serverName)
     return iconPath;
 }
 
+QString ServerManager::getIconBytesLocal(QString serverName, int squareSize)
+{
+    QString iconPath = getIconPathLocal(serverName);
+    QPixmap iconPixmap = QPixmap(iconPath);
+    if (!iconPixmap.isNull())
+    {
+        PixmapEdit sPixmapEdit;
+        sPixmapEdit.setPixmap(iconPixmap);
+        bool success = sPixmapEdit.centerPixmapAtSquare(squareSize, false);
+        if (success)
+        {
+            iconPixmap = sPixmapEdit.getPixmap();
+            QByteArray iconArray;
+            QBuffer iconBuffer(&iconArray);
+            iconBuffer.open(QIODevice::WriteOnly);
+            iconPixmap.save(&iconBuffer,"PNG");
+            iconBuffer.close();
+            return QString::fromUtf8(iconArray.toBase64());
+        }
+        else
+        {
+            return "";
+        }
+    }
+    else
+    {
+        return "";
+    }
+}
+
 bool ServerManager::addServerLocal(QString serverName)
 {
     QStringList serverList = configFile->value("serverList",QStringList()).toStringList();
@@ -839,6 +884,29 @@ QString ServerManager::getIconPathRemote(QString serverName)
         arg1 = serverName.replace("&","&amp;");
         arg1 = serverName.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=geticonpath --arg1=" + arg1.toUtf8() + "\n");
+        tcpSocket->flush();
+        QStringList args = getArgsFromReturnRemote();
+        if (args.at(0) != "ERROR_NORETURN")
+        {
+            return args.at(2);
+        }
+        else
+        {
+            return "ERROR_NORETURN";
+        }
+    }
+    return "ERROR_DISCONNECTED";
+}
+
+QString ServerManager::getIconBytesRemote(QString serverName, int squareSize)
+{
+    if (isConnected())
+    {
+        QString arg1 = serverName;
+        arg1 = serverName.replace("&","&amp;");
+        arg1 = serverName.replace(" ","&nbsp;");
+        QString arg2 = QString::number(squareSize);
+        tcpSocket->write("SM/1.1 request --rq=geticonbytes --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")

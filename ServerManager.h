@@ -39,6 +39,7 @@ public:
     // Server Manager Public
     QStringList getServerList();
     QString getIconPath(QString serverName);
+    QString getIconBytes(QString serverName, int squareSize);
     bool addServer(QString serverName);
     bool deleteServer(QString serverName);
     QString getStartCommand(QString serverName);
@@ -89,6 +90,7 @@ private:
     // Server Manager LocalMode
     QStringList getServerListLocal();
     QString getIconPathLocal(QString serverName);
+    QString getIconBytesLocal(QString serverName, int squareSize);
     bool addServerLocal(QString serverName);
     void deleteServerLocal(QString serverName);
     QString getStartCommandLocal(QString serverName);
@@ -114,6 +116,7 @@ private:
     // Server Manager RemoteMode
     QStringList getServerListRemote();
     QString getIconPathRemote(QString serverName);
+    QString getIconBytesRemote(QString serverName, int squareSize);
     bool addServerRemote(QString serverName);
     bool deleteServerRemote(QString serverName);
     QString getStartCommandRemote(QString serverName);
