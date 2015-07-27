@@ -29,21 +29,25 @@ TEMPLATE = app
 SOURCES += main.cpp \
     IconThread.cpp \
     KPTLabel.cpp \
-    frmServerManager.cpp \
+    frmConfig.cpp \
     frmIcon.cpp \
+    frmServerManager.cpp \
     PixmapEdit.cpp \
     ServerManager.cpp
 
 HEADERS  += config.h \
     IconThread.h \
     KPTLabel.h \
-    frmServerManager.h \
+    frmConfig.h \
     frmIcon.h \
+    frmServerManager.h \
     PixmapEdit.h \
     ServerManager.h
 
-FORMS    += frmServerManager.ui \
-    frmIcon.ui
+FORMS    += \
+    frmConfig.ui \
+    frmIcon.ui \
+    frmServerManager.ui \
 
 RESOURCES += \
     res/res.qrc
