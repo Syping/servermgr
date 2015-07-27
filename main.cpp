@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
 
     settings.beginGroup("Interface");
     QString language = settings.value("Language","System").toString();
+    bool designedMode = settings.value("designedMode",true).toBool();
     settings.endGroup();
 
     // Start external translate loading
@@ -395,7 +396,24 @@ int main(int argc, char *argv[])
 #endif
     // End internal translate loading
 
-    frmServerManager w;
+    // Start loading style
+    settings.beginGroup("Style");
+    bool loadCustom = settings.value("Custom",false).toBool();
+    if (loadCustom)
+    {
+        QString style = settings.value("Name","System").toString();
+        if (style != "System")
+        {
+            if (style.trimmed() != "")
+            {
+                a.setStyle(style);
+            }
+        }
+    }
+    settings.endGroup();
+    // End loading style
+
+    frmServerManager w(trplugspath, designedMode);
     w.show();
 
     return a.exec();
