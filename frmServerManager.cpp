@@ -377,7 +377,7 @@ void frmServerManager::on_cmdStart_clicked()
             bool success = smgr->startServer(serverName);
             if (!success)
             {
-                if (smgr->getLastReturnValue() == 300)
+                if (smgr->getLastReturnValue() == 200 && smgr->getLastReturnValue() == 300)
                 {
                     QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
                 }
@@ -410,7 +410,7 @@ void frmServerManager::on_cmdStop_clicked()
             bool success = smgr->stopServer(serverName);
             if (!success)
             {
-                if (smgr->getLastReturnValue() == 300)
+                if (smgr->getLastReturnValue() == 200 && smgr->getLastReturnValue() == 300)
                 {
                     QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
                 }
@@ -443,7 +443,7 @@ void frmServerManager::on_cmdConfig_clicked()
             bool success = smgr->configServer(serverName);
             if (!success)
             {
-                if (smgr->getLastReturnValue() == 300)
+                if (smgr->getLastReturnValue() == 200 && smgr->getLastReturnValue() == 300)
                 {
                     QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
                 }
@@ -476,7 +476,7 @@ void frmServerManager::on_cmdUpdate_clicked()
             bool success = smgr->updateServer(serverName);
             if (!success)
             {
-                if (smgr->getLastReturnValue() == 300)
+                if (smgr->getLastReturnValue() == 200 && smgr->getLastReturnValue() == 300)
                 {
                     QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
                 }
@@ -509,7 +509,7 @@ void frmServerManager::on_cmdAttach_clicked()
             bool success = smgr->attachServer(serverName);
             if (!success)
             {
-                if (smgr->getLastReturnValue() == 300)
+                if (smgr->getLastReturnValue() == 200 && smgr->getLastReturnValue() == 300)
                 {
                     QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
                 }
