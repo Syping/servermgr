@@ -44,7 +44,7 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
 #endif
         ui->cmdPlus->setStyleSheet("");
         ui->cmdMinus->setStyleSheet("");
-        this->setStyleSheet("");
+        ui->iconWidget->setStyleSheet("");
     }
     else
     {

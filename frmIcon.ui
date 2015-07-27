@@ -51,53 +51,47 @@
     <widget class="QWidget" name="iconWidget" native="true">
      <property name="styleSheet">
       <string notr="true">QWidget#iconWidget{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QWidget#sawcRight{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
-}
-QWidget#sawcRight{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QFrame{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QListWidget{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QPushButton{
-border-style: ridge;
-background-color: rgb(215, 70, 25); 
-color: rgb(255, 255, 255);
-border-width: 1px;
-border-radius: 0px;
-border-color: rgb(215, 120, 50);
-min-width: 5em;
-padding: 4px;
+	border-style: ridge;
+	background-color: rgb(215, 70, 25); 
+	color: rgb(255, 255, 255);
+	border-width: 1px;
+	border-radius: 0px;
+	border-color: rgb(215, 120, 50);
+	min-width: 5em;
+	padding: 4px;
 }
 QPushButton:hover{
-background-color: rgb(255, 255, 255);
-color: rgb(215, 70, 25);
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
 }
 QPushButton:pressed{
-background-color: rgb(255, 255, 255);
-color: rgb(215, 70, 25);
-border-style: inset;
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
 }
 </string>
      </property>
@@ -153,7 +147,7 @@ border-style: inset;
          <widget class="QPushButton" name="cmdOkay">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>75</width>
             <height>25</height>
            </size>
           </property>
@@ -280,7 +274,7 @@ image: url(:/icon/minus-icon_o.png)
          <widget class="QPushButton" name="cmdCancel">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>75</width>
             <height>25</height>
            </size>
           </property>
