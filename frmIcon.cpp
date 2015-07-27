@@ -46,6 +46,13 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         ui->cmdMinus->setStyleSheet("");
         this->setStyleSheet("");
     }
+    else
+    {
+#ifdef Q_WS_X11
+        ui->cmdPlus->setIcon(QIcon());
+        ui->cmdMinux->setIcon(QIcon());
+#endif
+    }
 }
 
 void frmIcon::loadIcons()
