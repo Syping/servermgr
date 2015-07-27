@@ -50,28 +50,28 @@
       <widget class="QWidget" name="pLoginDesigned">
        <property name="styleSheet">
         <string notr="true">QWidget#pLoginDesigned{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QCheckBox{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QFrame{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QLineEdit{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 </string>
        </property>
@@ -246,53 +246,53 @@ border-color: rgb(215, 120, 50);</string>
       <widget class="QWidget" name="pServerManager">
        <property name="styleSheet">
         <string notr="true">QWidget#pServerManager{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QWidget#sawcRight{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QCheckBox{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QFrame{
-background-color: rgb(215, 90, 0);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QListWidget{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
 }
 QPushButton{
-border-style: ridge;
-background-color: rgb(215, 70, 25); 
-color: rgb(255, 255, 255);
-border-width: 1px;
-border-radius: 0px;
-border-color: rgb(215, 120, 50);
-min-width: 5em;
-padding: 4px;
+	border-style: ridge;
+	background-color: rgb(215, 70, 25); 
+	color: rgb(255, 255, 255);
+	border-width: 1px;
+	border-radius: 0px;
+	border-color: rgb(215, 120, 50);
+	min-width: 5em;
+	padding: 4px;
 }
 QPushButton:hover{
-background-color: rgb(255, 255, 255);
-color: rgb(215, 70, 25);
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
 }
 QPushButton:pressed{
-background-color: rgb(255, 255, 255);
-color: rgb(215, 70, 25);
-border-style: inset;
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
 }
 </string>
        </property>
@@ -398,7 +398,7 @@ border-style: inset;
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-246</y>
+                 <y>0</y>
                  <width>145</width>
                  <height>535</height>
                 </rect>

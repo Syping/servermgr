@@ -37,9 +37,8 @@
 #include <QFont>
 #include <QIcon>
 
-frmServerManager::frmServerManager(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::frmServerManager)
+frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWidget *parent) :
+    QMainWindow(parent), languagePath(languagePath), designedMode(designedMode), ui(new Ui::frmServerManager)
 {
     ui->setupUi(this);
     autoLogin = false;
@@ -66,6 +65,13 @@ frmServerManager::frmServerManager(QWidget *parent) :
     ui->statusBar->addWidget(labStats,1);
     ui->statusBar->layout()->setContentsMargins(2,0,6,0);
     labStats->setText(tr("Welcome to Syping's Server Manager"));
+
+    // SM Style designedMode
+    SMStyleSheet = ui->pServerManager->styleSheet();
+    if (!designedMode)
+    {
+        ui->pServerManager->setStyleSheet("");
+    }
 
     // Change Designed Mode Font size
     QFont designedFont;
@@ -605,7 +611,7 @@ void frmServerManager::on_cmdAdmin_clicked()
             if (passwordHash == "")
             {
                 bool ok;
-                QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Type a password for the admin mode"),QLineEdit::Password,"",&ok);
+                QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Type a password for the admin mode and host mode"),QLineEdit::Password,"",&ok);
                 if (ok)
                 {
                     smgr->setAdminPassword(pwInput);
@@ -615,7 +621,7 @@ void frmServerManager::on_cmdAdmin_clicked()
             else
             {
                 bool ok;
-                QString pwInput = QInputDialog::getText(this,tr("Server Manager Admin"),tr("Please type the admin password"),QLineEdit::Password,"",&ok);
+                QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Please type the admin/host password"),QLineEdit::Password,"",&ok);
                 if (ok)
                 {
                     if (smgr->getPasswordHashFromString(pwInput) == passwordHash)
@@ -624,7 +630,7 @@ void frmServerManager::on_cmdAdmin_clicked()
                     }
                     else
                     {
-                        QMessageBox::warning(this,tr("Server Manager Admin"),tr("Incorrect password"));
+                        QMessageBox::warning(this,tr("Admin"),tr("Incorrect password"));
                     }
                 }
             }
@@ -636,7 +642,7 @@ void frmServerManager::on_cmdAdmin_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Server Manager Admin"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Admin"),tr("Server Manager connection lost"));
     }
 }
 
@@ -656,7 +662,7 @@ void frmServerManager::on_cmdCIcon_clicked()
             QString serverName = serverItem->text();
             QString iconPath = smgr->getIconPath(serverName);
             QIcon tempIcon = serverItem->icon();
-            frmIcon *iconWindow = new frmIcon(this);
+            frmIcon *iconWindow = new frmIcon(this, designedMode);
             iconWindow->setWindowIcon(this->windowIcon());
             iconWindow->setSquareSize(izSquare);
             iconWindow->loadIcons();
@@ -790,7 +796,7 @@ void frmServerManager::closeEvent(QCloseEvent *ev)
 
 void frmServerManager::on_cmdConfigLocal_clicked()
 {
-    frmConfig *configWindow = new frmConfig(this);
+    frmConfig *configWindow = new frmConfig(languagePath, designedMode, this);
     configWindow->show();
     configWindow->exec();
     configWindow->deleteLater();

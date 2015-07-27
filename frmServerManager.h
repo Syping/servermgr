@@ -34,7 +34,7 @@ class frmServerManager : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit frmServerManager(QWidget *parent = 0);
+    explicit frmServerManager(QString languagePath = "", bool designedMode = true, QWidget *parent = 0);
     void setAdminMode(bool admin);
     ~frmServerManager();
 
@@ -66,12 +66,15 @@ private slots:
 
 private:
     Ui::frmServerManager *ui;
+    QString languagePath;
+    QString SMStyleSheet;
     ServerManager *smgr;
     IconThread *iconWT;
     KPTLabel *labStats;
     QIcon standardIcon;
     bool mouseOverLogin;
     bool iconWTDefined;
+    bool designedMode;
     bool autoLogin;
     bool noAdmin;
     int izSquare;
