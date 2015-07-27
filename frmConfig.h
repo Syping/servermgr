@@ -39,13 +39,13 @@ private slots:
     void on_cmdChangeAdminPassword_clicked();
 
 private:
-    Ui::frmConfig *ui;
-    bool designedMode;
     QString languagePath;
+    bool designedMode;
     QMap <QString,QString> langWrapper;
     QStringList putStringToStringList(QString string);
     bool designedModeActivated();
     void applySettings();
+    Ui::frmConfig *ui;
 };
 
 #endif // FRMCONFIG_H
