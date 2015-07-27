@@ -18,6 +18,7 @@
 #include "ui_frmServerManager.h"
 #include "frmServerManager.h"
 #include "IconThread.h"
+#include "frmConfig.h"
 #include "frmIcon.h"
 #include "config.h"
 #include <QCryptographicHash>
@@ -50,8 +51,12 @@ frmServerManager::frmServerManager(QWidget *parent) :
     windowIcon.addPixmap(QPixmap(ProductPixmap));
     this->setWindowIcon(windowIcon);
 
+    // Change Text and Version things
+    ui->labSMVersion->setText(ui->labSMVersion->text().arg(ProductVersion));
+
     // Change Visibles
     ui->swSM->setCurrentIndex(0);
+    ui->labTop->setVisible(false);
     ui->statusBar->setVisible(false);
     ui->labDesignedLoginDes->setVisible(false);
     setAdminMode(false);
@@ -112,6 +117,15 @@ void frmServerManager::connectToServer()
     }
     else if (ui->txtHostnameDesigned->text() == "SM_LOCAL")
     {
+        smgr->ServerManagerMode = ServerManager::LocalMode;
+        if (ui->cbStayLoggedInDesigned->isChecked())
+        {
+            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+        }
+    }
+    else if (ui->txtHostnameDesigned->text() == "")
+    {
+        ui->txtHostnameDesigned->setText("SM_LOCAL");
         smgr->ServerManagerMode = ServerManager::LocalMode;
         if (ui->cbStayLoggedInDesigned->isChecked())
         {
@@ -554,6 +568,8 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdConfig->setVisible(false);
         ui->cmdUpdate->setVisible(false);
         ui->cmdDisconnect->setVisible(false);
+        ui->cmdConfigLocal->setVisible(false);
+        ui->labLocal->setVisible(false);
     }
     else
     {
@@ -574,6 +590,8 @@ void frmServerManager::setAdminMode(bool admin)
         ui->cmdConfig->setVisible(true);
         ui->cmdUpdate->setVisible(true);
         ui->cmdDisconnect->setVisible(true);
+        ui->cmdConfigLocal->setVisible(true);
+        ui->labLocal->setVisible(true);
     }
 }
 
@@ -768,4 +786,13 @@ void frmServerManager::closeEvent(QCloseEvent *ev)
         iconWT->terminate();
     }
     qApp->exit(0);
+}
+
+void frmServerManager::on_cmdConfigLocal_clicked()
+{
+    frmConfig *configWindow = new frmConfig(this);
+    configWindow->show();
+    configWindow->exec();
+    configWindow->deleteLater();
+    delete configWindow;
 }

@@ -62,6 +62,7 @@ private slots:
     void setWidgetDesign();
     void connectToServer();
     void on_cmdDisconnect_clicked();
+    void on_cmdConfigLocal_clicked();
 
 private:
     Ui::frmServerManager *ui;

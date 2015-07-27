@@ -252,13 +252,7 @@ selection-background-color: rgb(255, 255, 255);
 selection-color: rgb(215, 90, 0);
 }
 QWidget#sawcRight{
-background-color: rgb(215, 120, 50);
-color: rgb(255, 255, 255);
-selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(215, 90, 0);
-}
-QWidget#sawcRight{
-background-color: rgb(215, 120, 50);
+background-color: rgb(215, 90, 0);
 color: rgb(255, 255, 255);
 selection-background-color: rgb(255, 255, 255);
 selection-color: rgb(215, 90, 0);
@@ -388,6 +382,15 @@ border-style: inset;
            <layout class="QVBoxLayout" name="vlManagerRight">
             <item>
              <widget class="QScrollArea" name="saRight">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+              <property name="lineWidth">
+               <number>0</number>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -395,27 +398,39 @@ border-style: inset;
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-184</y>
-                 <width>143</width>
-                 <height>471</height>
+                 <y>-246</y>
+                 <width>145</width>
+                 <height>535</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcRight">
                 <property name="spacing">
                  <number>5</number>
                 </property>
+                <property name="leftMargin">
+                 <number>8</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
-                 <spacer name="vsSMU">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                 <widget class="KPTLabel" name="labRemote">
+                  <property name="text">
+                   <string>Server</string>
                   </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
-                 </spacer>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="cmdAttach">
@@ -530,6 +545,36 @@ border-style: inset;
                  </widget>
                 </item>
                 <item>
+                 <spacer name="vsSMM">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labLocal">
+                  <property name="text">
+                   <string>Client</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="cmdConfigLocal">
+                  <property name="text">
+                   <string>Config</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <spacer name="vsSMD">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -541,6 +586,16 @@ border-style: inset;
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="KPTLabel" name="labSMVersion">
+                  <property name="text">
+                   <string>Server Manager %1</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
