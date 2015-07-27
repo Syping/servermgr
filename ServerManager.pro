@@ -49,4 +49,6 @@ RESOURCES += \
 TRANSLATIONS += \
     res/sm_de.ts
 
+unix: !macx: DEFINES += SM_UNIX
+
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
