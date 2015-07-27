@@ -26,7 +26,7 @@
 #include <QFile>
 
 frmIcon::frmIcon(QWidget *parent, bool designedMode) :
-    QDialog(parent), ui(new Ui::frmIcon), designedMode(designedMode)
+    QDialog(parent), designedMode(designedMode), ui(new Ui::frmIcon)
 {
     setWindowFlags(windowFlags()^Qt::WindowContextHelpButtonHint);
     ui->setupUi(this);
