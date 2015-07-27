@@ -30,13 +30,12 @@ class frmConfig : public QDialog
     Q_OBJECT
 
 public:
-    explicit frmConfig(QString languagePath = "", bool designedMode = true, QWidget *parent = 0);
+    explicit frmConfig(QWidget *parent = 0, QString languagePath = "", bool designedMode = true);
     ~frmConfig();
 
 private slots:
     void on_cmdCancel_clicked();
     void on_cmdOK_clicked();
-
     void on_cmdChangeAdminPassword_clicked();
 
 private:

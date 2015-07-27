@@ -30,7 +30,7 @@
 #include <QFile>
 #include <QDir>
 
-frmConfig::frmConfig(QString languagePath, bool designedMode, QWidget *parent) :
+frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
     QDialog(parent), languagePath(languagePath), designedMode(designedMode), ui(new Ui::frmConfig)
 {
     setWindowFlags(windowFlags()^Qt::WindowContextHelpButtonHint);
