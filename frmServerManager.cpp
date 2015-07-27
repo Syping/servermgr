@@ -374,9 +374,17 @@ void frmServerManager::on_cmdStart_clicked()
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
-            if (!smgr->startServer(serverName))
+            bool success = smgr->startServer(serverName);
+            if (!success)
             {
-                QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
+                if (smgr->getLastReturnValue() == 300)
+                {
+                    QMessageBox::information(this,tr("Start"),tr("No command registered for start"));
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Start"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -399,9 +407,17 @@ void frmServerManager::on_cmdStop_clicked()
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
-            if (!smgr->stopServer(serverName))
+            bool success = smgr->stopServer(serverName);
+            if (!success)
             {
-                QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
+                if (smgr->getLastReturnValue() == 300)
+                {
+                    QMessageBox::information(this,tr("Stop"),tr("No command registered for stop"));
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Stop"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -424,9 +440,17 @@ void frmServerManager::on_cmdConfig_clicked()
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
-            if (!smgr->configServer(serverName))
+            bool success = smgr->configServer(serverName);
+            if (!success)
             {
-                QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
+                if (smgr->getLastReturnValue() == 300)
+                {
+                    QMessageBox::information(this,tr("Config"),tr("No command registered for config"));
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Config"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -449,9 +473,17 @@ void frmServerManager::on_cmdUpdate_clicked()
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
-            if (!smgr->updateServer(serverName))
+            bool success = smgr->updateServer(serverName);
+            if (!success)
             {
-                QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
+                if (smgr->getLastReturnValue() == 300)
+                {
+                    QMessageBox::information(this,tr("Update"),tr("No command registered for update"));
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Update"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
@@ -474,9 +506,17 @@ void frmServerManager::on_cmdAttach_clicked()
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
-            if (!smgr->attachServer(serverName))
+            bool success = smgr->attachServer(serverName);
+            if (!success)
             {
-                QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
+                if (smgr->getLastReturnValue() == 300)
+                {
+                    QMessageBox::information(this,tr("Attach"),tr("No command registered for attach"));
+                }
+                else
+                {
+                    QMessageBox::warning(this,tr("Attach"),tr("Server Manager server-side error"));
+                }
             }
         }
         else
