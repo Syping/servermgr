@@ -101,8 +101,8 @@ border-style: inset;
 </string>
      </property>
      <layout class="QVBoxLayout" name="iconWidgetLayout">
-      <property name="bottomMargin">
-       <number>9</number>
+      <property name="spacing">
+       <number>6</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="hlCurrent">
