@@ -3,6 +3,12 @@
     <qresource prefix="/icon">
         <file>server-icon.png</file>
         <file>server-icon_16.png</file>
+        <file>minus-icon.png</file>
+        <file>minus-icon_c.png</file>
+        <file>plus-icon.png</file>
+        <file>plus-icon_c.png</file>
+        <file>minus-icon_o.png</file>
+        <file>plus-icon_o.png</file>
     </qresource>
     <qresource prefix="/tr">
         <file>sm_de.qm</file>
