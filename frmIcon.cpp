@@ -53,6 +53,7 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         ui->cmdMinus->setIcon(QIcon());
 #endif
     }
+    ui->iconWidgetLayout->setSpacing(6);
 }
 
 void frmIcon::loadIcons()
