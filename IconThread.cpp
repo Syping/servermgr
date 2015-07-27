@@ -38,6 +38,26 @@ void IconThread::run()
         ismgr->ServerManagerMode = ServerManager::RemoteMode;
         if (ismgr->connectToServer(smgr->getCurrentSessionHostname(),smgr->getCurrentSessionPassword(),smgr->getCurrentSessionPort(),smgr->getCurrentSessionSSL()))
         {
+            foreach(QString serverName, serverList)
+            {
+                QString iconBase64 = ismgr->getIconBytes(serverName, squareSize);
+                if (iconBase64 != "")
+                {
+                    QByteArray iconBinary = QByteArray::fromBase64(iconBase64.toUtf8());
+                    QPixmap serverPixmap;
+                    serverPixmap.loadFromData(iconBinary,"PNG");
+                    if (!serverPixmap.isNull())
+                    {
+                        QByteArray iconBytes;
+                        QBuffer iconBuffer(&iconBytes);
+                        iconBuffer.open(QIODevice::WriteOnly);
+                        QDataStream iconOut(&iconBuffer);
+                        iconOut << serverPixmap;
+                        iconBuffer.close();
+                        emit setServerIcon(serverName, iconBytes);
+                    }
+                }
+            }
             ismgr->disconnectFromServer();
             ismgr->deleteLater();
         }
