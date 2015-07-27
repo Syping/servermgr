@@ -87,6 +87,7 @@ color: rgb(255, 255, 255);
 border-width: 1px;
 border-radius: 0px;
 border-color: rgb(215, 120, 50);
+min-width: 5em;
 padding: 4px;
 }
 QPushButton:hover{
@@ -200,7 +201,7 @@ border-style: inset;
          <widget class="QPushButton" name="cmdPlus">
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>10</width>
             <height>25</height>
            </size>
           </property>
@@ -212,6 +213,7 @@ border-style: inset;
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
+min-width: 0em;
 image: url(:/icon/plus-icon.png)
 }
 QPushButton:hover{
@@ -232,7 +234,7 @@ image: url(:/icon/plus-icon_o.png)
          <widget class="QPushButton" name="cmdMinus">
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>10</width>
             <height>25</height>
            </size>
           </property>
@@ -244,6 +246,7 @@ image: url(:/icon/plus-icon_o.png)
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
+min-width: 0em;
 image: url(:/icon/minus-icon.png)
 }
 QPushButton:hover{
