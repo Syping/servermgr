@@ -19,6 +19,7 @@
 #define FRMCONFIG_H
 
 #include <QDialog>
+#include <QMap>
 
 namespace Ui {
     class frmConfig;
@@ -29,14 +30,23 @@ class frmConfig : public QDialog
     Q_OBJECT
 
 public:
-    explicit frmConfig(QWidget *parent = 0);
+    explicit frmConfig(QString languagePath = "", bool designedMode = true, QWidget *parent = 0);
     ~frmConfig();
 
 private slots:
     void on_cmdCancel_clicked();
+    void on_cmdOK_clicked();
+
+    void on_cmdChangeAdminPassword_clicked();
 
 private:
     Ui::frmConfig *ui;
+    bool designedMode;
+    QString languagePath;
+    QMap <QString,QString> langWrapper;
+    QStringList putStringToStringList(QString string);
+    bool designedModeActivated();
+    void applySettings();
 };
 
 #endif // FRMCONFIG_H
