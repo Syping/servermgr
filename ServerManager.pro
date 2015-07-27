@@ -59,6 +59,7 @@ OTHER_FILES += \
     app.rc \
     sm.ico
 
+# UNIX EXTRAS
 unix: !macx: DEFINES += SM_UNIX
 unix: !macx: target.path = $$(SM_INSTALL_PATH)/bin
 unix: !macx: INSTALLS += target
