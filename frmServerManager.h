@@ -65,8 +65,9 @@ private slots:
     void on_cmdConfigLocal_clicked();
 
 private:
-    Ui::frmServerManager *ui;
     QString languagePath;
+    bool designedMode;
+    Ui::frmServerManager *ui;
     QString SMStyleSheet;
     ServerManager *smgr;
     IconThread *iconWT;
@@ -74,7 +75,6 @@ private:
     QIcon standardIcon;
     bool mouseOverLogin;
     bool iconWTDefined;
-    bool designedMode;
     bool autoLogin;
     bool noAdmin;
     int izSquare;
