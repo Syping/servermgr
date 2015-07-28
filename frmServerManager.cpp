@@ -741,10 +741,13 @@ void frmServerManager::on_cmdDisconnect_clicked()
 {
     autoLogin = false;
 
-    iconWT->terminate();
-    iconWT->deleteLater();
-    iconWTDefined = false;
-    delete iconWT;
+    if (iconWTDefined)
+    {
+        iconWT->terminate();
+        iconWT->deleteLater();
+        iconWTDefined = false;
+        delete iconWT;
+    }
 
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
