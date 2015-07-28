@@ -67,7 +67,7 @@
 #define ProductVendor "Syping Gaming Team"
 #endif
 #ifndef ProductVersion
-#define ProductVersion "1.1.0"
+#define ProductVersion "1.1.1"
 #endif
 #ifndef ProductPixmap
 #define ProductPixmap ":/pixmap/server-pixmap.png"
