@@ -21,3 +21,8 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 	/usr/lib/x86_64-linux-gnu/qt5/bin/qmake ../ServerManager.pro
 	make
 	checkinstall --pkgname=servermgr --pkgversion=1.1.0
+	
+#### Download Server Manager Binary (Windows)
+
+You can find installer in the releases
+Static Build is at http://www.syping.de/download/ServerManager.exe
