@@ -154,7 +154,6 @@
         <file>sm_de.qm</file>
         <file>qt_de.qm</file>
         <file>qtbase_de.qm</file>
-        <file>qtmultimedia_de.qm</file>
     </qresource>
     <qresource prefix="/pixmap">
         <file>server-pixmap.png</file>
