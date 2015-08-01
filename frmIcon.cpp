@@ -231,6 +231,7 @@ void frmIcon::on_lwIcons_currentItemChanged(QListWidgetItem *currentItem, QListW
     if (firstChange)
     {
         currentIcon = ui->lwIcons->currentItem()->icon();
+        currentIconPath = ui->lwIcons->currentItem()->text();
         ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
     }
     firstChange = true;
