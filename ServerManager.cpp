@@ -459,30 +459,36 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
                             sessionPasswd = password;
                             sessionPort = port;
                             sessionSSL = useSSL;
+                            lastReturn = id;
                             return true;
                         }
                         else
                         {
+                            lastReturn = id;
                             return false;
                         }
                     }
                     else
                     {
+                        lastReturn = id;
                         return false;
                     }
                 }
                 else
                 {
+                    lastReturn = 600;
                     return false;
                 }
             }
             else
             {
+                lastReturn = 700;
                 return false;
             }
         }
         else
         {
+            lastReturn = 800;
             return false;
         }
     }

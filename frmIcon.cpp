@@ -15,6 +15,7 @@
 * limitations under the License.
 *****************************************************************************/
 
+#include "SMStyleTweaks.h"
 #include "PixmapEdit.h"
 #include "ui_frmIcon.h"
 #include "frmIcon.h"
@@ -30,10 +31,10 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
 {
     setWindowFlags(windowFlags()^Qt::WindowContextHelpButtonHint);
     ui->setupUi(this);
-    ui->cmdCancel->setDefault(true);
     configFile = new QSettings(ProductVendor,"Icon Manager");
     currentIcon = QIcon(ProductImg);
     iconChanged = false;
+    firstChange = false;
     squareSize = 24;
 
     if (!designedMode)
@@ -52,8 +53,18 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         ui->cmdPlus->setIcon(QIcon());
         ui->cmdMinus->setIcon(QIcon());
 #endif
+        // Change Designed Mode Style
+        SMStyleTweaks *SMStyle = new SMStyleTweaks;
+        ui->cmdOkay->setStyle(SMStyle);
+        ui->cmdPlus->setStyle(SMStyle);
+        ui->cmdMinus->setStyle(SMStyle);
+        ui->cmdCancel->setStyle(SMStyle);
+        ui->lwIcons->setStyle(SMStyle);
     }
+
     ui->iconWidgetLayout->setSpacing(6);
+    ui->cmdCancel->setDefault(true);
+    ui->lwIcons->setFocus();
 }
 
 void frmIcon::loadIcons()
@@ -124,7 +135,10 @@ frmIcon::~frmIcon()
 
 void frmIcon::on_cmdOkay_clicked()
 {
-    iconChanged = true;
+    if (firstChange)
+    {
+        iconChanged = true;
+    }
     this->close();
 }
 
@@ -212,10 +226,14 @@ void frmIcon::on_cmdPlus_clicked()
 
 void frmIcon::on_lwIcons_currentItemChanged(QListWidgetItem *currentItem, QListWidgetItem *previousItem)
 {
+    Q_UNUSED(currentItem);
     Q_UNUSED(previousItem);
-    currentIcon = currentItem->icon();
-    currentIconPath = currentItem->text();
-    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
+    if (firstChange)
+    {
+        currentIcon = ui->lwIcons->currentItem()->icon();
+        ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
+    }
+    firstChange = true;
 }
 
 bool frmIcon::isIconChanged()
@@ -239,6 +257,6 @@ void frmIcon::setSquareSize(int _squareSize)
     ui->lwIcons->setIconSize(QSize(squareSize, squareSize));
     ui->imgCurrentIcon->setMinimumSize(QSize(squareSize, squareSize));
     ui->imgCurrentIcon->setMaximumSize(QSize(squareSize, squareSize));
-    ui->imgCurrentIcon->setGeometry(ui->imgCurrentIcon->geometry().x(),ui->imgCurrentIcon->y(),squareSize, squareSize);
+    ui->imgCurrentIcon->setGeometry(ui->imgCurrentIcon->geometry().x(), ui->imgCurrentIcon->y(), squareSize, squareSize);
 }
 

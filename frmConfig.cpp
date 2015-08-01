@@ -15,6 +15,7 @@
 * limitations under the License.
 *****************************************************************************/
 
+#include "SMStyleTweaks.h"
 #include "ServerManager.h"
 #include "ui_frmConfig.h"
 #include "frmConfig.h"
@@ -45,6 +46,13 @@ frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
     {
         classicMode = true;
         ui->configWidget->setStyleSheet("");
+    }
+    else
+    {
+        SMStyleTweaks *SMStyle = new SMStyleTweaks;
+        ui->cmdChangeAdminPassword->setStyle(SMStyle);
+        ui->cmdCancel->setStyle(SMStyle);
+        ui->cmdOK->setStyle(SMStyle);
     }
     ui->cbSMStyle->setChecked(classicMode);
 
@@ -131,11 +139,13 @@ frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
     ui->cbStyle->addItems(QStyleFactory::keys());
     QStringList styles;
     styles << "System" << QStyleFactory::keys();
+
     settings.beginGroup("Style");
-    bool loadCustom = settings.value("Custom",false).toBool();
+#ifdef SM_UNIX
+    bool loadCustom = settings.value("Custom", false).toBool();
     if (loadCustom)
     {
-        QString style = settings.value("Name","System").toString();
+        QString style = settings.value("Name", "System").toString();
         if (style != "System")
         {
             if (style.trimmed() != "")
@@ -147,7 +157,28 @@ frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
             }
         }
     }
+#else
+    bool loadCustom = settings.value("Custom", true).toBool();
+    if (loadCustom)
+    {
+        QString style = settings.value("Name", "Fusion").toString();
+        if (style != "System")
+        {
+            if (style.trimmed() != "")
+            {
+                if (styles.contains(style))
+                {
+                    ui->cbStyle->setCurrentIndex(ui->cbStyle->findText(style));
+                }
+            }
+        }
+    }
+#endif
     settings.endGroup();
+
+    ui->configWidgetLayout->setSpacing(6);
+    ui->cmdCancel->setDefault(true);
+    ui->cbStyle->setFocus();
 }
 
 QStringList frmConfig::putStringToStringList(QString string)

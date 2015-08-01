@@ -58,6 +58,7 @@ private:
     QStringList iconList;
     bool designedMode;
     bool iconChanged;
+    bool firstChange;
     int squareSize;
     Ui::frmIcon *ui;
 };

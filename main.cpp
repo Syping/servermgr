@@ -322,10 +322,11 @@ int main(int argc, char *argv[])
 
     // Start loading style
     settings.beginGroup("Style");
-    bool loadCustom = settings.value("Custom",false).toBool();
+#ifdef SM_UNIX
+    bool loadCustom = settings.value("Custom", false).toBool();
     if (loadCustom)
     {
-        QString style = settings.value("Name","System").toString();
+        QString style = settings.value("Name", "System").toString();
         if (style != "System")
         {
             if (style.trimmed() != "")
@@ -334,6 +335,21 @@ int main(int argc, char *argv[])
             }
         }
     }
+    settings.endGroup();
+#else
+    bool loadCustom = settings.value("Custom", true).toBool();
+    if (loadCustom)
+    {
+        QString style = settings.value("Name", "Fusion").toString();
+        if (style != "System")
+        {
+            if (style.trimmed() != "")
+            {
+                a.setStyle(style);
+            }
+        }
+    }
+#endif
     settings.endGroup();
     // End loading style
 

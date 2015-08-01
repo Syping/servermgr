@@ -73,9 +73,39 @@ QLineEdit{
 	selection-background-color: rgb(255, 255, 255);
 	selection-color: rgb(215, 90, 0);
 }
-</string>
+QPushButton{
+	border-style: ridge;
+	background-color: rgb(215, 70, 25); 
+	color: rgb(255, 255, 255);
+	border-width: 1px;
+	border-radius: 0px;
+	border-color: rgb(215, 120, 50);
+	min-width: 5em;
+	padding: 4px;
+}
+QPushButton:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}
+QPushButton:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus{
+	background-color: rgb(218, 86, 45);
+}
+QPushButton:focus:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="vlLoginPage">
         <item>
          <widget class="KPTLabel" name="labDesignedLoginDes">
           <property name="text">
@@ -210,34 +240,15 @@ QLineEdit{
          </spacer>
         </item>
         <item>
-         <widget class="KPTLabel" name="labDesignedLogin">
+         <widget class="QPushButton" name="cmdDesignedLogin">
           <property name="minimumSize">
            <size>
-            <width>0</width>
+            <width>75</width>
             <height>30</height>
            </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(215, 70, 25); 
-border-color: rgb(215, 120, 50);</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
           </property>
           <property name="text">
            <string>Login</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -274,6 +285,20 @@ QListWidget{
 	color: rgb(255, 255, 255);
 	selection-background-color: rgb(255, 255, 255);
 	selection-color: rgb(215, 90, 0);
+	border-color: rgb(166, 92, 38);
+	border-style: solid;
+	border-width: 1px;
+}
+QListWidget::item{
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+}
+QListWidget::item:hover{
+	background-color: rgb(234, 187, 152);
+}
+QListWidget::item:selected{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 90, 0);
 }
 QPushButton{
 	border-style: ridge;
@@ -285,11 +310,23 @@ QPushButton{
 	min-width: 5em;
 	padding: 4px;
 }
+QPushButton:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}
 QPushButton:hover{
 	background-color: rgb(255, 255, 255);
 	color: rgb(215, 70, 25);
 }
-QPushButton:pressed{
+QPushButton:focus{
+	background-color: rgb(218, 86, 45);
+}
+QPushButton:focus:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus:pressed{
 	background-color: rgb(255, 255, 255);
 	color: rgb(215, 70, 25);
 	border-style: inset;
@@ -325,6 +362,9 @@ QPushButton:pressed{
            <layout class="QVBoxLayout" name="vlManagerLeft">
             <item>
              <widget class="QScrollArea" name="saLeft">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -334,7 +374,7 @@ QPushButton:pressed{
                  <x>0</x>
                  <y>0</y>
                  <width>256</width>
-                 <height>287</height>
+                 <height>289</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcLeft">
@@ -352,8 +392,8 @@ QPushButton:pressed{
                 </property>
                 <item>
                  <widget class="QListWidget" name="lwServer">
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
+                  <property name="horizontalScrollBarPolicy">
+                   <enum>Qt::ScrollBarAlwaysOff</enum>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -399,7 +439,7 @@ QPushButton:pressed{
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>145</width>
+                 <width>147</width>
                  <height>535</height>
                 </rect>
                </property>
@@ -604,6 +644,35 @@ QPushButton:pressed{
            </layout>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pWaitPage">
+       <property name="styleSheet">
+        <string notr="true">QWidget#pWaitPage{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+QFrame{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+</string>
+       </property>
+       <layout class="QVBoxLayout" name="vlWaitPage">
+        <item>
+         <widget class="KPTLabel" name="labPleaseWait">
+          <property name="text">
+           <string>Please wait...</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

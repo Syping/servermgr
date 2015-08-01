@@ -140,18 +140,29 @@ QPushButton{
 	min-width: 5em;
 	padding: 4px;
 }
-QPushButton:hover{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 70, 25);
-}
 QPushButton:pressed{
 	background-color: rgb(255, 255, 255);
 	color: rgb(215, 70, 25);
 	border-style: inset;
 }
-</string>
+QPushButton:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus{
+	background-color: rgb(218, 86, 45);
+}
+QPushButton:focus:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}</string>
      </property>
-     <layout class="QVBoxLayout" name="vlConfigWidget">
+     <layout class="QVBoxLayout" name="configWidgetLayout">
       <item>
        <widget class="KPTLabel" name="labStyle">
         <property name="text">
@@ -216,6 +227,12 @@ QPushButton:pressed{
        <layout class="QHBoxLayout" name="hlLocalMode">
         <item>
          <widget class="QPushButton" name="cmdChangeAdminPassword">
+          <property name="minimumSize">
+           <size>
+            <width>75</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
            <string>Change admin password</string>
           </property>
@@ -266,6 +283,12 @@ QPushButton:pressed{
         </item>
         <item>
          <widget class="QPushButton" name="cmdOK">
+          <property name="minimumSize">
+           <size>
+            <width>75</width>
+            <height>25</height>
+           </size>
+          </property>
           <property name="text">
            <string>OK</string>
           </property>
@@ -278,6 +301,12 @@ QPushButton:pressed{
         </item>
         <item>
          <widget class="QPushButton" name="cmdCancel">
+          <property name="minimumSize">
+           <size>
+            <width>75</width>
+            <height>25</height>
+           </size>
+          </property>
           <property name="text">
            <string>Cancel</string>
           </property>
