@@ -27,6 +27,7 @@ TARGET = ServerManager
 TEMPLATE = app
 
 SOURCES += main.cpp \
+    ConnectThread.cpp \
     IconThread.cpp \
     KPTLabel.cpp \
     frmConfig.cpp \
@@ -36,13 +37,15 @@ SOURCES += main.cpp \
     ServerManager.cpp
 
 HEADERS  += config.h \
+    ConnectThread.h \
     IconThread.h \
     KPTLabel.h \
     frmConfig.h \
     frmIcon.h \
     frmServerManager.h \
     PixmapEdit.h \
-    ServerManager.h
+    ServerManager.h \
+    SMStyleTweaks.h
 
 FORMS    += \
     frmConfig.ui \

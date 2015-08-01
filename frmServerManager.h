@@ -22,6 +22,7 @@
 #include <QCloseEvent>
 #include <QSettings>
 #include "ServerManager.h"
+#include "ConnectThread.h"
 #include "IconThread.h"
 #include "KPTLabel.h"
 
@@ -42,7 +43,7 @@ public slots:
     void setServerIcon(QString serverName, QByteArray iconBytes);
 
 private slots:
-    void on_labDesignedLogin_mouseRelease(QMouseEvent *ev);
+    void on_connectionIssued(bool isSuccess);
     void on_cmdNewServer_clicked();
     void on_cmdDeleteServer_clicked();
     void on_cmdCStart_clicked();
@@ -58,26 +59,28 @@ private slots:
     void on_cmdAttach_clicked();
     void on_cmdCAttach_clicked();
     void on_cmdCIcon_clicked();
-    void on_timerLB_ticked();
-    void setWidgetDesign();
     void connectToServer();
     void on_cmdDisconnect_clicked();
     void on_cmdConfigLocal_clicked();
+    void on_cmdDesignedLogin_clicked();
 
 private:
     QString languagePath;
     bool designedMode;
     Ui::frmServerManager *ui;
+    ConnectThread *conWT;
     QString SMStyleSheet;
     ServerManager *smgr;
     IconThread *iconWT;
     KPTLabel *labStats;
     QIcon standardIcon;
+    int pagePleaseWait;
+    int pageInterface;
+    int pageLogin;
+    int izSquare;
     bool mouseOverLogin;
     bool iconWTDefined;
-    bool autoLogin;
     bool noAdmin;
-    int izSquare;
 
 protected:
     void closeEvent(QCloseEvent *ev);

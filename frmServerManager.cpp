@@ -17,6 +17,8 @@
 
 #include "ui_frmServerManager.h"
 #include "frmServerManager.h"
+#include "ConnectThread.h"
+#include "SMStyleTweaks.h"
 #include "IconThread.h"
 #include "frmConfig.h"
 #include "frmIcon.h"
@@ -41,20 +43,25 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     QMainWindow(parent), languagePath(languagePath), designedMode(designedMode), ui(new Ui::frmServerManager)
 {
     ui->setupUi(this);
-    autoLogin = false;
     iconWTDefined = false;
     smgr = new ServerManager(this);
     standardIcon = QIcon(ProductImg);
     QIcon windowIcon = QIcon(ProductIcon);
     windowIcon.addPixmap(QPixmap(ProductImg));
     windowIcon.addPixmap(QPixmap(ProductPixmap));
+    this->setWindowTitle(ProductName);
     this->setWindowIcon(windowIcon);
+
+    // Change Page IDs
+    pageLogin = 0;
+    pageInterface = 1;
+    pagePleaseWait = 2;
 
     // Change Text and Version things
     ui->labSMVersion->setText(ui->labSMVersion->text().arg(ProductVersion));
 
     // Change Visibles
-    ui->swSM->setCurrentIndex(0);
+    ui->swSM->setCurrentIndex(pageLogin);
     ui->labTop->setVisible(false);
     ui->statusBar->setVisible(false);
     ui->labDesignedLoginDes->setVisible(false);
@@ -64,7 +71,7 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     labStats = new KPTLabel();
     ui->statusBar->addWidget(labStats,1);
     ui->statusBar->layout()->setContentsMargins(2,0,6,0);
-    labStats->setText(tr("Welcome to Syping's Server Manager"));
+    labStats->setText(tr("Welcome to Syping's %1").arg(ProductName));
 
     // SM Style designedMode
     SMStyleSheet = ui->pServerManager->styleSheet();
@@ -78,28 +85,32 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     designedFont.setPixelSize(15);
     ui->txtHostnameDesigned->setFont(designedFont);
     ui->txtPasswordDesigned->setFont(designedFont);
-    ui->labDesignedLogin->setFont(designedFont);
+    ui->cmdDesignedLogin->setFont(designedFont);
+    ui->labPleaseWait->setFont(designedFont);
     ui->labDesignedLoginDes->setFont(designedFont);
     ui->cbStayLoggedInDesigned->setFont(designedFont);
     ui->cbUseEncryptedConnectionDesigned->setFont(designedFont);
     mouseOverLogin = false;
-    setWidgetDesign();
 #ifdef DISABLE_SSL
     ui->cbUseEncryptedConnectionDesigned->setVisible(false);
 #endif
+
+    // Change Designed Mode Style
+    SMStyleTweaks *SMStyle = new SMStyleTweaks;
+    ui->cmdDesignedLogin->setStyle(SMStyle);
+    if (designedMode)
+    {
+        ui->pServerManager->setStyle(SMStyle);
+    }
 
     // Change Icon size
     izSquare = 24;
     ui->lwServer->setIconSize(QSize(izSquare, izSquare));
 
-    // Start Timer
-    QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
-
     // Check for Autologin
     if (smgr->autologinEnabled())
     {
-        autoLogin = true;
-        connectToServer();
+        QTimer::singleShot(10,this,SLOT(connectToServer()));
     }
 
 }
@@ -111,69 +122,118 @@ frmServerManager::~frmServerManager()
 
 void frmServerManager::connectToServer()
 {
-    if (autoLogin)
+    if (smgr->autologinEnabled())
     {
-        bool connectionSuccess = smgr->connectToServerWithAutologin();
-        if (!connectionSuccess)
+        conWT = new ConnectThread(this, smgr, true);
+
+        connect(conWT, SIGNAL(connectionIssued(bool)), this, SLOT(on_connectionIssued(bool)));
+        conWT->start(QThread::LowPriority);
+
+        ui->swSM->setCurrentIndex(pagePleaseWait);
+    }
+    else
+    {
+        QStringList remoteHostList = ui->txtHostnameDesigned->text().split(":");
+        bool remoteEncrypted = ui->cbUseEncryptedConnectionDesigned->isChecked();
+        bool remoteActivateAutologin = ui->cbStayLoggedInDesigned->isChecked();
+        QString remotePasswd = ui->txtPasswordDesigned->text();
+        QString remoteHost;
+        int remotePort;
+        if (remoteHostList.length() == 0)
         {
-            QMessageBox::warning(this,tr("Server Manager"),tr("Can't connnect to %1 Server!").arg("Server Manager"));
-            autoLogin = false;
+            remoteHost = "SM_LOCAL";
+            remotePort = 0;
+        }
+        else if (remoteHostList.length() == 1)
+        {
+            remoteHost = remoteHostList.at(0);
+            remotePort = 9509;
+        }
+        else if (remoteHostList.length() == 2)
+        {
+            bool portOk;
+            remoteHost = remoteHostList.at(0);
+            remotePort = remoteHostList.at(1).toInt(&portOk);
+            if (!portOk)
+            {
+                QMessageBox::warning(this, ProductName, "Incorrect port format, only numbers are accepted");
+                return;
+            }
+        }
+        else
+        {
+            QMessageBox::warning(this, ProductName, "Incorrect address format");
             return;
         }
+
+        conWT = new ConnectThread(this, smgr, false, remoteActivateAutologin, remoteHost, remotePort, remoteEncrypted, remotePasswd);
+
+        connect(conWT, SIGNAL(connectionIssued(bool)), this, SLOT(on_connectionIssued(bool)));
+        conWT->start(QThread::LowPriority);
+
+        ui->swSM->setCurrentIndex(pagePleaseWait);
     }
-    else if (ui->txtHostnameDesigned->text() == "SM_LOCAL")
+}
+
+void frmServerManager::on_connectionIssued(bool isSuccess)
+{
+    if (isSuccess)
     {
-        smgr->ServerManagerMode = ServerManager::LocalMode;
-        if (ui->cbStayLoggedInDesigned->isChecked())
+        // Visible things for Server Manager Widget
+        ui->swSM->setCurrentIndex(pageInterface);
+
+        // Get server list
+        QStringList serverList = smgr->getServerList();
+        foreach (const QString &serverName, serverList)
         {
-            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+            QListWidgetItem *newItem = new QListWidgetItem(serverName);
+            newItem->setIcon(standardIcon);
+            ui->lwServer->addItem(newItem);
         }
-    }
-    else if (ui->txtHostnameDesigned->text() == "")
-    {
-        ui->txtHostnameDesigned->setText("SM_LOCAL");
-        smgr->ServerManagerMode = ServerManager::LocalMode;
-        if (ui->cbStayLoggedInDesigned->isChecked())
+
+        if (serverList.length() != 0)
         {
-            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+            iconWT = new IconThread(smgr, serverList, 24, this);
+            iconWTDefined = true;
+
+            connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
+            iconWT->start(QThread::LowPriority);
         }
     }
     else
     {
-        smgr->ServerManagerMode = ServerManager::RemoteMode;
-        bool connectionSuccess = smgr->connectToServer(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
-        if (!connectionSuccess)
+        int lastReturn = smgr->getLastReturnValue();
+        if (lastReturn == 404)
         {
-            QMessageBox::warning(this,tr("Server Manager"),tr("Can't connnect to %1 Server!").arg("Server Manager"));
-            return;
+            QMessageBox::warning(this, ProductName, tr("Incorrect password for %1 Server!").arg(ProductName));
         }
-        if (ui->cbStayLoggedInDesigned->isChecked())
+        else if (lastReturn == 700)
         {
-            smgr->setAutologinEnabled(ui->txtHostnameDesigned->text(),ui->txtPasswordDesigned->text(),9509,ui->cbUseEncryptedConnectionDesigned->isChecked());
+            QMessageBox::warning(this, ProductName, tr("Can't read %1 Server Stream!").arg(ProductName));
         }
+        else if (lastReturn == 600)
+        {
+            QMessageBox::warning(this, ProductName, tr("Can't read %1 Server Stream!").arg(ProductName));
+        }
+        else if (lastReturn == 800)
+        {
+            QMessageBox::warning(this, ProductName, tr("Can't connnect to %1 Server!").arg(ProductName));
+        }
+        else
+        {
+            QMessageBox::warning(this, ProductName, tr("Can't connnect to %1 Server!").arg(ProductName));
+        }
+
+        // Visible things for Server Manager Widget
+        ui->swSM->setCurrentIndex(pageLogin);
+
+        // Disable autologin if enabled
+        if (smgr->autologinEnabled()) smgr->setAutologinDisabled();
+
     }
-
-    // Visible things for Server Manager Widget
-    ui->swSM->setCurrentIndex(1);
-    // ui->statusBar->setVisible(true); --- wait with this
-
-    // Get server list
-    QStringList serverList = smgr->getServerList();
-    foreach (const QString &serverName, serverList)
-    {
-        QListWidgetItem *newItem = new QListWidgetItem(serverName);
-        newItem->setIcon(standardIcon);
-        ui->lwServer->addItem(newItem);
-    }
-
-    if (serverList.length() != 0)
-    {
-        iconWT = new IconThread(smgr, serverList, 24, this);
-        iconWTDefined = true;
-
-        connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
-        iconWT->start(QThread::LowPriority);
-    }
+    conWT->terminate();
+    conWT->deleteLater();
+    delete conWT;
 }
 
 void frmServerManager::on_cmdNewServer_clicked()
@@ -199,7 +259,7 @@ void frmServerManager::on_cmdNewServer_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("New Server"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("New Server"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -226,7 +286,7 @@ void frmServerManager::on_cmdDeleteServer_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Delete Server"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Delete Server"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -246,7 +306,7 @@ void frmServerManager::on_cmdCStart_clicked()
             {
                 if (!smgr->setStartCommand(serverName, serverStart))
                 {
-                    QMessageBox::warning(this,tr("Choose Start"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Start"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -257,7 +317,7 @@ void frmServerManager::on_cmdCStart_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Start"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Start"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -277,7 +337,7 @@ void frmServerManager::on_cmdCStop_clicked()
             {
                 if (!smgr->setStopCommand(serverName, serverStop))
                 {
-                    QMessageBox::warning(this,tr("Choose Stop"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Stop"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -288,7 +348,7 @@ void frmServerManager::on_cmdCStop_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Server"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Server"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -308,7 +368,7 @@ void frmServerManager::on_cmdCConfig_clicked()
             {
                 if (!smgr->setConfigCommand(serverName, serverConfig))
                 {
-                    QMessageBox::warning(this,tr("Choose Config"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Config"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -319,7 +379,7 @@ void frmServerManager::on_cmdCConfig_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Config"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Config"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -339,7 +399,7 @@ void frmServerManager::on_cmdCUpdate_clicked()
             {
                 if (!smgr->setUpdateCommand(serverName, serverUpdate))
                 {
-                    QMessageBox::warning(this,tr("Choose Update"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Update"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -350,7 +410,7 @@ void frmServerManager::on_cmdCUpdate_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Update"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Update"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -370,7 +430,7 @@ void frmServerManager::on_cmdCAttach_clicked()
             {
                 if (!smgr->setAttachCommand(serverName, serverAttach))
                 {
-                    QMessageBox::warning(this,tr("Choose Attach"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Attach"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -381,7 +441,7 @@ void frmServerManager::on_cmdCAttach_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Attach"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Choose Attach"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -403,7 +463,7 @@ void frmServerManager::on_cmdStart_clicked()
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Start"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Start"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -414,7 +474,7 @@ void frmServerManager::on_cmdStart_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Start"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Start"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -436,7 +496,7 @@ void frmServerManager::on_cmdStop_clicked()
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Stop"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Stop"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -447,7 +507,7 @@ void frmServerManager::on_cmdStop_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Stop"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Stop"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -469,7 +529,7 @@ void frmServerManager::on_cmdConfig_clicked()
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Config"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Config"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -480,7 +540,7 @@ void frmServerManager::on_cmdConfig_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Config"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Config"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -502,7 +562,7 @@ void frmServerManager::on_cmdUpdate_clicked()
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Update"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Update"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -513,7 +573,7 @@ void frmServerManager::on_cmdUpdate_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Update"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Update"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -535,7 +595,7 @@ void frmServerManager::on_cmdAttach_clicked()
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Attach"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Attach"),tr("%1 server-side error").arg(ProductName));
                 }
             }
         }
@@ -546,7 +606,7 @@ void frmServerManager::on_cmdAttach_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Attach"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Attach"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -642,7 +702,7 @@ void frmServerManager::on_cmdAdmin_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Admin"),tr("Server Manager connection lost"));
+        QMessageBox::warning(this,tr("Admin"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
@@ -676,7 +736,7 @@ void frmServerManager::on_cmdCIcon_clicked()
                 serverItem->setIcon(tempIcon);
                 if (!smgr->setIconPath(serverName, iconPath))
                 {
-                    QMessageBox::warning(this,tr("Choose Icon"),tr("Server Manager server-side error"));
+                    QMessageBox::warning(this,tr("Choose Icon"),tr("%1 server-side error").arg(ProductName));
                 }
             }
             iconWindow->deleteLater();
@@ -689,58 +749,12 @@ void frmServerManager::on_cmdCIcon_clicked()
     }
     else
     {
-        QMessageBox::warning(this,tr("Choose Icon"),tr("Server Manager connection lost"));
-    }
-}
-
-void frmServerManager::setWidgetDesign()
-{
-#ifdef QT4
-    QStyle *KMStyle = QStyleFactory::create("cleanlooks");
-#else
-#ifdef QT5
-    QStyle *KMStyle = QStyleFactory::create("fusion");
-#else
-    QCommonStyle *KMStyle = new QCommonStyle();
-#endif
-#endif
-    ui->labDesignedLogin->setStyle(KMStyle);
-}
-
-void frmServerManager::on_timerLB_ticked()
-{
-    if (ui->labDesignedLogin->rect().contains(ui->labDesignedLogin->mapFromGlobal(QCursor::pos())))
-    {
-        if (!mouseOverLogin)
-        {
-            ui->labDesignedLogin->setStyleSheet("background-color: rgb(255, 255, 255); border-color: rgb(215, 120, 50); color: rgb(215, 70, 25);");
-        }
-        mouseOverLogin = true;
-    }
-    else
-    {
-        if (mouseOverLogin)
-        {
-            ui->labDesignedLogin->setStyleSheet("background-color: rgb(215, 70, 25); border-color: rgb(215, 120, 50);");
-        }
-        mouseOverLogin = false;
-    }
-    QTimer::singleShot(10,this,SLOT(on_timerLB_ticked()));
-}
-
-void frmServerManager::on_labDesignedLogin_mouseRelease(QMouseEvent *ev)
-{
-    Q_UNUSED(ev);
-    if (ui->labDesignedLogin->rect().contains(ui->labDesignedLogin->mapFromGlobal(QCursor::pos())))
-    {
-        connectToServer();
+        QMessageBox::warning(this,tr("Choose Icon"),tr("%1 connection lost").arg(ProductName));
     }
 }
 
 void frmServerManager::on_cmdDisconnect_clicked()
 {
-    autoLogin = false;
-
     if (iconWTDefined)
     {
         iconWT->terminate();
@@ -751,7 +765,7 @@ void frmServerManager::on_cmdDisconnect_clicked()
 
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
-    ui->swSM->setCurrentIndex(0);
+    ui->swSM->setCurrentIndex(pageLogin);
     ui->lwServer->clear();
     ui->statusBar->setVisible(false);
     ui->txtPasswordDesigned->clear();
@@ -804,4 +818,9 @@ void frmServerManager::on_cmdConfigLocal_clicked()
     configWindow->exec();
     configWindow->deleteLater();
     delete configWindow;
+}
+
+void frmServerManager::on_cmdDesignedLogin_clicked()
+{
+    connectToServer();
 }
