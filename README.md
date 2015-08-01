@@ -6,7 +6,6 @@ Syping Gaming Team Server Manager
  - Q: How to setup a Server Manager Server? A: Download http://www.syping.de/download/ServerManagerServer.txz for Linux and read README.txt
  - Q: It is planned to make the server open source? A: Yes, if the server 64bit compatible without problems
  - Q: The Linux Server doesn't work what can i do? A: Check if all dependencies installed with ldd ServerManagerServer and ldd platforms/libqxcb.so
- - Q: The Windows Version doesn't work because MSVC* what can i do? A: Install MSVC 2008 SP1 Redist and Install MSVC 2010 SP1 Redist
 
 #### Build Server Manager
 
