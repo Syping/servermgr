@@ -76,7 +76,7 @@ unix: !macx: INSTALLS += target appfiles pixfiles
 # ANDROID EXTRAS
 android: CONFIG += mobility
 android: DEFINES += SM_ANDROID
-android: DEPLOYMENT.display_name = Server Manager
+android: DEPLOYMENT.display_name = "Server Manager"
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-src
 
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
