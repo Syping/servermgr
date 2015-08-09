@@ -77,6 +77,3 @@ unix: !macx: pixfiles.files = $$PWD/res/install/servermgr.xpm
 unix: !macx: INSTALLS += target appfiles pixfiles
 
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
-
-DISTFILES += \
-    configure

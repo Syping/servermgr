@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=Server Manager
+Comment=Server Manager
+Categories=Qt;Application;Network;
+Exec=servermgr
+Icon=servermgr
+Terminal=false
+StartupNotify=false
