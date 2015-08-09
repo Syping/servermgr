@@ -23,4 +23,5 @@ SUBDIRS = src
 
 OTHER_FILES += configure \
     LICENSE \
-    README.md
+    README.md \
+    sm_version

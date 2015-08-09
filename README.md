@@ -19,7 +19,7 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 	cd build
 	SM_INSTALL_PATH=/usr ../configure
 	make
-	checkinstall --pkgname=servermgr --pkgversion=1.1.1
+	checkinstall --pkgname=servermgr --pkgversion=$(cat "sm_version")
 	
 #### Download Server Manager Binary (Windows)
 
