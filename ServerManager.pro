@@ -24,6 +24,7 @@ isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 win32: RC_FILE = app.rc
 
 TARGET = ServerManager
+
 TEMPLATE = app
 
 SOURCES += main.cpp \
@@ -62,9 +63,17 @@ OTHER_FILES += \
     app.rc \
     sm.ico
 
+# ANDROID EXTRAS
+android: DEFINES += SM_ANDROID
+
 # UNIX EXTRAS
+unix: !macx: TARGET = servermgr
 unix: !macx: DEFINES += SM_UNIX
 unix: !macx: target.path = $$(SM_INSTALL_PATH)/bin
-unix: !macx: INSTALLS += target
+unix: !macx: appfiles.path = $$(SM_INSTALL_PATH)/share/applications
+unix: !macx: appfiles.files = $$PWD/res/install/servermgr.desktop
+unix: !macx: pixfiles.path = $$(SM_INSTALL_PATH)/share/pixmaps
+unix: !macx: pixfiles.files = $$PWD/res/install/servermgr.xpm
+unix: !macx: INSTALLS += target appfiles pixfiles
 
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
