@@ -18,6 +18,7 @@
 #ifndef FRMSERVERMANAGER_H
 #define FRMSERVERMANAGER_H
 
+#include <QListWidget>
 #include <QMainWindow>
 #include <QCloseEvent>
 #include <QSettings>
@@ -63,11 +64,17 @@ private slots:
     void on_cmdDisconnect_clicked();
     void on_cmdConfigLocal_clicked();
     void on_cmdDesignedLogin_clicked();
+    void on_cmdAndroidLogin_clicked();
+    void on_cmdStartAndroid_clicked();
+    void on_cmdStopAndroid_clicked();
+    void on_cmdDisconnectAndroid_clicked();
+    void on_cmdUpdateAndroid_clicked();
 
 private:
     QString languagePath;
     bool designedMode;
     Ui::frmServerManager *ui;
+    QListWidget *activeLW;
     ConnectThread *conWT;
     QString SMStyleSheet;
     ServerManager *smgr;

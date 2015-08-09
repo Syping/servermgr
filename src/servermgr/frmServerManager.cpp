@@ -52,10 +52,22 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     this->setWindowTitle(ProductName);
     this->setWindowIcon(windowIcon);
 
+    // Change Window Size
+#ifdef SM_ANDROID
+    this->setMinimumSize(QSize(0, 0));
+    this->setMaximumSize(QSize(16777215, 16777215));
+#endif
+
     // Change Page IDs
+#ifdef SM_ANDROID
+    pageLogin = 3;
+    pageInterface = 4;
+    pagePleaseWait = 5;
+#else
     pageLogin = 0;
     pageInterface = 1;
     pagePleaseWait = 2;
+#endif
 
     // Change Text and Version things
     ui->labSMVersion->setText(ui->labSMVersion->text().arg(ProductVersion));
@@ -103,9 +115,21 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
         ui->pServerManager->setStyle(SMStyle);
     }
 
+    // Change Active ListWidget
+#ifdef SM_ANDROID
+    activeLW = ui->lwServerAndroid;
+#else
+    activeLW = ui->lwServer;
+#endif
+
     // Change Icon size
+#ifdef SM_ANDROID
+    izSquare = 32;
+    activeLW->setIconSize(QSize(izSquare, izSquare));
+#else
     izSquare = 24;
-    ui->lwServer->setIconSize(QSize(izSquare, izSquare));
+    activeLW->setIconSize(QSize(izSquare, izSquare));
+#endif
 
     // Check for Autologin
     if (smgr->autologinEnabled())
@@ -133,10 +157,17 @@ void frmServerManager::connectToServer()
     }
     else
     {
+#ifdef SM_ANDROID
+        QStringList remoteHostList = ui->txtHostnameAndroid->text().split(":");
+        bool remoteEncrypted = ui->cbUseEncryptedConnectionAndorid->isChecked();
+        bool remoteActivateAutologin = ui->cbStayLoggedInAndroid->isChecked();
+        QString remotePasswd = ui->txtPasswordAndroid->text();
+#else
         QStringList remoteHostList = ui->txtHostnameDesigned->text().split(":");
         bool remoteEncrypted = ui->cbUseEncryptedConnectionDesigned->isChecked();
         bool remoteActivateAutologin = ui->cbStayLoggedInDesigned->isChecked();
         QString remotePasswd = ui->txtPasswordDesigned->text();
+#endif
         QString remoteHost;
         int remotePort;
         if (remoteHostList.length() == 0)
@@ -188,12 +219,12 @@ void frmServerManager::on_connectionIssued(bool isSuccess)
         {
             QListWidgetItem *newItem = new QListWidgetItem(serverName);
             newItem->setIcon(standardIcon);
-            ui->lwServer->addItem(newItem);
+            activeLW->addItem(newItem);
         }
 
         if (serverList.length() != 0)
         {
-            iconWT = new IconThread(smgr, serverList, 24, this);
+            iconWT = new IconThread(smgr, serverList, izSquare, this);
             iconWTDefined = true;
 
             connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
@@ -249,7 +280,7 @@ void frmServerManager::on_cmdNewServer_clicked()
             {
                 QListWidgetItem *newItem = new QListWidgetItem(serverName);
                 newItem->setIcon(standardIcon);
-                ui->lwServer->addItem(newItem);
+                activeLW->addItem(newItem);
             }
             else
             {
@@ -267,7 +298,7 @@ void frmServerManager::on_cmdDeleteServer_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -294,7 +325,7 @@ void frmServerManager::on_cmdCStart_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             bool snok;
@@ -325,7 +356,7 @@ void frmServerManager::on_cmdCStop_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             bool snok;
@@ -356,7 +387,7 @@ void frmServerManager::on_cmdCConfig_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             bool snok;
@@ -387,7 +418,7 @@ void frmServerManager::on_cmdCUpdate_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             bool snok;
@@ -418,7 +449,7 @@ void frmServerManager::on_cmdCAttach_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             bool snok;
@@ -449,7 +480,7 @@ void frmServerManager::on_cmdStart_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -482,7 +513,7 @@ void frmServerManager::on_cmdStop_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -515,7 +546,7 @@ void frmServerManager::on_cmdConfig_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -548,7 +579,7 @@ void frmServerManager::on_cmdUpdate_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -581,7 +612,7 @@ void frmServerManager::on_cmdAttach_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -715,7 +746,7 @@ void frmServerManager::on_cmdCIcon_clicked()
 {
     if (smgr->isConnected())
     {
-        QList<QListWidgetItem*> selectedItems = ui->lwServer->selectedItems();
+        QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
         if (selectedItems.length() == 1)
         {
             QListWidgetItem *serverItem = selectedItems.at(0);
@@ -766,7 +797,7 @@ void frmServerManager::on_cmdDisconnect_clicked()
     smgr->disconnectFromServer();
     smgr->setAutologinDisabled();
     ui->swSM->setCurrentIndex(pageLogin);
-    ui->lwServer->clear();
+    activeLW->clear();
     ui->statusBar->setVisible(false);
     ui->txtPasswordDesigned->clear();
     ui->cbStayLoggedInDesigned->setChecked(false);
@@ -783,7 +814,7 @@ void frmServerManager::on_cmdDisconnect_clicked()
 
 void frmServerManager::setServerIcon(QString serverName, QByteArray iconBytes)
 {
-    QList<QListWidgetItem*> itemsToReplace = ui->lwServer->findItems(serverName, Qt::MatchExactly);
+    QList<QListWidgetItem*> itemsToReplace = activeLW->findItems(serverName, Qt::MatchExactly);
     if (itemsToReplace.count() == 1)
     {
         QPixmap serverPixmap;
@@ -823,4 +854,29 @@ void frmServerManager::on_cmdConfigLocal_clicked()
 void frmServerManager::on_cmdDesignedLogin_clicked()
 {
     connectToServer();
+}
+
+void frmServerManager::on_cmdAndroidLogin_clicked()
+{
+    connectToServer();
+}
+
+void frmServerManager::on_cmdStartAndroid_clicked()
+{
+    on_cmdStart_clicked();
+}
+
+void frmServerManager::on_cmdStopAndroid_clicked()
+{
+    on_cmdStop_clicked();
+}
+
+void frmServerManager::on_cmdDisconnectAndroid_clicked()
+{
+    on_cmdDisconnect_clicked();
+}
+
+void frmServerManager::on_cmdUpdateAndroid_clicked()
+{
+    on_cmdUpdate_clicked();
 }

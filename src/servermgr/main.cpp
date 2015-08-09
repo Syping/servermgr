@@ -335,7 +335,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    settings.endGroup();
 #else
     bool loadCustom = settings.value("Custom", true).toBool();
     if (loadCustom)
@@ -354,7 +353,11 @@ int main(int argc, char *argv[])
     // End loading style
 
     frmServerManager w(trplugspath, designedMode);
+#ifdef SM_ANDROID
+    w.showMaximized();
+#else
     w.show();
+#endif
 
     return a.exec();
 }
