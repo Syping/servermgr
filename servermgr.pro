@@ -22,4 +22,5 @@ CONFIG += ordered
 SUBDIRS = src
 
 OTHER_FILES += configure \
-    LICENSE
+    LICENSE \
+    README.md
