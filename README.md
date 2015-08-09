@@ -17,7 +17,7 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 	cd servermgr
 	mkdir build
 	cd build
-        SM_INSTALL_PATH=/usr ../configure
+	SM_INSTALL_PATH=/usr ../configure
 	make
 	checkinstall --pkgname=servermgr --pkgversion=1.1.1
 	
