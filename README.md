@@ -12,7 +12,7 @@ Syping Gaming Team Server Manager
 
 Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if you can't build with Qt5!)
 
-        apt-get install git qtbase5-dev checkinstall
+	apt-get install git qtbase5-dev checkinstall
 	git clone https://github.com/Syping/servermgr.git
 	cd servermgr
 	mkdir build
