@@ -124,7 +124,7 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
 
     // Change Icon size
 #ifdef SM_ANDROID
-    izSquare = 32;
+    izSquare = 64;
     activeLW->setIconSize(QSize(izSquare, izSquare));
 #else
     izSquare = 24;
@@ -799,6 +799,19 @@ void frmServerManager::on_cmdDisconnect_clicked()
     ui->swSM->setCurrentIndex(pageLogin);
     activeLW->clear();
     ui->statusBar->setVisible(false);
+#ifdef SM_ANDROID
+    ui->txtHostnameAndroid->clear();
+    ui->cbStayLoggedInAndroid->setChecked(false);
+    ui->cbUseEncryptedConnectionAndorid->setChecked(false);
+    if (ui->txtHostnameAndroid->text() == "")
+    {
+        ui->txtHostnameAndroid->setFocus();
+    }
+    else
+    {
+        ui->txtPasswordAndroid->setFocus();
+    }
+#else
     ui->txtPasswordDesigned->clear();
     ui->cbStayLoggedInDesigned->setChecked(false);
     ui->cbUseEncryptedConnectionDesigned->setChecked(false);
@@ -810,6 +823,7 @@ void frmServerManager::on_cmdDisconnect_clicked()
     {
         ui->txtPasswordDesigned->setFocus();
     }
+#endif
 }
 
 void frmServerManager::setServerIcon(QString serverName, QByteArray iconBytes)

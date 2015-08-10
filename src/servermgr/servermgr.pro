@@ -79,4 +79,13 @@ android: DEFINES += SM_ANDROID
 android: DEPLOYMENT.display_name = "Server Manager"
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-src
 
+DISTFILES += \
+    android-src/AndroidManifest.xml \
+    android-src/gradle/wrapper/gradle-wrapper.jar \
+    android-src/gradlew \
+    android-src/res/values/libs.xml \
+    android-src/build.gradle \
+    android-src/gradle/wrapper/gradle-wrapper.properties \
+    android-src/gradlew.bat
+
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
