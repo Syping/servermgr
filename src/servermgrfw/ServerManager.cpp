@@ -18,7 +18,6 @@
 #include "ServerManager.h"
 #include "PixmapEdit.h"
 #include "config.h"
-
 #include <QCryptographicHash>
 #include <QHostAddress>
 #include <QByteArray>
@@ -27,7 +26,7 @@
 
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
-    configFile = new QSettings(ProductVendor,ProductName);
+    configFile = new QSettings(ProductVendor, ProductName);
 #ifdef DISABLE_SSL
     tcpSocket = new QTcpSocket();
 #else

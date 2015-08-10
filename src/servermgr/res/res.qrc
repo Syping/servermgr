@@ -158,4 +158,10 @@
     <qresource prefix="/pixmap">
         <file>server-pixmap.png</file>
     </qresource>
+    <qresource prefix="/android">
+        <file>DC.png</file>
+        <file>pause.png</file>
+        <file>play.png</file>
+        <file>update.png</file>
+    </qresource>
 </RCC>

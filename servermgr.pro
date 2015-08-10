@@ -15,7 +15,6 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-
 TEMPLATE = subdirs
 CONFIG += ordered
 

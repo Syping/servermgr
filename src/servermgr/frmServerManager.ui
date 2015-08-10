@@ -45,7 +45,7 @@
     <item>
      <widget class="QStackedWidget" name="swSM">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="pLoginDesigned">
        <property name="styleSheet">
@@ -677,11 +677,11 @@ QFrame{
        </layout>
       </widget>
       <widget class="QWidget" name="pLoginAndroid">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="vlSMLoginAndroid">
         <item>
          <widget class="QLabel" name="labDesAndroid">
           <property name="text">
-           <string>Welcome to Syping Gaming Team's Server Manager</string>
+           <string>Welcome to Syping's Server Manager</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -748,9 +748,15 @@ QFrame{
        </layout>
       </widget>
       <widget class="QWidget" name="pServerManagerAndroid">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="vlSMA">
         <item>
          <widget class="QListWidget" name="lwServerAndroid">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
@@ -776,28 +782,44 @@ QFrame{
           <item>
            <widget class="QPushButton" name="cmdStartAndroid">
             <property name="text">
-             <string>Start</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/android/play.png</normaloff>:/android/play.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="cmdStopAndroid">
             <property name="text">
-             <string>Stop</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/android/pause.png</normaloff>:/android/pause.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="cmdUpdateAndroid">
             <property name="text">
-             <string>Update</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/android/update.png</normaloff>:/android/update.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="cmdDisconnectAndroid">
             <property name="text">
-             <string>Disconnect</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res/res.qrc">
+              <normaloff>:/android/DC.png</normaloff>:/android/DC.png</iconset>
             </property>
            </widget>
           </item>
@@ -806,7 +828,7 @@ QFrame{
        </layout>
       </widget>
       <widget class="QWidget" name="pWaitPageAndroid">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="vlAndroidWaitPage">
         <item>
          <widget class="KPTLabel" name="labPleaseWaitAndroid">
           <property name="text">

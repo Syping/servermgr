@@ -15,8 +15,10 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS += servermgr
+SUBDIRS += servermgrfw \
+    servermgr
+
+HEADERS += config.h

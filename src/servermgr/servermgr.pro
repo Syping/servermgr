@@ -25,6 +25,8 @@ win32: RC_FILE = app.rc
 
 TARGET = ServerManager
 
+DEPLOYMENT.display_name = "Server Manager"
+
 TEMPLATE = app
 
 SOURCES += main.cpp \
@@ -33,19 +35,14 @@ SOURCES += main.cpp \
     KPTLabel.cpp \
     frmConfig.cpp \
     frmIcon.cpp \
-    frmServerManager.cpp \
-    PixmapEdit.cpp \
-    ServerManager.cpp
+    frmServerManager.cpp
 
-HEADERS  += config.h \
-    ConnectThread.h \
+HEADERS  += ConnectThread.h \
     IconThread.h \
     KPTLabel.h \
     frmConfig.h \
     frmIcon.h \
-    frmServerManager.h \
-    PixmapEdit.h \
-    ServerManager.h \
+    frmServerManager.h
     SMStyleTweaks.h
 
 FORMS    += \
@@ -58,6 +55,8 @@ RESOURCES += \
 
 TRANSLATIONS += \
     res/sm_de.ts
+
+INCLUDEPATH += ../servermgrfw ../
 
 OTHER_FILES += \
     app.rc \
@@ -76,8 +75,12 @@ unix: !macx: INSTALLS += target appfiles pixfiles
 # ANDROID EXTRAS
 android: CONFIG += mobility
 android: DEFINES += SM_ANDROID
-android: DEPLOYMENT.display_name = "Server Manager"
+android: TARGET = ServerManager
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-src
+
+# SERVER MANAGER LIBS
+win32: LIBS += -L$$OUT_PWD/../servermgrfw/release -L$$OUT_PWD/../servermgrfw/debug -lservermgrfw
+unix: LIBS += -L$$OUT_PWD/../servermgrfw -lservermgrfw
 
 DISTFILES += \
     android-src/AndroidManifest.xml \
