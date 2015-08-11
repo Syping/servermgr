@@ -33,7 +33,7 @@ if [ "$SM_DISABLE_SSL" = "YES" ]; then
 		export SM_CONFIGURE_ARGS="$SM_CONFIGURE_ARGS CONFIG+=DisableSSL"
 	fi
 fi
-if [ "$SM_WITH_SERVER = "YES" ]; then
+if [ "$SM_WITH_SERVER" = "YES" ]; then
 	if [ -z "$SM_CONFIGURE_ARGS" ]; then
 		export SM_CONFIGURE_ARGS="CONFIG+=WithServer"
 	else
