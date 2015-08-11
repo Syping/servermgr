@@ -71,6 +71,9 @@ unix: !macx: pixfiles.path = $$(SM_INSTALL_PATH)/share/pixmaps
 unix: !macx: pixfiles.files = $$PWD/res/install/servermgr.xpm
 unix: !macx: INSTALLS += target appfiles pixfiles
 
+# MAC OS X EXTRAS
+macx: TARGET = "Server Manager"
+
 # ANDROID EXTRAS
 android: CONFIG += mobility
 android: DEFINES += SM_ANDROID
