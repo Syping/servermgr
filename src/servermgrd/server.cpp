@@ -23,7 +23,7 @@ server::server(ServerManager *smgr, bool useSSL, QObject *parent) :
 {
 }
 
-void server::incomingConnection(int handle)
+void server::incomingConnection(qintptr handle)
 {
     qDebug() << "Client incoming";
     core *cCore = new core(handle, smgr, useSSL, this);

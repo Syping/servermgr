@@ -28,7 +28,7 @@
 #include <iostream>
 using namespace std;
 
-core::core(int handle, ServerManager *smgr, bool useSSL, QObject *parent) :
+core::core(qintptr handle, ServerManager *smgr, bool useSSL, QObject *parent) :
     QThread(parent), handle(handle), smgr(smgr), useSSL(useSSL)
 {
     sslca = QSslCertificate::fromPath(QLatin1String("ca.pem"));

@@ -35,7 +35,7 @@ private:
     bool useSSL;
 
 protected:
-    void incomingConnection(int handle);
+    void incomingConnection(qintptr handle);
 };
 
 #endif // SERVER_H

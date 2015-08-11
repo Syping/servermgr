@@ -34,11 +34,11 @@ class core : public QThread
 {
     Q_OBJECT
 public:
-    core(int handle, ServerManager *smgr, bool useSSL, QObject *parent = 0);
+    core(qintptr handle, ServerManager *smgr, bool useSSL, QObject *parent = 0);
     void run();
 
 private:
-    int handle;
+    qintptr handle;
     ServerManager *smgr;
     bool useSSL;
 
