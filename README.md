@@ -4,7 +4,7 @@ Syping Gaming Team Server Manager
 #### FAQ
  - Q: How to connect to localhost without running server? A: type SM_LOCAL as hostname
  - Q: How to setup a Server Manager Server? A: Download http://www.syping.de/download/ServerManagerServer.txz for Linux and read README.txt
- - Q: It is planned to make the server open source? A: Yes, if the server 64bit compatible without problems
+ - Q: My 64bit Build of the Server Manager Server don't work, what should i do? A: Compile the Server with a 32bit Qt5
  - Q: The Linux Server doesn't work what can i do? A: Check if all dependencies installed with ldd ServerManagerServer and ldd platforms/libqxcb.so
  - Q: How to run the Linux Server without DISPLAY? A: ./ServerManagerServer.sh -platform minimal
 
