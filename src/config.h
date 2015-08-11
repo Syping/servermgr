@@ -72,8 +72,14 @@
 #ifndef ProductPixmap
 #define ProductPixmap ":/pixmap/server-pixmap.png"
 #endif
+#ifdef SM_ANDROID
+#ifndef ProductImg
+#define ProductImg ":/pixmap/server-pixmap.png"
+#endif
+#else
 #ifndef ProductImg
 #define ProductImg ":/icon/server-icon.png"
+#endif
 #endif
 #ifndef ProductIcon
 #define ProductIcon ":/icon/server-icon_16.png"
