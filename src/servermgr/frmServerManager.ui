@@ -45,7 +45,7 @@
     <item>
      <widget class="QStackedWidget" name="swSM">
       <property name="currentIndex">
-       <number>4</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="pLoginDesigned">
        <property name="styleSheet">
@@ -373,8 +373,8 @@ QPushButton:focus:pressed{
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>71</width>
-                 <height>71</height>
+                 <width>256</width>
+                 <height>289</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcLeft">
@@ -439,7 +439,7 @@ QPushButton:focus:pressed{
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>111</width>
+                 <width>147</width>
                  <height>535</height>
                 </rect>
                </property>
@@ -749,6 +749,52 @@ QFrame{
       </widget>
       <widget class="QWidget" name="pServerManagerAndroid">
        <layout class="QVBoxLayout" name="vlSMA">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="KPTLabel" name="labTitle">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(215, 90, 0);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(215, 90, 0);
+border-radius: 0px;
+border-color: white;
+border-style: ridge;</string>
+          </property>
+          <property name="text">
+           <string>Server Manager</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QListWidget" name="lwServerAndroid">
           <property name="frameShape">
