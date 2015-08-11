@@ -110,6 +110,7 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     // Change Designed Mode Style
     SMStyleTweaks *SMStyle = new SMStyleTweaks;
     ui->cmdDesignedLogin->setStyle(SMStyle);
+    ui->lwServerAndroid->setStyle(SMStyle);
     if (designedMode)
     {
         ui->pServerManager->setStyle(SMStyle);

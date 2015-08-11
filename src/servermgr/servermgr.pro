@@ -24,8 +24,7 @@ isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 win32: RC_FILE = app.rc
 
 TARGET = ServerManager
-
-DEPLOYMENT.display_name = "Server Manager"
+DEPLOYMENT.display_name = Server Manager
 
 TEMPLATE = app
 
@@ -87,6 +86,7 @@ DISTFILES += \
     android-src/gradle/wrapper/gradle-wrapper.jar \
     android-src/gradlew \
     android-src/res/values/libs.xml \
+    android-src/res/values/strings.xml \
     android-src/build.gradle \
     android-src/gradle/wrapper/gradle-wrapper.properties \
     android-src/gradlew.bat

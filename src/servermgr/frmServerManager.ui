@@ -373,8 +373,8 @@ QPushButton:focus:pressed{
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>256</width>
-                 <height>289</height>
+                 <width>71</width>
+                 <height>71</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcLeft">
@@ -439,7 +439,7 @@ QPushButton:focus:pressed{
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>147</width>
+                 <width>111</width>
                  <height>535</height>
                 </rect>
                </property>
@@ -788,6 +788,12 @@ QFrame{
              <iconset resource="res/res.qrc">
               <normaloff>:/android/play.png</normaloff>:/android/play.png</iconset>
             </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -798,6 +804,12 @@ QFrame{
             <property name="icon">
              <iconset resource="res/res.qrc">
               <normaloff>:/android/pause.png</normaloff>:/android/pause.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -810,6 +822,12 @@ QFrame{
              <iconset resource="res/res.qrc">
               <normaloff>:/android/update.png</normaloff>:/android/update.png</iconset>
             </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -820,6 +838,12 @@ QFrame{
             <property name="icon">
              <iconset resource="res/res.qrc">
               <normaloff>:/android/DC.png</normaloff>:/android/DC.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
