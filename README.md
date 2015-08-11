@@ -21,6 +21,10 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 	make
 	checkinstall --pkgname=servermgr --pkgversion=$(cat "sm_version")
 	
+#### Configure Server Manager with the Server (no make install)
+
+    SM_INSTALL_PATH=/usr ../configure --with-server
+	
 #### Download Server Manager APK (Android)
 
 Pre-Release: http://www.syping.de/download/sm_android/1.1.2pre1/QtApp-release-signed.apk
