@@ -19,6 +19,8 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += servermgrfw \
-    servermgr
+    servermgr \
+
+CONFIG(WithServer): SUBDIRS += servermgrd
 
 HEADERS += config.h
