@@ -33,3 +33,7 @@ Pre-Release: http://www.syping.de/download/sm_android/1.1.2pre1/QtApp-release-si
 
 You can find installer in the releases, you can find a 
 static build at https://github.com/Syping/servermgr/releases/download/v1.1.1.1/ServerManager.exe
+
+#### Download Server Manager Daily Builds (Windows)
+
+Daily-Builds: https://www.syping.de/servermgr_daily/
