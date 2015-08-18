@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
         cout << "|                               |\n";
         cout << "|       Syping SM Server        |\n";
 #if defined(Q_WS_X11)
-        cout << "|       Version 1.0a LR1        |\n";
+        cout << "|       Version 1.1.2 LR1       |\n";
 #else
-        cout << "|       Version 1.0a R1         |\n";
+        cout << "|       Version 1.1.2 R1        |\n";
 #endif
         cout << "|                               |\n";
         cout << "|       Port: ";
