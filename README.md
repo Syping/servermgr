@@ -31,7 +31,7 @@ Server only
 	
 #### Download Server Manager Binary
 
-https://github.com/Syping/servermgr/releases
+Windows and Android: https://github.com/Syping/servermgr/releases
 
 #### Download Server Manager Daily Builds (Windows)
 
