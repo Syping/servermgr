@@ -1,5 +1,5 @@
 /*****************************************************************************
-* servermgr Syping Gaming Team Server Manager
+* servermgrd Syping Gaming Team Server Manager Server
 * Copyright (C) 2015 Syping Gaming Team
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
