@@ -424,7 +424,7 @@
         <location filename="../frmServerManager.cpp" line="242"/>
         <location filename="../frmServerManager.cpp" line="248"/>
         <source>The %1 Server has no servers registred</source>
-        <translation type="unfinished"></translation>
+        <translation>Der %1 Server hat keine Server registriert</translation>
     </message>
     <message>
         <location filename="../frmServerManager.cpp" line="256"/>
