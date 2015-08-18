@@ -22,5 +22,6 @@ SUBDIRS += servermgrfw \
     servermgr \
 
 CONFIG(WithServer): SUBDIRS += servermgrd
+CONFIG(WithoutClient): SUBDIRS -= servermgr
 
 HEADERS += config.h
