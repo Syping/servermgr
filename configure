@@ -3,7 +3,7 @@ for i in "$@"
 do
 case $i in
 	--help)
-	echo "Available options: --disable-ssl --with-server"
+	echo "Available options: --disable-ssl --with-server --server-only"
 	echo "Available environment values: SM_INSTALL_PATH SM_QMAKE_PATH SM_CONFIGURE_ARGS"
 	exit 0
 	shift
@@ -14,6 +14,11 @@ case $i in
     ;;
 	--with-server)
     SM_WITH_SERVER=YES
+    shift
+    ;;
+	--server-only)
+	SM_WITH_SERVER=YES
+    SM_WITHOUT_CLIENT=YES
     shift
     ;;
     *)
@@ -40,11 +45,21 @@ if [ "$SM_WITH_SERVER" = "YES" ]; then
 		export SM_CONFIGURE_ARGS="$SM_CONFIGURE_ARGS CONFIG+=WithServer"
 	fi
 fi
+if [ "$SM_WITHOUT_CLIENT" = "YES" ]; then
+	if [ -z "$SM_CONFIGURE_ARGS" ]; then
+		export SM_CONFIGURE_ARGS="CONFIG+=WithoutClient"
+	else
+		export SM_CONFIGURE_ARGS="$SM_CONFIGURE_ARGS CONFIG+=WithoutClient"
+	fi
+fi
 export SM_QMAKE_PATH="$SM_QMAKE_PATH"
 export SM_INSTALL_PATH="$SM_INSTALL_PATH"
 export SM_SOURCE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+echo "rm -rf Makefile"
+rm -rf Makefile
 echo $SM_QMAKE_PATH "$SM_SOURCE_DIR/servermgr.pro" $SM_CONFIGURE_ARGS -o Makefile
 $SM_QMAKE_PATH "$SM_SOURCE_DIR/servermgr.pro" $SM_CONFIGURE_ARGS -o Makefile || qmake-qt5 "$SM_SOURCE_DIR/servermgr.pro" $SM_CONFIGURE_ARGS -o Makefile || /usr/lib/i386-linux-gnu/qt5/bin/qmake "$SM_SOURCE_DIR/servermgr.pro" $SM_CONFIGURE_ARGS -o Makefile || /usr/lib/x86_64-linux-gnu/qt5/bin/qmake "$SM_SOURCE_DIR/servermgr.pro" $SM_CONFIGURE_ARGS -o Makefile
 echo "make clean"
 make clean
+echo "Server Manager Configure Args are" "$SM_CONFIGURE_ARGS"
 echo "Server Manager Install Path is" "$SM_INSTALL_PATH"
