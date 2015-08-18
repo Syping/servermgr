@@ -871,7 +871,15 @@ QStringList ServerManager::getServerListRemote()
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
-            return args.at(2).split("&sms;");
+            QString serverString = args.at(2);
+            if (serverString != "")
+            {
+                return serverString.split("&sms;");
+            }
+            else
+            {
+                return QStringList("ERROR_NORETURN");
+            }
         }
         else
         {

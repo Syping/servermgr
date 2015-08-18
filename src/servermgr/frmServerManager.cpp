@@ -216,20 +216,36 @@ void frmServerManager::on_connectionIssued(bool isSuccess)
 
         // Get server list
         QStringList serverList = smgr->getServerList();
-        foreach (const QString &serverName, serverList)
+        if (serverList.length() >= 1)
         {
-            QListWidgetItem *newItem = new QListWidgetItem(serverName);
-            newItem->setIcon(standardIcon);
-            activeLW->addItem(newItem);
+            if (serverList.at(0).left(6) != "ERROR_")
+            {
+                foreach (const QString &serverName, serverList)
+                {
+                    QListWidgetItem *newItem = new QListWidgetItem(serverName);
+                    newItem->setIcon(standardIcon);
+                    activeLW->addItem(newItem);
+                }
+                if (serverList.length() != 0)
+                {
+                    iconWT = new IconThread(smgr, serverList, izSquare, this);
+                    iconWTDefined = true;
+
+                    connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
+                    iconWT->start(QThread::LowPriority);
+                }
+            }
+            else
+            {
+                if (serverList.at(0) == "ERROR_NORETURN")
+                {
+                    QMessageBox::information(this, ProductName, tr("The %1 Server has no servers registred").arg(ProductName));
+                }
+            }
         }
-
-        if (serverList.length() != 0)
+        else
         {
-            iconWT = new IconThread(smgr, serverList, izSquare, this);
-            iconWTDefined = true;
-
-            connect(iconWT,SIGNAL(setServerIcon(QString,QByteArray)),this,SLOT(setServerIcon(QString,QByteArray)));
-            iconWT->start(QThread::LowPriority);
+            QMessageBox::information(this, ProductName, tr("The %1 Server has no servers registred").arg(ProductName));
         }
     }
     else
