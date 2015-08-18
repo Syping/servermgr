@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Server Manager"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.1.2"
 #define MyAppPublisher "Syping Gaming Team"
 #define MyAppExeName "ServerManager.exe"
 
@@ -17,8 +17,8 @@ AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-LicenseFile=C:\Users\Rafael\Documents\Projects\ServerManager\LICENSE
-OutputDir=A:\Users\Rafael\Desktop\Bilder+Rescs\ServerManagerMinGW
+LicenseFile=C:\Windows.old.000\Users\Rafael\Documents\Projects\ServerManager\LICENSE
+OutputDir=C:\Users\Rafael\Resourcen\SM_MINGW_SHARED
 OutputBaseFilename=sm_setup
 Compression=lzma
 SolidCompression=yes
@@ -31,7 +31,7 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "A:\Users\Rafael\Desktop\Bilder+Rescs\ServerManagerMinGW\x86\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Rafael\Resourcen\SM_MINGW_SHARED\x86\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
