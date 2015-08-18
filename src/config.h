@@ -137,7 +137,7 @@
 #elif defined(MSVC)
 #define ApplicationID "Server Manager"
 #else
-#define ApplicationID "Server Manager"
+#define ApplicationID "{24ABE582-3070-4945-98D2-0D782817F96C}"
 #endif
 #else
 #define ApplicationID "Server Manager"
