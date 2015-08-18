@@ -24,7 +24,9 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 #### Configure Server Manager with the Server
 
     SM_INSTALL_PATH=/usr ../configure --with-server
+
 Server only
+
     SM_INSTALL_PATH=/usr ../configure --server-only
 	
 #### Download Server Manager Binary
