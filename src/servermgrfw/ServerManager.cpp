@@ -1,5 +1,5 @@
 /*****************************************************************************
-* servermgr Syping Gaming Team Server Manager
+* servermgrfw Syping Gaming Team Server Manager Framework
 * Copyright (C) 2015 Syping Gaming Team
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
