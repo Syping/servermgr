@@ -1,5 +1,5 @@
 #/*****************************************************************************
-#* servermgr Syping Gaming Team Server Manager
+#* servermgrd Syping Gaming Team Server Manager Server
 #* Copyright (C) 2015 Syping Gaming Team
 #*
 #* Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,11 @@ HEADERS  += core.h \
     server.h
 
 INCLUDEPATH += ../servermgrfw ../
+
+# UNIX EXTRAS
+unix: !macx: DEFINES += SM_UNIX
+unix: !macx: target.path = $$(SM_INSTALL_PATH)/bin
+unix: !macx: INSTALLS += target
 
 # SERVER MANAGER LIBS
 win32: LIBS += -L$$OUT_PWD/../servermgrfw/release -L$$OUT_PWD/../servermgrfw/debug -lservermgrfw
