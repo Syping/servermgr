@@ -24,6 +24,10 @@
 #include <QProcess>
 #include <QBuffer>
 
+#ifdef SM_LUA
+#include "ServerManagerLua.h"
+#endif
+
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
     configFile = new QSettings(ProductVendor, ProductName);
@@ -38,6 +42,10 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     sessionPort = 9509;
     sessionSSL = false;
     lastReturn = 0;
+#ifdef SM_LUA
+    QString LUA_RETURN = SML.runLuaScriptString("SM_LUA_RETURN = _VERSION");
+    qDebug() << LUA_RETURN;
+#endif
 }
 
 // Server Manager Public

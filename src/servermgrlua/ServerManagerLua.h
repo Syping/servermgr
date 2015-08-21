@@ -54,10 +54,16 @@ class ServerManagerLua : public QObject
 
 public:
     explicit ServerManagerLua(QObject *parent = 0);
-    lua_State* initLua();
-    void haltLua(lua_State *lp);
-    QString runLuaScriptFile(lua_State *lp, QString filePath);
-    QString runLuaScriptString(lua_State *lp, QString luaScript);
+    QString runLuaScriptFile(QString filePath);
+    QString runLuaScriptString(QString luaScript);
+    void closeLuaState();
+    ~ServerManagerLua();
+
+private:
+    void initLua();
+    void setStandardGlobalValues();
+    QString getReturnValue();
+    lua_State *lp;
 
 };
 

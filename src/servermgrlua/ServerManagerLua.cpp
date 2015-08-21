@@ -19,28 +19,47 @@
 
 ServerManagerLua::ServerManagerLua(QObject *parent) : QObject(parent)
 {
-
+    initLua();
 }
 
-lua_State* ServerManagerLua::initLua()
+ServerManagerLua::~ServerManagerLua()
 {
-    lua_State *lp;
+    closeLuaState();
+}
+
+void ServerManagerLua::initLua()
+{
     lp = luaL_newstate();
     luaL_openlibs(lp);
-    return lp;
 }
 
-void ServerManagerLua::haltLua(lua_State *lp)
+void ServerManagerLua::closeLuaState()
 {
     lua_close(lp);
 }
 
-QString ServerManagerLua::runLuaScriptFile(lua_State *lp, QString filePath)
+void ServerManagerLua::setStandardGlobalValues()
 {
-    luaL_dofile(lp, filePath.toStdString().c_str());
+    lua_setglobal(lp, "SM_LUA_RETURN");
+    lua_pushstring(lp, "");
 }
 
-QString ServerManagerLua::runLuaScriptString(lua_State *lp, QString luaScript)
+QString ServerManagerLua::getReturnValue()
 {
+    lua_getglobal(lp, "SM_LUA_RETURN");
+    return QString(lua_tostring(lp, -1));
+}
+
+QString ServerManagerLua::runLuaScriptFile(QString filePath)
+{
+    setStandardGlobalValues();
+    luaL_dofile(lp, filePath.toStdString().c_str());
+    return getReturnValue();
+}
+
+QString ServerManagerLua::runLuaScriptString(QString luaScript)
+{
+    setStandardGlobalValues();
     luaL_dostring(lp, luaScript.toStdString().c_str());
+    return getReturnValue();
 }
