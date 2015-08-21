@@ -18,11 +18,13 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS += servermgrfw \
+SUBDIRS += servermgrlua \
+    servermgrfw \
     servermgr \
+    servermgrd
 
-CONFIG(WithServer): SUBDIRS += servermgrd
 CONFIG(WithoutClient): SUBDIRS -= servermgr
-CONFIG(WithLua:) SUBDIRS += servermgrlua
+!CONFIG(WithServer): SUBDIRS -= servermgrd
+!CONFIG(WithLua): SUBDIRS -= servermgrlua
 
 HEADERS += config.h
