@@ -43,7 +43,6 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     sessionSSL = false;
     lastReturn = 0;
 #ifdef SM_LUA
-
 #endif
 }
 

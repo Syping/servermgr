@@ -15,7 +15,7 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-QT += core
+QT += core gui widgets
 
 TARGET = servermgrlua
 TEMPLATE = lib

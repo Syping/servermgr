@@ -16,6 +16,8 @@
 *****************************************************************************/
 
 #include "ServerManagerLua.h"
+#include <QMessageBox>
+#include <QProcess>
 
 ServerManagerLua::ServerManagerLua(QObject *parent) : QObject(parent)
 {
@@ -31,6 +33,8 @@ void ServerManagerLua::initLua()
 {
     lp = luaL_newstate();
     luaL_openlibs(lp);
+    lua_register(lp, "sm_run_background", sm_run_background);
+    lua_register(lp, "sm_gui_msgbox", sm_gui_msgbox);
 }
 
 void ServerManagerLua::closeLuaState()
@@ -80,4 +84,50 @@ void ServerManagerLua::runLuaFunction(QString function)
 {
     lua_getglobal(lp, function.toStdString().c_str());
     lua_call(lp, 0, 0);
+}
+
+// Lua Functions
+
+int ServerManagerLua::sm_run_background(lua_State *L)
+{
+    int n = lua_gettop(L);
+    QString execLine;
+    if (n >= 1)
+    {
+        execLine = QString(lua_tostring(L, 1));
+    }
+    QProcess execProcess;
+    execProcess.startDetached(execLine);
+    return 0;
+}
+
+int ServerManagerLua::sm_gui_msgbox(lua_State *L)
+{
+    int n = lua_gettop(L);
+    const char* text = "";
+    const char* title = "Server Manager Lua";
+    const char* mode = "";
+    if (n == 0) return 0;
+    if (n == 1)
+    {
+        text = lua_tostring(L,1);
+    }
+    if (n == 2)
+    {
+        text = lua_tostring(L,1);
+        title = lua_tostring(L,2);
+    }
+    if (n >= 3)
+    {
+        text = lua_tostring(L,1);
+        title = lua_tostring(L,2);
+        mode = lua_tostring(L,3);
+    }
+    QString smode = mode;
+    QWidget *vThis = new QWidget();
+    vThis->setWindowModality(Qt::ApplicationModal);
+    if (smode == "0" || smode == "information") {QMessageBox::information(vThis, QString(title), QString(text));}
+    else if (smode == "1" || smode == "warning") {QMessageBox::warning(vThis, QString(title), QString(text));}
+    else {QMessageBox::information(vThis, QString(title), QString(text));}
+    return 0;
 }

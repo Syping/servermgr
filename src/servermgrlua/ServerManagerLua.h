@@ -60,13 +60,14 @@ public:
     QString getLuaGlobalString(QString globalValue);
     void setLuaGlobalString(QString globalValue, QString newString);
     void runLuaFunction(QString function);
-
     ~ServerManagerLua();
 
 private:
     void initLua();
     void setStandardGlobalValues();
     QString getReturnValue();
+    static int sm_run_background(lua_State *L);
+    static int sm_gui_msgbox(lua_State *L);
     lua_State *lp;
 
 };
