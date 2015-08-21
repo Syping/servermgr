@@ -1,5 +1,5 @@
 #/*****************************************************************************
-#* servermgrlua Syping Gaming Team Server Manager Framework Lua Fork
+#* servermgrlua Syping Gaming Team Server Manager Framework Lua
 #* Copyright (C) 2015 Syping Gaming Team
 #*
 #* Licensed under the Apache License, Version 2.0 (the "License");
