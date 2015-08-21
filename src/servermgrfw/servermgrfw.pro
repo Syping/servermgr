@@ -18,6 +18,7 @@
 QT       += core gui network widgets
 
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
+CONFIG(WithLua): DEFINES += "SM_LUA"
 
 TARGET = servermgrfw
 TEMPLATE = lib

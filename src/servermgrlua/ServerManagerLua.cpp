@@ -22,3 +22,25 @@ ServerManagerLua::ServerManagerLua(QObject *parent) : QObject(parent)
 
 }
 
+lua_State* ServerManagerLua::initLua()
+{
+    lua_State *lp;
+    lp = luaL_newstate();
+    luaL_openlibs(lp);
+    return lp;
+}
+
+void ServerManagerLua::haltLua(lua_State *lp)
+{
+    lua_close(lp);
+}
+
+QString ServerManagerLua::runLuaScriptFile(lua_State *lp, QString filePath)
+{
+    luaL_dofile(lp, filePath.toStdString().c_str());
+}
+
+QString ServerManagerLua::runLuaScriptString(lua_State *lp, QString luaScript)
+{
+    luaL_dostring(lp, luaScript.toStdString().c_str());
+}

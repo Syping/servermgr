@@ -20,15 +20,45 @@
 
 #include <QObject>
 
+extern "C"
+{
+#include "lua/lapi.h"
+#include "lua/lauxlib.h"
+#include "lua/lcode.h"
+#include "lua/lctype.h"
+#include "lua/ldebug.h"
+#include "lua/ldo.h"
+#include "lua/lfunc.h"
+#include "lua/lgc.h"
+#include "lua/llex.h"
+#include "lua/llimits.h"
+#include "lua/lmem.h"
+#include "lua/lobject.h"
+#include "lua/lopcodes.h"
+#include "lua/lparser.h"
+#include "lua/lstate.h"
+#include "lua/lstring.h"
+#include "lua/ltable.h"
+#include "lua/ltm.h"
+#include "lua/lua.h"
+#include "lua/luaconf.h"
+#include "lua/lualib.h"
+#include "lua/lundump.h"
+#include "lua/lvm.h"
+#include "lua/lzio.h"
+}
+
 class ServerManagerLua : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ServerManagerLua(QObject *parent = 0);
+    lua_State* initLua();
+    void haltLua(lua_State *lp);
+    QString runLuaScriptFile(lua_State *lp, QString filePath);
+    QString runLuaScriptString(lua_State *lp, QString luaScript);
 
-signals:
-
-public slots:
 };
 
 #endif // SERVERMANAGERLUA_H
