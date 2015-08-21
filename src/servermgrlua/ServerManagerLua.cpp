@@ -63,3 +63,21 @@ QString ServerManagerLua::runLuaScriptString(QString luaScript)
     luaL_dostring(lp, luaScript.toStdString().c_str());
     return getReturnValue();
 }
+
+QString ServerManagerLua::getLuaGlobalString(QString globalValue)
+{
+    lua_getglobal(lp, globalValue.toStdString().c_str());
+    return QString(lua_tostring(lp, -1));
+}
+
+void ServerManagerLua::setLuaGlobalString(QString globalValue, QString newString)
+{
+    lua_setglobal(lp, globalValue.toStdString().c_str());
+    lua_pushstring(lp, newString.toStdString().c_str());
+}
+
+void ServerManagerLua::runLuaFunction(QString function)
+{
+    lua_getglobal(lp, function.toStdString().c_str());
+    lua_call(lp, 0, 0);
+}

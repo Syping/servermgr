@@ -57,6 +57,10 @@ public:
     QString runLuaScriptFile(QString filePath);
     QString runLuaScriptString(QString luaScript);
     void closeLuaState();
+    QString getLuaGlobalString(QString globalValue);
+    void setLuaGlobalString(QString globalValue, QString newString);
+    void runLuaFunction(QString function);
+
     ~ServerManagerLua();
 
 private:

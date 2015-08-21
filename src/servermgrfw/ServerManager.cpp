@@ -43,7 +43,9 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     sessionSSL = false;
     lastReturn = 0;
 #ifdef SM_LUA
-    QString LUA_RETURN = SML.runLuaScriptString("SM_LUA_RETURN = _VERSION");
+    QString LUA_RETURN = SML.runLuaScriptString("SM_LUA_RETURN = _VERSION\nfunction Penis()\nprint(\"Penis triggerd\")\nSM_LUA_RETURN = \"Penis\"\nend\n");
+    qDebug() << LUA_RETURN;
+    SML.runLuaFunction("Penis");
     qDebug() << LUA_RETURN;
 #endif
 }
