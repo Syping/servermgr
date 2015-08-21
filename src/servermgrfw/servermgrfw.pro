@@ -16,8 +16,9 @@
 #*****************************************************************************/
 
 
-QT       += core gui network
-isEqual(QT_MAJOR_VERSION, 5): QT += widgets
+QT       += core gui network widgets
+
+isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
 TARGET = servermgrfw
 TEMPLATE = lib

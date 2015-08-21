@@ -15,10 +15,8 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-QT       += core network gui
-isEqual(QT_MAJOR_VERSION, 5): QT += widgets
+QT       += core network gui widgets
 
-isEqual(QT_MAJOR_VERSION, 4): DEFINES += "QT4"
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
 CONFIG   += console

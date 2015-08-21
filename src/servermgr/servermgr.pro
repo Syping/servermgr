@@ -15,10 +15,8 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-QT       += core gui network
-isEqual(QT_MAJOR_VERSION, 5): QT += widgets
+QT       += core gui network widgets
 
-isEqual(QT_MAJOR_VERSION, 4): DEFINES += "QT4"
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
 win32: RC_FILE = app.rc

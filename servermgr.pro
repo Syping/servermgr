@@ -15,6 +15,9 @@
 #* limitations under the License.
 #*****************************************************************************/
 
+lessThan(QT_MAJOR_VERSION, 5): error("servermgr requires Qt 5.3 or higher")
+isEqual(QT_MAJOR_VERSION, 5): lessThan(QT_MINOR_VERSION, 3): error("servermgr requires Qt 5.3 or higher")
+
 TEMPLATE = subdirs
 CONFIG += ordered
 
