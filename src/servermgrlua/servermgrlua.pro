@@ -21,6 +21,13 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
+# SERVERMGR LUA
+
+SOURCES += ServerManagerLua.cpp
+HEADERS += ServerManagerLua.h
+
+# ORIGINAL LUA
+
 SOURCES += lapi.c \
     lauxlib.c \
     lbaselib.c \
