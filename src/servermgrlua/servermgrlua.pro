@@ -15,11 +15,11 @@
 #* limitations under the License.
 #*****************************************************************************/
 
+QT += core
 
 TARGET = servermgrlua
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG -= qt
 
 # SERVERMGR LUA
 
