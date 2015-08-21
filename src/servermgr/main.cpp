@@ -103,46 +103,6 @@ int main(int argc, char *argv[])
         }
     }
     a.installTranslator(&EappTranslator);
-#ifdef QT4
-    QTranslator EqtTranslator;
-    if (language == "System" || language.trimmed() == "")
-    {
-        QString languageName = QLocale::system().name();
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(trplugspath + "/qt_" + langList.at(0) + ".qm"))
-            {
-                EqtTranslator.load(trplugspath + "/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    else
-    {
-        QString languageName = language;
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(trplugspath + "/qt_" + langList.at(0) + ".qm"))
-            {
-                EqtTranslator.load(trplugspath + "/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    if (trsf)
-    {
-        QString languageName = QLocale::system().name();
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(trplugspath + "/qt_" + langList.at(0) + ".qm"))
-            {
-                EqtTranslator.load(trplugspath + "/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    a.installTranslator(&EqtTranslator);
-#else
 #ifdef QT5
     QTranslator EqtTranslator1;
     if (language == "System" || language.trimmed() == "")
@@ -182,7 +142,6 @@ int main(int argc, char *argv[])
         }
     }
     a.installTranslator(&EqtTranslator1);
-#endif
 #endif
     // End external translate loading
     // Start internal translate loading
@@ -237,46 +196,6 @@ int main(int argc, char *argv[])
         }
     }
     a.installTranslator(&appTranslator);
-#ifdef QT4
-    QTranslator qtTranslator;
-    if (language == "System" || language.trimmed() == "")
-    {
-        QString languageName = QLocale::system().name();
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(":/tr/qt_" + langList.at(0) + ".qm"))
-            {
-                qtTranslator.load(":/tr/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    else
-    {
-        QString languageName = language;
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(":/tr/qt_" + langList.at(0) + ".qm"))
-            {
-                qtTranslator.load(":/tr/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    if (trsf)
-    {
-        QString languageName = QLocale::system().name();
-        QStringList langList = languageName.split("_");
-        if (langList.length() >= 1)
-        {
-            if (QFile::exists(":/tr/qt_" + langList.at(0) + ".qm"))
-            {
-                qtTranslator.load(":/tr/qt_" + langList.at(0) + ".qm");
-            }
-        }
-    }
-    a.installTranslator(&qtTranslator);
-#else
 #ifdef QT5
     QTranslator qtTranslator1;
     if (language == "System" || language.trimmed() == "")
@@ -316,7 +235,6 @@ int main(int argc, char *argv[])
         }
     }
     a.installTranslator(&qtTranslator1);
-#endif
 #endif
     // End internal translate loading
 
