@@ -152,7 +152,6 @@
     </qresource>
     <qresource prefix="/tr">
         <file>sm_de.qm</file>
-        <file>qt_de.qm</file>
         <file>qtbase_de.qm</file>
     </qresource>
     <qresource prefix="/pixmap">
