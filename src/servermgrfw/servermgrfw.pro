@@ -15,7 +15,6 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-
 QT       += core gui network widgets
 
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
