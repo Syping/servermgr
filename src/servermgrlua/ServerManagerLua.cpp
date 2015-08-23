@@ -18,6 +18,7 @@
 #include "ServerManagerLua.h"
 #include <QMessageBox>
 #include <QProcess>
+#include <QInputDialog>
 
 ServerManagerLua::ServerManagerLua(QObject *parent) : QObject(parent)
 {
@@ -35,6 +36,7 @@ void ServerManagerLua::initLua()
     luaL_openlibs(lp);
     lua_register(lp, "sm_run_background", sm_run_background);
     lua_register(lp, "sm_gui_msgbox", sm_gui_msgbox);
+    lua_register(lp, "sm_gui_inputbox", sm_gui_inputbox);
 }
 
 void ServerManagerLua::closeLuaState()
@@ -95,9 +97,13 @@ int ServerManagerLua::sm_run_background(lua_State *L)
     if (n >= 1)
     {
         execLine = QString(lua_tostring(L, 1));
+        QProcess execProcess;
+        execProcess.startDetached(execLine);
+        lua_pushboolean(L, true);
+    } else {
+        lua_pushboolean(L, false);
     }
-    QProcess execProcess;
-    execProcess.startDetached(execLine);
+
     return 0;
 }
 
@@ -129,5 +135,30 @@ int ServerManagerLua::sm_gui_msgbox(lua_State *L)
     if (smode == "0" || smode == "information") {QMessageBox::information(vThis, QString(title), QString(text));}
     else if (smode == "1" || smode == "warning") {QMessageBox::warning(vThis, QString(title), QString(text));}
     else {QMessageBox::information(vThis, QString(title), QString(text));}
+    return 0;
+}
+
+int ServerManagerLua::sm_gui_inputbox(lua_State *L)
+{
+    int n = lua_gettop(L);
+    const char* title = "Server Manager Lua";
+    const char* label = "Label:";
+
+    if(n == 1) {
+        title = lua_tostring(L,1);
+    }
+    if(n == 2) {
+        title = lua_tostring(L,1);
+        label = lua_tostring(L,2);
+    }
+
+    QWidget *vThis = new QWidget();
+    QInputDialog *inputDialog = new QInputDialog(vThis);
+    inputDialog->setOptions(QInputDialog::NoButtons);
+
+    QString text = inputDialog->getText(vThis, QString(title), QString(label), QLineEdit::Normal);
+
+    lua_pushstring(L, text.toStdString().c_str());
+
     return 0;
 }
