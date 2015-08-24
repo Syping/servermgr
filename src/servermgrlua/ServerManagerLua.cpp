@@ -142,23 +142,46 @@ int ServerManagerLua::sm_gui_inputbox(lua_State *L)
 {
     int n = lua_gettop(L);
     const char* title = "Server Manager Lua";
-    const char* label = "Label:";
+    const char* label = "Input:";
+    QString inputText;
+    QLineEdit::EchoMode InputBoxEchoMode = QLineEdit::Normal;
 
-    if(n == 1) {
-        title = lua_tostring(L,1);
+    if(n == 1)
+    {
+        title = lua_tostring(L, 1);
     }
-    if(n == 2) {
-        title = lua_tostring(L,1);
-        label = lua_tostring(L,2);
+    if(n == 2)
+    {
+        title = lua_tostring(L, 1);
+        label = lua_tostring(L, 2);
+    }
+    if(n == 3)
+    {
+        title = lua_tostring(L, 1);
+        label = lua_tostring(L, 2);
+        inputText = QString(lua_tostring(L, 3));
+    }
+    if (n >= 4)
+    {
+        title = lua_tostring(L, 1);
+        label = lua_tostring(L, 2);
+        inputText = QString(lua_tostring(L, 3));
+        if (lua_toboolean(L, 4))
+        {
+            InputBoxEchoMode = QLineEdit::Password;
+        }
     }
 
     QWidget *vThis = new QWidget();
-    QInputDialog *inputDialog = new QInputDialog(vThis);
-    inputDialog->setOptions(QInputDialog::NoButtons);
+    vThis->setWindowModality(Qt::ApplicationModal);
 
-    QString text = inputDialog->getText(vThis, QString(title), QString(label), QLineEdit::Normal);
+    bool ok;
+    inputText = QInputDialog::getText(vThis, QString(title), QString(label), InputBoxEchoMode, inputText, &ok);
 
-    lua_pushstring(L, text.toStdString().c_str());
-
+    if (ok)
+    {
+        lua_pushstring(L, inputText.toStdString().c_str());
+        return 1;
+    }
     return 0;
 }
