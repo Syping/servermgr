@@ -60,6 +60,7 @@ public:
     QString getLuaGlobalString(QString globalValue);
     void setLuaGlobalString(QString globalValue, QString newString);
     void runLuaFunction(QString function);
+    void registerLuaFunction(QString function, lua_CFunction cfunction);
     ~ServerManagerLua();
 
 private:

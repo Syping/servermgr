@@ -35,8 +35,8 @@ void ServerManagerLua::initLua()
     lp = luaL_newstate();
     luaL_openlibs(lp);
     lua_register(lp, "sm_run_background", sm_run_background);
-    lua_register(lp, "sm_gui_msgbox", sm_gui_msgbox);
-    lua_register(lp, "sm_gui_inputbox", sm_gui_inputbox);
+    //lua_register(lp, "sm_gui_msgbox", sm_gui_msgbox);
+    //lua_register(lp, "sm_gui_inputbox", sm_gui_inputbox);
 }
 
 void ServerManagerLua::closeLuaState()
@@ -86,6 +86,11 @@ void ServerManagerLua::runLuaFunction(QString function)
 {
     lua_getglobal(lp, function.toStdString().c_str());
     lua_call(lp, 0, 0);
+}
+
+void ServerManagerLua::registerLuaFunction(QString function, lua_CFunction cfunction)
+{
+    lua_register(lp, function.toStdString().c_str(), cfunction);
 }
 
 // Lua Functions
