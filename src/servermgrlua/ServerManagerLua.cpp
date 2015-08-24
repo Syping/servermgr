@@ -99,9 +99,6 @@ int ServerManagerLua::sm_run_background(lua_State *L)
         execLine = QString(lua_tostring(L, 1));
         QProcess execProcess;
         execProcess.startDetached(execLine);
-        lua_pushboolean(L, true);
-    } else {
-        lua_pushboolean(L, false);
     }
 
     return 0;
