@@ -160,7 +160,7 @@ int ServerManagerLua::sm_gui_inputbox(lua_State *L)
     if (n >= 4)
     {
         title = lua_tostring(L, 1);
-        label = lua_tostring(L, 2);
+        text = lua_tostring(L, 2);
         inputText = QString(lua_tostring(L, 3));
         if (lua_toboolean(L, 4))
         {
