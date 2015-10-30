@@ -24,10 +24,6 @@
 #include <QProcess>
 #include <QBuffer>
 
-#ifdef SM_LUA
-#include "ServerManagerLua.h"
-#endif
-
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
     configFile = new QSettings(ProductVendor, ProductName);
@@ -42,8 +38,6 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
     sessionPort = 9509;
     sessionSSL = false;
     lastReturn = 0;
-#ifdef SM_LUA
-#endif
 }
 
 // Server Manager Public
@@ -435,6 +429,7 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
             tcpSocket->write(spw.toUtf8());
             tcpSocket->write("\n");
             tcpSocket->flush();
+            tcpSocket->waitForBytesWritten(5000);
             tcpSocket->waitForReadyRead(5000);
             if (tcpSocket->canReadLine())
             {
@@ -631,7 +626,7 @@ QStringList ServerManager::getServerListLocal()
 QString ServerManager::getIconPathLocal(QString serverName)
 {
     configFile->beginGroup("server " + serverName);
-    QString iconPath = configFile->value("icon",ProductImg).toString();
+    QString iconPath = configFile->value("icon", ProductImg).toString();
     configFile->endGroup();
     return iconPath;
 }
@@ -904,6 +899,7 @@ QString ServerManager::getIconPathRemote(QString serverName)
         arg1 = serverName.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=geticonpath --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -927,6 +923,7 @@ QString ServerManager::getIconBytesRemote(QString serverName, int squareSize)
         QString arg2 = QString::number(squareSize);
         tcpSocket->write("SM/1.1 request --rq=geticonbytes --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -949,6 +946,7 @@ bool ServerManager::addServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=addserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -970,6 +968,7 @@ bool ServerManager::deleteServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=delserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -991,6 +990,7 @@ QString ServerManager::getStartCommandRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=getstartcmd --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1016,6 +1016,7 @@ bool ServerManager::setStartCommandRemote(QString serverName, QString startComma
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setstartcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1037,6 +1038,7 @@ QString ServerManager::getStopCommandRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=getstopcmd --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1062,6 +1064,7 @@ bool ServerManager::setStopCommandRemote(QString serverName, QString stopCommand
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setstopcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1083,6 +1086,7 @@ QString ServerManager::getConfigCommandRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=getconfigcmd --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1108,6 +1112,7 @@ bool ServerManager::setConfigCommandRemote(QString serverName, QString configCom
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setconfigcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1129,6 +1134,7 @@ QString ServerManager::getUpdateCommandRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=getupdatecmd --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1154,6 +1160,7 @@ bool ServerManager::setUpdateCommandRemote(QString serverName, QString updateCom
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setupdatecmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1175,6 +1182,7 @@ QString ServerManager::getAttachCommandRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 request --rq=getattachcmd --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1200,6 +1208,7 @@ bool ServerManager::setAttachCommandRemote(QString serverName, QString attachCom
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setattachcmd --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1221,6 +1230,7 @@ bool ServerManager::startServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=startserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1242,6 +1252,7 @@ bool ServerManager::stopServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=stopserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1263,6 +1274,7 @@ bool ServerManager::configServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=configserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1284,6 +1296,7 @@ bool ServerManager::updateServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=updateserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1305,6 +1318,7 @@ bool ServerManager::attachServerRemote(QString serverName)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=attachserver --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1329,6 +1343,7 @@ bool ServerManager::setIconPathRemote(QString serverName, QString iconPath)
         arg2 = arg2.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=seticonpath --arg1=" + arg1.toUtf8() + " --arg2=" + arg2.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1347,6 +1362,7 @@ QString ServerManager::getAdminPasswordHashRemote()
     {
         tcpSocket->write("SM/1.1 request --rq=getadminpwhash\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1369,6 +1385,7 @@ bool ServerManager::setAdminPasswordHashRemote(QString passwordHash)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setadminpwhash --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1390,6 +1407,7 @@ bool ServerManager::setAdminPasswordRemote(QString password)
         arg1 = arg1.replace(" ","&nbsp;");
         tcpSocket->write("SM/1.1 action --at=setadminpw --arg1=" + arg1.toUtf8() + "\n");
         tcpSocket->flush();
+        tcpSocket->waitForBytesWritten(5000);
         QStringList args = getArgsFromReturnRemote();
         if (args.at(0) != "ERROR_NORETURN")
         {
@@ -1405,7 +1423,9 @@ bool ServerManager::setAdminPasswordRemote(QString password)
 QStringList ServerManager::getArgsFromReturnRemote()
 {
     QStringList retlist;
-    tcpSocket->waitForReadyRead(5000);
+    int readTrys = 0;
+    returnToReadyRead:
+    tcpSocket->waitForReadyRead(1000);
     if (tcpSocket->canReadLine())
     {
         QByteArray readed = tcpSocket->readLine().trimmed();
@@ -1445,6 +1465,8 @@ QStringList ServerManager::getArgsFromReturnRemote()
         retlist.append(arg2);
         return retlist;
     }
+    readTrys++;
+    if (readTrys <= 5) goto returnToReadyRead;
     retlist.append("ERROR_NORETURN");
     lastReturn = 500;
     return retlist;

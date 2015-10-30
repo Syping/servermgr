@@ -15,7 +15,7 @@
 #* limitations under the License.
 #*****************************************************************************/
 
-QT += core gui widgets
+QT += core
 
 TARGET = servermgrlua
 TEMPLATE = lib
@@ -28,61 +28,61 @@ HEADERS += ServerManagerLua.h
 
 # ORIGINAL LUA
 
-SOURCES += lua/lapi.c \
-    lua/lauxlib.c \
-    lua/lbaselib.c \
-    lua/lbitlib.c \
-    lua/lcode.c \
-    lua/lcorolib.c \
-    lua/lctype.c \
-    lua/ldblib.c \
-    lua/ldebug.c \
-    lua/ldo.c \
-    lua/ldump.c \
-    lua/lfunc.c \
-    lua/lgc.c \
-    lua/linit.c \
-    lua/liolib.c \
-    lua/llex.c \
-    lua/lmathlib.c \
-    lua/lmem.c \
-    lua/loadlib.c \
-    lua/lobject.c \
-    lua/lopcodes.c \
-    lua/loslib.c \
-    lua/lparser.c \
-    lua/lstate.c \
-    lua/lstring.c \
-    lua/lstrlib.c \
-    lua/ltable.c \
-    lua/ltablib.c \
-    lua/ltm.c \
-    lua/lundump.c \
-    lua/lutf8lib.c \
-    lua/lvm.c \
-    lua/lzio.c
+SOURCES += lapi.c \
+    lauxlib.c \
+    lbaselib.c \
+    lbitlib.c \
+    lcode.c \
+    lcorolib.c \
+    lctype.c \
+    ldblib.c \
+    ldebug.c \
+    ldo.c \
+    ldump.c \
+    lfunc.c \
+    lgc.c \
+    linit.c \
+    liolib.c \
+    llex.c \
+    lmathlib.c \
+    lmem.c \
+    loadlib.c \
+    lobject.c \
+    lopcodes.c \
+    loslib.c \
+    lparser.c \
+    lstate.c \
+    lstring.c \
+    lstrlib.c \
+    ltable.c \
+    ltablib.c \
+    ltm.c \
+    lundump.c \
+    lutf8lib.c \
+    lvm.c \
+    lzio.c
 	
-HEADERS += lua/lapi.h \
-    lua/lauxlib.h \
-    lua/lcode.h \
-    lua/lctype.h \
-    lua/ldebug.h \
-    lua/ldo.h \
-    lua/lfunc.h \
-    lua/lgc.h \
-    lua/llex.h \
-    lua/llimits.h \
-    lua/lmem.h \
-    lua/lobject.h \
-    lua/lopcodes.h \
-    lua/lparser.h \
-    lua/lstate.h \
-    lua/lstring.h \
-    lua/ltable.h \
-    lua/ltm.h \
-    lua/lua.h \
-    lua/luaconf.h \
-    lua/lualib.h \
-    lua/lundump.h \
-    lua/lvm.h \
-    lua/lzio.h
+HEADERS += lapi.h \
+    lauxlib.h \
+    lcode.h \
+    lctype.h \
+    ldebug.h \
+    ldo.h \
+    lfunc.h \
+    lgc.h \
+    llex.h \
+    llimits.h \
+    lmem.h \
+    lobject.h \
+    lopcodes.h \
+    lparser.h \
+    lstate.h \
+    lstring.h \
+    ltable.h \
+    ltm.h \
+    lua.h \
+    luaconf.h \
+    lualib.h \
+    lundump.h \
+    lvm.h \
+    lzio.h

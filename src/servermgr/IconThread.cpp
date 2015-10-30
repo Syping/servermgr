@@ -36,7 +36,7 @@ void IconThread::run()
     {
         ServerManager *ismgr = new ServerManager();
         ismgr->ServerManagerMode = ServerManager::RemoteMode;
-        if (ismgr->connectToServer(smgr->getCurrentSessionHostname(),smgr->getCurrentSessionPassword(),smgr->getCurrentSessionPort(),smgr->getCurrentSessionSSL()))
+        if (ismgr->connectToServer(smgr->getCurrentSessionHostname(), smgr->getCurrentSessionPassword(), smgr->getCurrentSessionPort(), smgr->getCurrentSessionSSL()))
         {
             foreach(QString serverName, serverList)
             {

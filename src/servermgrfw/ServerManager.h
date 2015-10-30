@@ -28,10 +28,6 @@
 #include <QSslSocket>
 #endif
 
-#ifdef SM_LUA
-#include "ServerManagerLua.h"
-#endif
-
 class ServerManager : public QObject
 {
     Q_OBJECT
@@ -144,7 +140,6 @@ private:
     bool setAdminPasswordRemote(QString password);
     QStringList getArgsFromReturnRemote();
 
-
 private:
     QSettings *configFile;
 #ifdef DISABLE_SSL
@@ -157,9 +152,6 @@ private:
     int sessionPort;
     bool sessionSSL;
     int lastReturn;
-#ifdef SM_LUA
-    ServerManagerLua SML;
-#endif
 };
 
 #endif // SERVERMANAGER_H

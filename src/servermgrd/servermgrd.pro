@@ -45,11 +45,3 @@ win32: LIBS += -L$$OUT_PWD/../servermgrfw/release -L$$OUT_PWD/../servermgrfw/deb
 unix: LIBS += -L$$OUT_PWD/../servermgrfw -lservermgrfw
 
 CONFIG(DisableSSL): DEFINES += DISABLE_SSL
-
-# INITIALIZE LUA
-CONFIG(WithLua){
-DEFINES += "SM_LUA"
-INCLUDEPATH += ../servermgrlua
-win32: LIBS += -L$$OUT_PWD/../servermgrlua/release -L$$OUT_PWD/../servermgrlua/debug -lservermgrlua
-unix: LIBS += -L$$OUT_PWD/../servermgrlua -lservermgrlua
-}

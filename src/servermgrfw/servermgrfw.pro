@@ -19,7 +19,6 @@ QT       += core gui network widgets
 
 isEqual(QT_MAJOR_VERSION, 5): DEFINES += "QT5"
 
-
 TARGET = servermgrfw
 TEMPLATE = lib
 CONFIG += staticlib
@@ -31,11 +30,3 @@ HEADERS += ServerManager.h \
     PixmapEdit.h
 
 INCLUDEPATH += ../
-
-# INITIALIZE LUA
-CONFIG(WithLua){
-DEFINES += "SM_LUA"
-INCLUDEPATH += ../servermgrlua
-win32: LIBS += -L$$OUT_PWD/../servermgrlua/release -L$$OUT_PWD/../servermgrlua/debug -lservermgrlua
-unix: LIBS += -L$$OUT_PWD/../servermgrlua -lservermgrlua
-}

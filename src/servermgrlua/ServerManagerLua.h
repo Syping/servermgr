@@ -20,58 +20,15 @@
 
 #include <QObject>
 
-extern "C"
-{
-#include "lua/lapi.h"
-#include "lua/lauxlib.h"
-#include "lua/lcode.h"
-#include "lua/lctype.h"
-#include "lua/ldebug.h"
-#include "lua/ldo.h"
-#include "lua/lfunc.h"
-#include "lua/lgc.h"
-#include "lua/llex.h"
-#include "lua/llimits.h"
-#include "lua/lmem.h"
-#include "lua/lobject.h"
-#include "lua/lopcodes.h"
-#include "lua/lparser.h"
-#include "lua/lstate.h"
-#include "lua/lstring.h"
-#include "lua/ltable.h"
-#include "lua/ltm.h"
-#include "lua/lua.h"
-#include "lua/luaconf.h"
-#include "lua/lualib.h"
-#include "lua/lundump.h"
-#include "lua/lvm.h"
-#include "lua/lzio.h"
-}
-
 class ServerManagerLua : public QObject
 {
     Q_OBJECT
-
 public:
     explicit ServerManagerLua(QObject *parent = 0);
-    QString runLuaScriptFile(QString filePath);
-    QString runLuaScriptString(QString luaScript);
-    void closeLuaState();
-    QString getLuaGlobalString(QString globalValue);
-    void setLuaGlobalString(QString globalValue, QString newString);
-    void runLuaFunction(QString function);
-    void registerLuaFunction(QString function, lua_CFunction cfunction);
-    ~ServerManagerLua();
 
-private:
-    void initLua();
-    void setStandardGlobalValues();
-    QString getReturnValue();
-    static int sm_run_background(lua_State *L);
-    static int sm_gui_msgbox(lua_State *L);
-    static int sm_gui_inputbox(lua_State *L);
-    lua_State *lp;
+signals:
 
+public slots:
 };
 
 #endif // SERVERMANAGERLUA_H

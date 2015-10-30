@@ -62,8 +62,8 @@ void core::run()
 
     if (useSSL)
     {
-        client->setPrivateKey("server.key",QSsl::Rsa,QSsl::Pem);
-        client->setLocalCertificate("server.pem",QSsl::Pem);
+        client->setPrivateKey("server.key", QSsl::Rsa,QSsl::Pem);
+        client->setLocalCertificate("server.pem", QSsl::Pem);
         client->setCaCertificates(sslca);
         client->startServerEncryption();
         client->waitForEncrypted(30000);
@@ -315,6 +315,7 @@ void core::readThread(QObject *socket)
                 else if (request == "geticonbytes")
                 {
                     retV = smgr->getIconBytes(arg1, arg2.toInt());
+                    qDebug() << retV << "retV";
                     if (retV == "")
                     {
                         retS = "300";
@@ -360,6 +361,7 @@ void core::readThread(QObject *socket)
                     retV = "";
                     retS = "300";
                 }
+                qDebug() << QString("SM/1.1 return --rq=" + toSMEscape(request) + " --id=" + retS + " --arg1=" + toSMEscape(retV) + "\n").toUtf8() << "line";
                 client->write(QString("SM/1.1 return --rq=" + toSMEscape(request) + " --id=" + retS + " --arg1=" + toSMEscape(retV) + "\n").toUtf8());
                 client->flush();
             }
