@@ -28,9 +28,11 @@ TARGET = servermgrd
 
 SOURCES += main.cpp \
     core.cpp \
+    http.cpp \
     server.cpp
 
 HEADERS  += core.h \
+    http.h \
     server.h
 
 INCLUDEPATH += ../servermgrfw ../
