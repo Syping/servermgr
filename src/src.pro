@@ -21,9 +21,11 @@ CONFIG += ordered
 SUBDIRS += servermgrlua \
     servermgrfw \
     servermgr \
-    servermgrd
+    servermgrd \
+    servermgrterm
 
 CONFIG(WithoutClient): SUBDIRS -= servermgr
+CONFIG(WithoutClient): SUBDIRS -= servermgrterm
 !CONFIG(WithServer): SUBDIRS -= servermgrd
 !CONFIG(WithLua): SUBDIRS -= servermgrlua
 
