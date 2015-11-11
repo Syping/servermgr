@@ -10,7 +10,7 @@ Syping Gaming Team Server Manager
 
 #### Build Server Manager
 
-Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if you can't build with Qt5!)
+Make sure you have Qt5.2 or newer installed
 
 	apt-get install git qtbase5-dev checkinstall
 	git clone https://github.com/Syping/servermgr.git
@@ -19,7 +19,7 @@ Make sure you have Qt5.2 or newer installed (pls dont build with Qt4, only if yo
 	cd build
 	SM_INSTALL_PATH=/usr ../configure
 	make
-	checkinstall --pkgname=servermgr --pkgversion=$(cat "sm_version")
+	checkinstall --pkgname=servermgr --pkgversion=$(cat "../sm_version")
 	
 #### Configure Server Manager with the Server
 
@@ -32,7 +32,3 @@ Server only
 #### Download Server Manager Binary
 
 Windows and Android: https://github.com/Syping/servermgr/releases
-
-#### Download Server Manager Daily Builds (Windows)
-
-Daily-Builds: https://www.syping.de/servermgr_daily/
