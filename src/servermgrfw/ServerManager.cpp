@@ -429,8 +429,14 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
             tcpSocket->write(spw.toUtf8());
             tcpSocket->write("\n");
             tcpSocket->flush();
-            tcpSocket->waitForBytesWritten(5000);
-            tcpSocket->waitForReadyRead(5000);
+            if (!tcpSocket->waitForBytesWritten(5000))
+            {
+                tcpSocket->waitForBytesWritten(5000);
+            }
+            if (!tcpSocket->waitForReadyRead(5000))
+            {
+                tcpSocket->waitForReadyRead(5000);
+            }
             if (tcpSocket->canReadLine())
             {
                 QByteArray readed = tcpSocket->readLine().trimmed();

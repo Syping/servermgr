@@ -131,12 +131,12 @@ void core::run()
                     if (argstr.left(11) == "--password=")
                     {
                         password = fromSMEscape(argstr.remove(0,11));
-                        cout << clientIP + ": Sended Password: " + password.toStdString() + "\n";
+                        cout << clientIP + ": password " + password.toStdString() + "\n";
                     }
                     if (argstr.left(10) == "--version=")
                     {
                         version = fromSMEscape(argstr.remove(0,10));
-                        cout << clientIP + ": Sended Version: " + version.toStdString() + "\n";
+                        cout << clientIP + ": version " + version.toStdString() + "\n";
                     }
                 }
                 clientVersion = version;
@@ -285,6 +285,8 @@ void core::readThread(QObject *socket)
                 if (retV) { retS = "200"; }
                 client->write(QString("SM/1.1 return --at=" + toSMEscape(action) + " --id=" + retS + "\n").toUtf8());
                 client->flush();
+                cout << clientIP + ": action " + action.toStdString() + "\n";
+                cout << clientIP + ": thread go write\n";
             }
             else if (readlist.at(0) == "SM/1.1" && readlist.at(1) == "request")
             {
@@ -315,7 +317,6 @@ void core::readThread(QObject *socket)
                 else if (request == "geticonbytes")
                 {
                     retV = smgr->getIconBytes(arg1, arg2.toInt());
-                    qDebug() << retV << "retV";
                     if (retV == "")
                     {
                         retS = "300";
@@ -361,9 +362,10 @@ void core::readThread(QObject *socket)
                     retV = "";
                     retS = "300";
                 }
-                qDebug() << QString("SM/1.1 return --rq=" + toSMEscape(request) + " --id=" + retS + " --arg1=" + toSMEscape(retV) + "\n").toUtf8() << "line";
                 client->write(QString("SM/1.1 return --rq=" + toSMEscape(request) + " --id=" + retS + " --arg1=" + toSMEscape(retV) + "\n").toUtf8());
                 client->flush();
+                cout << clientIP + ": request " + request.toStdString() + "\n";
+                cout << clientIP + ": thread go write\n";
             }
             else if (readlist.at(0) == "SM/1.1" && readlist.at(1) == "disconnect")
             {
