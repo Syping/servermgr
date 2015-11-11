@@ -45,7 +45,7 @@
     <item>
      <widget class="QStackedWidget" name="swSM">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pLoginDesigned">
        <property name="styleSheet">
@@ -438,7 +438,7 @@ QPushButton:focus:pressed{
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>0</y>
+                 <y>-246</y>
                  <width>147</width>
                  <height>535</height>
                 </rect>
