@@ -45,7 +45,6 @@ frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
     if (!designedMode)
     {
         classicMode = true;
-        ui->configWidget->setStyleSheet("");
     }
     else
     {
@@ -53,6 +52,13 @@ frmConfig::frmConfig(QWidget *parent, QString languagePath, bool designedMode) :
         ui->cmdChangeAdminPassword->setStyle(SMStyle);
         ui->cmdCancel->setStyle(SMStyle);
         ui->cmdOK->setStyle(SMStyle);
+
+        QFile *CWStyleFile = new QFile(":/smstyle/configWidget.qss");
+        if (CWStyleFile->open(QFile::ReadOnly))
+        {
+            ui->configWidget->setStyleSheet(QString::fromUtf8(CWStyleFile->readAll()));
+            CWStyleFile->close();
+        }
     }
     ui->cbSMStyle->setChecked(classicMode);
 

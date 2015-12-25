@@ -166,5 +166,6 @@
     <qresource prefix="/smstyle">
         <file>pServerManager.qss</file>
         <file>pLogin.qss</file>
+        <file>configWidget.qss</file>
     </qresource>
 </RCC>
