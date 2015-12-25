@@ -436,6 +436,7 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
             QString scv = getClassVersion();
             scv = scv.replace("&","&amp;");
             scv = scv.replace(" ","&nbsp;");
+            tcpSocket->write(scv.toUtf8());
             tcpSocket->write("\n");
             tcpSocket->flush();
             if (!tcpSocket->waitForBytesWritten(5000))
