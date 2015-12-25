@@ -1,0 +1,7 @@
+QPushButton{
+	min-width: 0em;
+	image: url(:/icon/minus-icon.png)
+}
+QPushButton:hover{
+	image: url(:/icon/minus-icon_o.png)
+}

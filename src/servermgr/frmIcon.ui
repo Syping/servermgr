@@ -155,15 +155,6 @@
             <height>25</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-min-width: 0em;
-image: url(:/icon/plus-icon.png)
-}
-QPushButton:hover{
-image: url(:/icon/plus-icon_o.png)
-}</string>
-          </property>
           <property name="text">
            <string/>
           </property>
@@ -186,15 +177,6 @@ image: url(:/icon/plus-icon_o.png)
             <width>16777215</width>
             <height>25</height>
            </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-min-width: 0em;
-image: url(:/icon/minus-icon.png)
-}
-QPushButton:hover{
-image: url(:/icon/minus-icon_o.png)
-}</string>
           </property>
           <property name="text">
            <string/>

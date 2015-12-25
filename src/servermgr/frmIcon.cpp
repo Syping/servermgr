@@ -43,8 +43,6 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         ui->cmdPlus->setIcon(QIcon(":/icon/plus-icon_c.png"));
         ui->cmdMinus->setIcon(QIcon(":/icon/minus-icon_c.png"));
 #endif
-        ui->cmdPlus->setStyleSheet("");
-        ui->cmdMinus->setStyleSheet("");
     }
     else
     {
@@ -64,6 +62,18 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         if (IWStyleFile->open(QFile::ReadOnly))
         {
             ui->iconWidget->setStyleSheet(QString::fromUtf8(IWStyleFile->readAll()));
+        }
+
+        QFile *BPStyleFile = new QFile(":/smstyle/cmdPlus.qss");
+        if (BPStyleFile->open(QFile::ReadOnly))
+        {
+            ui->cmdPlus->setStyleSheet(QString::fromUtf8(BPStyleFile->readAll()));
+        }
+
+        QFile *BMStyleFile = new QFile(":/smstyle/cmdMinus.qss");
+        if (BMStyleFile->open(QFile::ReadOnly))
+        {
+            ui->cmdMinus->setStyleSheet(QString::fromUtf8(BMStyleFile->readAll()));
         }
     }
 

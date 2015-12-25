@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/style">
+    <qresource prefix="/">
         <file>tr/ac.png</file>
         <file>tr/ad.png</file>
         <file>tr/ae.png</file>
@@ -168,5 +168,7 @@
         <file>pLogin.qss</file>
         <file>configWidget.qss</file>
         <file>iconWidget.qss</file>
+        <file>cmdMinus.qss</file>
+        <file>cmdPlus.qss</file>
     </qresource>
 </RCC>
