@@ -729,11 +729,12 @@ void frmServerManager::on_cmdAdmin_clicked()
     {
         if (smgr->ServerManagerMode == ServerManager::LocalMode)
         {
+            QInputDialog inputDialog;
             QString passwordHash = smgr->getAdminPasswordHash();
             if (passwordHash == "")
             {
                 bool ok;
-                QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Type a password for the admin mode and host mode"),QLineEdit::Password,"",&ok);
+                QString pwInput = inputDialog.getText(this, tr("Admin"), tr("Type a password for the admin mode and host mode"), QLineEdit::Password, "", &ok, inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
                 if (ok)
                 {
                     smgr->setAdminPassword(pwInput);
@@ -743,7 +744,7 @@ void frmServerManager::on_cmdAdmin_clicked()
             else
             {
                 bool ok;
-                QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Please type the admin/host password"),QLineEdit::Password,"",&ok);
+                QString pwInput = inputDialog.getText(this, tr("Admin"), tr("Please type the admin/host password"), QLineEdit::Password, "", &ok, inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
                 if (ok)
                 {
                     if (smgr->getPasswordHashFromString(pwInput) == passwordHash)

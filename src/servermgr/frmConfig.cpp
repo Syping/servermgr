@@ -279,10 +279,11 @@ void frmConfig::on_cmdChangeAdminPassword_clicked()
     ServerManager *psmgr = new ServerManager();
     psmgr->ServerManagerMode = ServerManager::LocalMode;
     QString passwordHash = psmgr->getAdminPasswordHash();
+    QInputDialog inputDialog;
     if (passwordHash == "")
     {
         bool ok;
-        QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Type a password for the admin mode and host mode"),QLineEdit::Password,"",&ok);
+        QString pwInput = inputDialog.getText(this, tr("Admin"), tr("Type a password for the admin mode and host mode"), QLineEdit::Password, "", &ok, inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
         if (ok)
         {
             psmgr->setAdminPassword(pwInput);
@@ -291,24 +292,24 @@ void frmConfig::on_cmdChangeAdminPassword_clicked()
     else
     {
         bool ok;
-        QString pwInput = QInputDialog::getText(this,tr("Admin"),tr("Please type the admin/host password"),QLineEdit::Password,"",&ok);
+        QString pwInput = inputDialog.getText(this, tr("Admin"), tr("Please type the admin/host password"), QLineEdit::Password, "", &ok, inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
         if (ok)
         {
             if (psmgr->getPasswordHashFromString(pwInput) == passwordHash)
             {
-                pwInput = QInputDialog::getText(this,tr("Admin"),tr("Type a new password for the admin mode and host mode"),QLineEdit::Password,"",&ok);
+                pwInput = inputDialog.getText(this, tr("Admin"), tr("Type a new password for the admin mode and host mode"), QLineEdit::Password, "", &ok, inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
                 if (ok)
                 {
                     psmgr->setAdminPassword(pwInput);
                 }
                 else
                 {
-                    QMessageBox::warning(this,tr("Admin"),tr("Password not changed"));
+                    QMessageBox::warning(this, tr("Admin"), tr("Password not changed"));
                 }
             }
             else
             {
-                QMessageBox::warning(this,tr("Admin"),tr("Incorrect password"));
+                QMessageBox::warning(this, tr("Admin"), tr("Incorrect password"));
             }
         }
     }
