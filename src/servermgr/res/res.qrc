@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/style">
         <file>tr/ac.png</file>
         <file>tr/ad.png</file>
         <file>tr/ae.png</file>
@@ -162,5 +162,8 @@
         <file>pause.png</file>
         <file>play.png</file>
         <file>update.png</file>
+    </qresource>
+    <qresource prefix="/smstyle">
+        <file>pServerManager.qss</file>
     </qresource>
 </RCC>

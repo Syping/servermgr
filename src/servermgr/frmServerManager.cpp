@@ -86,10 +86,15 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     labStats->setText(tr("Welcome to Syping's %1").arg(ProductName));
 
     // SM Style designedMode
-    SMStyleSheet = ui->pServerManager->styleSheet();
-    if (!designedMode)
+    QFile *SMStyleFile = new QFile(":/smstyle/pServerManager.qss");
+    if (SMStyleFile->open(QFile::ReadOnly))
     {
-        ui->pServerManager->setStyleSheet("");
+        SMStyleSheet = SMStyleFile->readAll();
+        SMStyleFile->close();
+    }
+    if (designedMode)
+    {
+        ui->pServerManager->setStyleSheet(SMStyleSheet);
     }
 
     // Change Designed Mode Font size

@@ -1,0 +1,75 @@
+QWidget#pServerManager{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+QWidget#sawcRight{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+QCheckBox{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+QFrame{
+	background-color: rgb(215, 90, 0);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+}
+QListWidget{
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 255, 255);
+	selection-color: rgb(215, 90, 0);
+	border-color: rgb(166, 92, 38);
+	border-style: solid;
+	border-width: 1px;
+}
+QListWidget::item{
+	background-color: rgb(215, 120, 50);
+	color: rgb(255, 255, 255);
+}
+QListWidget::item:hover{
+	background-color: rgb(234, 187, 152);
+}
+QListWidget::item:selected{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 90, 0);
+}
+QPushButton{
+	border-style: ridge;
+	background-color: rgb(215, 70, 25); 
+	color: rgb(255, 255, 255);
+	border-width: 1px;
+	border-radius: 0px;
+	border-color: rgb(215, 120, 50);
+	min-width: 5em;
+	padding: 4px;
+}
+QPushButton:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}
+QPushButton:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus{
+	background-color: rgb(218, 86, 45);
+}
+QPushButton:focus:hover{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+}
+QPushButton:focus:pressed{
+	background-color: rgb(255, 255, 255);
+	color: rgb(215, 70, 25);
+	border-style: inset;
+}
