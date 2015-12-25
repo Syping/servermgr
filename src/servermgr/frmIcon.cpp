@@ -252,6 +252,13 @@ void frmIcon::on_lwIcons_currentItemChanged(QListWidgetItem *currentItem, QListW
     firstChange = true;
 }
 
+void frmIcon::on_lwIcons_itemClicked(QListWidgetItem *item)
+{
+    currentIcon = item->icon();
+    currentIconPath = item->text();
+    ui->imgCurrentIcon->setPixmap(currentIcon.pixmap(squareSize, squareSize));
+}
+
 bool frmIcon::isIconChanged()
 {
     return iconChanged;
@@ -275,4 +282,3 @@ void frmIcon::setSquareSize(int _squareSize)
     ui->imgCurrentIcon->setMaximumSize(QSize(squareSize, squareSize));
     ui->imgCurrentIcon->setGeometry(ui->imgCurrentIcon->geometry().x(), ui->imgCurrentIcon->y(), squareSize, squareSize);
 }
-

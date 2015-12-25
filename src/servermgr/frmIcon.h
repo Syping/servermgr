@@ -50,6 +50,7 @@ private slots:
     void on_cmdMinus_clicked();
     void on_cmdPlus_clicked();
     void on_lwIcons_currentItemChanged(QListWidgetItem *currentItem, QListWidgetItem *previousItem);
+    void on_lwIcons_itemClicked(QListWidgetItem *item);
 
 private:
     QSettings *configFile;
