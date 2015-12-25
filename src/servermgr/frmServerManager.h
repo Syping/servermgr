@@ -76,6 +76,7 @@ private:
     Ui::frmServerManager *ui;
     QListWidget *activeLW;
     ConnectThread *conWT;
+    QString SLStyleSheet;
     QString SMStyleSheet;
     ServerManager *smgr;
     IconThread *iconWT;

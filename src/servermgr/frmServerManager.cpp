@@ -86,14 +86,21 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     labStats->setText(tr("Welcome to Syping's %1").arg(ProductName));
 
     // SM Style designedMode
+    QFile *SLStyleFile = new QFile(":/smstyle/pLogin.qss");
+    if (SLStyleFile->open(QFile::ReadOnly))
+    {
+        SLStyleSheet = QString::fromUtf8(SLStyleFile->readAll());
+        SLStyleFile->close();
+    }
     QFile *SMStyleFile = new QFile(":/smstyle/pServerManager.qss");
     if (SMStyleFile->open(QFile::ReadOnly))
     {
-        SMStyleSheet = SMStyleFile->readAll();
+        SMStyleSheet = QString::fromUtf8(SMStyleFile->readAll());
         SMStyleFile->close();
     }
     if (designedMode)
     {
+        ui->pLogin->setStyleSheet(SLStyleSheet);
         ui->pServerManager->setStyleSheet(SMStyleSheet);
     }
 
@@ -114,10 +121,10 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
 
     // Change Designed Mode Style
     SMStyleTweaks *SMStyle = new SMStyleTweaks;
-    ui->cmdDesignedLogin->setStyle(SMStyle);
     ui->lwServerAndroid->setStyle(SMStyle);
     if (designedMode)
     {
+        ui->cmdDesignedLogin->setStyle(SMStyle);
         ui->pServerManager->setStyle(SMStyle);
     }
 
