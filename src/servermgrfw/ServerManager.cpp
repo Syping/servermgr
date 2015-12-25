@@ -42,6 +42,11 @@ ServerManager::ServerManager(QObject *parent) : QObject(parent)
 
 // Server Manager Public
 
+QString ServerManager::getClassVersion()
+{
+    return "1.2.0";
+}
+
 QStringList ServerManager::getServerList()
 {
     if (ServerManagerMode == LocalMode)
@@ -427,6 +432,10 @@ bool ServerManager::connectToServer(QString hostname, QString password, int port
             spw = spw.replace("&","&amp;");
             spw = spw.replace(" ","&nbsp;");
             tcpSocket->write(spw.toUtf8());
+            tcpSocket->write(" --version=");
+            QString scv = getClassVersion();
+            scv = scv.replace("&","&amp;");
+            scv = scv.replace(" ","&nbsp;");
             tcpSocket->write("\n");
             tcpSocket->flush();
             if (!tcpSocket->waitForBytesWritten(5000))
