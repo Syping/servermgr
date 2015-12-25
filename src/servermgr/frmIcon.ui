@@ -49,71 +49,6 @@
    </property>
    <item>
     <widget class="QWidget" name="iconWidget" native="true">
-     <property name="styleSheet">
-      <string notr="true">QWidget#iconWidget{
-	background-color: rgb(215, 90, 0);
-	color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 255, 255);
-	selection-color: rgb(215, 90, 0);
-}
-QFrame{
-	background-color: rgb(215, 90, 0);
-	color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 255, 255);
-	selection-color: rgb(215, 90, 0);
-}
-QListWidget{
-	background-color: rgb(215, 120, 50);
-	color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 255, 255);
-	selection-color: rgb(215, 90, 0);
-	border-color: rgb(166, 92, 38);
-	border-style: solid;
-	border-width: 1px;
-}
-QListWidget::item{
-	background-color: rgb(215, 120, 50);
-	color: rgb(255, 255, 255);
-}
-QListWidget::item:hover{
-	background-color: rgb(234, 187, 152);
-}
-QListWidget::item:selected{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 90, 0);
-}
-QPushButton{
-	border-style: ridge;
-	background-color: rgb(215, 70, 25); 
-	color: rgb(255, 255, 255);
-	border-width: 1px;
-	border-radius: 0px;
-	border-color: rgb(215, 120, 50);
-	min-width: 5em;
-	padding: 4px;
-}
-QPushButton:pressed{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 70, 25);
-	border-style: inset;
-}
-QPushButton:hover{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 70, 25);
-}
-QPushButton:focus{
-	background-color: rgb(218, 86, 45);
-}
-QPushButton:focus:hover{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 70, 25);
-}
-QPushButton:focus:pressed{
-	background-color: rgb(255, 255, 255);
-	color: rgb(215, 70, 25);
-	border-style: inset;
-}</string>
-     </property>
      <layout class="QVBoxLayout" name="iconWidgetLayout">
       <property name="spacing">
        <number>6</number>
@@ -175,8 +110,7 @@ QPushButton:focus:pressed{
           </property>
           <property name="icon">
            <iconset theme="dialog-ok">
-            <normaloff/>
-           </iconset>
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
@@ -211,7 +145,7 @@ QPushButton:focus:pressed{
          <widget class="QPushButton" name="cmdPlus">
           <property name="minimumSize">
            <size>
-            <width>10</width>
+            <width>2</width>
             <height>25</height>
            </size>
           </property>
@@ -235,8 +169,7 @@ image: url(:/icon/plus-icon_o.png)
           </property>
           <property name="icon">
            <iconset theme="list-add">
-            <normaloff/>
-           </iconset>
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
@@ -244,7 +177,7 @@ image: url(:/icon/plus-icon_o.png)
          <widget class="QPushButton" name="cmdMinus">
           <property name="minimumSize">
            <size>
-            <width>10</width>
+            <width>2</width>
             <height>25</height>
            </size>
           </property>
@@ -268,8 +201,7 @@ image: url(:/icon/minus-icon_o.png)
           </property>
           <property name="icon">
            <iconset theme="list-remove">
-            <normaloff/>
-           </iconset>
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
@@ -299,8 +231,7 @@ image: url(:/icon/minus-icon_o.png)
           </property>
           <property name="icon">
            <iconset theme="dialog-cancel">
-            <normaloff/>
-           </iconset>
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>

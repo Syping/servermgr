@@ -167,5 +167,6 @@
         <file>pServerManager.qss</file>
         <file>pLogin.qss</file>
         <file>configWidget.qss</file>
+        <file>iconWidget.qss</file>
     </qresource>
 </RCC>

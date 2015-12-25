@@ -45,7 +45,6 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
 #endif
         ui->cmdPlus->setStyleSheet("");
         ui->cmdMinus->setStyleSheet("");
-        ui->iconWidget->setStyleSheet("");
     }
     else
     {
@@ -60,6 +59,12 @@ frmIcon::frmIcon(QWidget *parent, bool designedMode) :
         ui->cmdMinus->setStyle(SMStyle);
         ui->cmdCancel->setStyle(SMStyle);
         ui->lwIcons->setStyle(SMStyle);
+
+        QFile *IWStyleFile = new QFile(":/smstyle/iconWidget.qss");
+        if (IWStyleFile->open(QFile::ReadOnly))
+        {
+            ui->iconWidget->setStyleSheet(QString::fromUtf8(IWStyleFile->readAll()));
+        }
     }
 
     ui->iconWidgetLayout->setSpacing(6);
