@@ -48,9 +48,6 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="pLogin">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <layout class="QVBoxLayout" name="vlLoginPage">
         <item>
          <widget class="KPTLabel" name="labDesignedLoginDes">
@@ -125,9 +122,6 @@
             <height>30</height>
            </size>
           </property>
-          <property name="frame">
-           <bool>false</bool>
-          </property>
           <property name="placeholderText">
            <string>Hostname</string>
           </property>
@@ -146,9 +140,6 @@
             <width>16777215</width>
             <height>30</height>
            </size>
-          </property>
-          <property name="frame">
-           <bool>false</bool>
           </property>
           <property name="echoMode">
            <enum>QLineEdit::Password</enum>
@@ -244,8 +235,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>256</width>
-                 <height>289</height>
+                 <width>98</width>
+                 <height>73</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcLeft">
@@ -310,7 +301,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>147</width>
+                 <width>111</width>
                  <height>535</height>
                 </rect>
                </property>

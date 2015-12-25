@@ -102,6 +102,8 @@ frmServerManager::frmServerManager(QString languagePath, bool designedMode, QWid
     {
         ui->pLogin->setStyleSheet(SLStyleSheet);
         ui->pServerManager->setStyleSheet(SMStyleSheet);
+        ui->txtHostnameDesigned->setFrame(false);
+        ui->txtPasswordDesigned->setFrame(false);
     }
 
     // Change Designed Mode Font size
