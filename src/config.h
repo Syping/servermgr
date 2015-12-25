@@ -166,6 +166,8 @@
 #define ProductCompiler "MSVC2012"
 #elif defined(MSVC2013)
 #define ProductCompiler "MSVC2013"
+#elif defined(MSVC2015)
+#define ProductCompiler "MSVC2015"
 #else
 #define ProductCompiler "MSVC"
 #endif
