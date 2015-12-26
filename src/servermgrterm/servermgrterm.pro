@@ -29,6 +29,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp
 
+INCLUDEPATH += ../servermgrfw ../
+
 # UNIX EXTRAS
 unix: !macx: TARGET = servermgrterm
 unix: !macx: DEFINES += SM_UNIX
