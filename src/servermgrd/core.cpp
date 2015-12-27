@@ -105,7 +105,7 @@ void core::run()
         else if (readlist.length() >= 1)
         {
             method = readlist.at(0);
-            client->write("SM/1.1 600 Don't Understand\n");
+            client->write("SM/1.1 600 Unknown Protocol\n");
             client->flush();
             client->disconnectFromHost();
             cout << clientIP + ": core disconnect 600\n";
@@ -113,7 +113,7 @@ void core::run()
         }
         else
         {
-            client->write("SM/1.1 600 Don't Understand\n");
+            client->write("SM/1.1 600 Unknown Protocol\n");
             client->flush();
             client->disconnectFromHost();
             cout << clientIP + ": core disconnect 600\n";
