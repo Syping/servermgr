@@ -16,12 +16,6 @@
     <height>350</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>450</width>
-    <height>350</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Server Manager</string>
   </property>
