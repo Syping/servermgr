@@ -39,7 +39,7 @@
     <item>
      <widget class="QStackedWidget" name="swSM">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pLogin">
        <layout class="QVBoxLayout" name="vlLoginPage">
@@ -229,8 +229,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>98</width>
-                 <height>73</height>
+                 <width>256</width>
+                 <height>289</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="vlSawcLeft">
@@ -295,7 +295,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>111</width>
+                 <width>147</width>
                  <height>535</height>
                 </rect>
                </property>

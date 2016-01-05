@@ -300,11 +300,12 @@ void frmServerManager::on_connectionIssued(bool isSuccess)
 
 void frmServerManager::on_cmdNewServer_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         bool snok;
         QString serverName;
-        serverName = QInputDialog::getText(this,tr("New Server"),tr("Please type a name for this server"),QLineEdit::Normal,"",&snok);
+        serverName = inputDialog.getText(this,tr("New Server"),tr("Please type a name for this server"),QLineEdit::Normal,"",&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
         if (snok)
         {
             if (smgr->addServer(serverName))
@@ -354,6 +355,7 @@ void frmServerManager::on_cmdDeleteServer_clicked()
 
 void frmServerManager::on_cmdCStart_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
@@ -363,7 +365,7 @@ void frmServerManager::on_cmdCStart_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString serverStart = smgr->getStartCommand(serverName);
-            serverStart = QInputDialog::getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok);
+            serverStart = inputDialog.getText(this,tr("Choose Start"),tr("Please type in start command"),QLineEdit::Normal,serverStart,&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
             if (snok)
             {
                 if (!smgr->setStartCommand(serverName, serverStart))
@@ -385,6 +387,7 @@ void frmServerManager::on_cmdCStart_clicked()
 
 void frmServerManager::on_cmdCStop_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
@@ -394,7 +397,7 @@ void frmServerManager::on_cmdCStop_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString serverStop = smgr->getStopCommand(serverName);
-            serverStop = QInputDialog::getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok);
+            serverStop = inputDialog.getText(this,tr("Choose Stop"),tr("Please type in stop command"),QLineEdit::Normal,serverStop,&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
             if (snok)
             {
                 if (!smgr->setStopCommand(serverName, serverStop))
@@ -416,6 +419,7 @@ void frmServerManager::on_cmdCStop_clicked()
 
 void frmServerManager::on_cmdCConfig_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
@@ -425,7 +429,7 @@ void frmServerManager::on_cmdCConfig_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString serverConfig = smgr->getConfigCommand(serverName);
-            serverConfig = QInputDialog::getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok);
+            serverConfig = inputDialog.getText(this,tr("Choose Config"),tr("Please type in config command"),QLineEdit::Normal,serverConfig,&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
             if (snok)
             {
                 if (!smgr->setConfigCommand(serverName, serverConfig))
@@ -447,6 +451,7 @@ void frmServerManager::on_cmdCConfig_clicked()
 
 void frmServerManager::on_cmdCUpdate_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
@@ -456,7 +461,7 @@ void frmServerManager::on_cmdCUpdate_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString serverUpdate = smgr->getUpdateCommand(serverName);
-            serverUpdate = QInputDialog::getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok);
+            serverUpdate = inputDialog.getText(this,tr("Choose Update"),tr("Please type in update command"),QLineEdit::Normal,serverUpdate,&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
             if (snok)
             {
                 if (!smgr->setUpdateCommand(serverName, serverUpdate))
@@ -478,6 +483,7 @@ void frmServerManager::on_cmdCUpdate_clicked()
 
 void frmServerManager::on_cmdCAttach_clicked()
 {
+    QInputDialog inputDialog;
     if (smgr->isConnected())
     {
         QList<QListWidgetItem*> selectedItems = activeLW->selectedItems();
@@ -487,7 +493,7 @@ void frmServerManager::on_cmdCAttach_clicked()
             QListWidgetItem *serverItem = selectedItems.at(0);
             QString serverName = serverItem->text();
             QString serverAttach = smgr->getAttachCommand(serverName);
-            serverAttach = QInputDialog::getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok);
+            serverAttach = inputDialog.getText(this,tr("Choose Attach"),tr("Please type in attach command"),QLineEdit::Normal,serverAttach,&snok,inputDialog.windowFlags()^Qt::WindowContextHelpButtonHint);
             if (snok)
             {
                 if (!smgr->setAttachCommand(serverName, serverAttach))
