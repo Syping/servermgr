@@ -150,7 +150,7 @@ void core::run()
                 {
                     client->write("SM/1.1 return --at=login --id=200 --description=Success\n");
                     client->flush();
-                    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]:: core connected 200\n";
+                    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core connected 200\n";
                     readThread(client);
                     return;
                 }
