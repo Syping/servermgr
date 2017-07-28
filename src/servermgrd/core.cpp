@@ -28,10 +28,10 @@
 #include <iostream>
 using namespace std;
 
-core::core(qintptr handle, ServerManager *smgr, bool useSSL, QObject *parent) :
-    QThread(parent), handle(handle), smgr(smgr), useSSL(useSSL)
+core::core(qintptr handle, ServerManager *smgr, bool useSSL, QString pemFile, QString keyFile, QString caFile, QObject *parent) :
+    QThread(parent), handle(handle), smgr(smgr), useSSL(useSSL), pemFile(pemFile), keyFile(keyFile), caFile(caFile)
 {
-    sslca = QSslCertificate::fromPath(QLatin1String("ca.pem"));
+    sslca = QSslCertificate::fromPath(caFile);
     workInThread = true;
 }
 
@@ -58,33 +58,36 @@ void core::run()
         qclientIP.insert(qclientIP.length(),"]");
     }
     clientIP = qclientIP.toStdString();
-    cout << clientIP + ": core connect\n";
+    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core connect\n";
 
     if (useSSL)
     {
-        client->setPrivateKey("server.key", QSsl::Rsa,QSsl::Pem);
-        client->setLocalCertificate("server.pem", QSsl::Pem);
-        client->setCaCertificates(sslca);
+        client->setPrivateKey(keyFile, QSsl::Rsa,QSsl::Pem);
+        client->setLocalCertificate(pemFile, QSsl::Pem);
+        if (QFile::exists(caFile))
+        {
+            client->setCaCertificates(sslca);
+        }
         client->startServerEncryption();
         client->waitForEncrypted(30000);
         if (client->isEncrypted())
         {
-            cout << clientIP + ": core ssl\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core ssl\n";
         }
         else
         {
-            cout << clientIP + ": core ssl failed\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core ssl failed\n";
             client->disconnectFromHost();
             return;
         }
     }
 
     client->waitForReadyRead(5000);
-    cout << clientIP + ": core wait read\n";
+    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core wait read\n";
 
     if (client->canReadLine())
     {
-        cout << clientIP + ": core go read\n";
+        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core go read\n";
         QByteArray readed = client->readLine().trimmed();
         QString readstr = QString::fromUtf8(readed);
         QStringList readlist = readstr.split(" ");
@@ -108,7 +111,7 @@ void core::run()
             client->write("SM/1.1 600 Unknown Protocol\n");
             client->flush();
             client->disconnectFromHost();
-            cout << clientIP + ": core disconnect 600\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnect 600\n";
             return;
         }
         else
@@ -116,14 +119,14 @@ void core::run()
             client->write("SM/1.1 600 Unknown Protocol\n");
             client->flush();
             client->disconnectFromHost();
-            cout << clientIP + ": core disconnect 600\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnect 600\n";
             return;
         }
         if (method == "SM/1.1" && address == "login")
         {
             if (readlist.length() >= 2)
             {
-                cout << clientIP + ": login\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: login\n";
                 QString password;
                 QString version = "1.1";
                 foreach(QString argstr,readlist)
@@ -131,12 +134,12 @@ void core::run()
                     if (argstr.left(11) == "--password=")
                     {
                         password = fromSMEscape(argstr.remove(0,11));
-                        cout << clientIP + ": password " + password.toStdString() + "\n";
+                        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: password " + password.toStdString() + "\n";
                     }
                     if (argstr.left(10) == "--version=")
                     {
                         version = fromSMEscape(argstr.remove(0,10));
-                        cout << clientIP + ": version " + version.toStdString() + "\n";
+                        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: version " + version.toStdString() + "\n";
                     }
                 }
                 clientVersion = version;
@@ -144,7 +147,7 @@ void core::run()
                 {
                     client->write("SM/1.1 return --at=login --id=200 --description=Success\n");
                     client->flush();
-                    cout << clientIP + ": core connected 200\n";
+                    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]:: core connected 200\n";
                     readThread(client);
                     return;
                 }
@@ -152,18 +155,18 @@ void core::run()
                 {
                     client->write("SM/1.1 return --at=login --id=404 --description=Not&nbsp;Found\n");
                     client->flush();
-                    cout << clientIP + ": core disconnected 404\n";
+                    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected 404\n";
                     client->disconnectFromHost();
                     return;
                 }
             }
-            cout << clientIP + ": core disconnected ep\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected ep\n";
             client->write("SM/1.1 return --at=connect --id=ep --description=Error&nbsp;in&nbsp;Protocol\n");
             client->flush();
             client->disconnectFromHost();
             return;
         }
-        cout << clientIP + ": core disconnected up\n";
+        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected up\n";
         client->write("SM/1.1 return --at=connect --id=up --description=Unknown&nbsp;Protocol\n");
         client->flush();
         client->disconnectFromHost();
@@ -171,7 +174,7 @@ void core::run()
     }
     else
     {
-        cout << clientIP + ": core disconnected nr\n";
+        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected nr\n";
         client->write("SM/1.1 return --at=connect --id=nr --description=No&nbsp;Response\n");
         client->flush();
         client->disconnectFromHost();
@@ -181,7 +184,7 @@ void core::run()
 
 void core::readThread(QObject *socket)
 {
-    qDebug() << "Success login";
+    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: success login\n";
 #ifndef DISABLE_SSL
     QSslSocket *client = (QSslSocket*)socket;
 #else
@@ -192,7 +195,7 @@ void core::readThread(QObject *socket)
         client->waitForReadyRead(1000);
         if (client->canReadLine())
         {
-            cout << clientIP + ": thread go read\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: thread go read\n";
             QByteArray readed = client->readLine().trimmed();
             QString readstr = QString::fromUtf8(readed);
             QStringList readlist = readstr.split(" ");
@@ -285,8 +288,8 @@ void core::readThread(QObject *socket)
                 if (retV) { retS = "200"; }
                 client->write(QString("SM/1.1 return --at=" + toSMEscape(action) + " --id=" + retS + "\n").toUtf8());
                 client->flush();
-                cout << clientIP + ": action " + action.toStdString() + "\n";
-                cout << clientIP + ": thread go write\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: action " + action.toStdString() + "\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: thread go write\n";
             }
             else if (readlist.at(0) == "SM/1.1" && readlist.at(1) == "request")
             {
@@ -364,12 +367,12 @@ void core::readThread(QObject *socket)
                 }
                 client->write(QString("SM/1.1 return --rq=" + toSMEscape(request) + " --id=" + retS + " --arg1=" + toSMEscape(retV) + "\n").toUtf8());
                 client->flush();
-                cout << clientIP + ": request " + request.toStdString() + "\n";
-                cout << clientIP + ": thread go write\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: request " + request.toStdString() + "\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: thread go write\n";
             }
             else if (readlist.at(0) == "SM/1.1" && readlist.at(1) == "disconnect")
             {
-                cout << clientIP + ": core disconnected dk\n";
+                cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected dk\n";
                 client->disconnectFromHost();
                 workInThread = false;
             }
@@ -381,7 +384,7 @@ void core::readThread(QObject *socket)
         }
         else if (client->state() == QTcpSocket::UnconnectedState)
         {
-            cout << clientIP + ": core disconnected nr\n";
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core disconnected nr\n";
             workInThread = false;
         }
     }

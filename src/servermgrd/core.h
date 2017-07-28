@@ -34,13 +34,16 @@ class core : public QThread
 {
     Q_OBJECT
 public:
-    core(qintptr handle, ServerManager *smgr, bool useSSL, QObject *parent = 0);
+    core(qintptr handle, ServerManager *smgr, bool useSSL, QString pemFile, QString keyFile, QString caFile, QObject *parent = 0);
     void run();
 
 private:
     qintptr handle;
     ServerManager *smgr;
     bool useSSL;
+    QString pemFile;
+    QString keyFile;
+    QString caFile;
 
     bool workInThread;
     string clientIP;

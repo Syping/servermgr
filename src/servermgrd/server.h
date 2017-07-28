@@ -28,11 +28,14 @@ class server : public QTcpServer
 {
     Q_OBJECT
 public:
-    server(ServerManager *smgr, bool useSSL, QObject *parent = 0);
+    server(ServerManager *smgr, bool useSSL, QString pemFile, QString keyFile, QString caFile, QObject *parent = 0);
 
 private:
     ServerManager *smgr;
     bool useSSL;
+    QString pemFile;
+    QString keyFile;
+    QString caFile;
 
 protected:
     void incomingConnection(qintptr handle);

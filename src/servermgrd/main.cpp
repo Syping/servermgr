@@ -33,14 +33,23 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QFileInfo(a.applicationFilePath()).absoluteDir().absolutePath());
 
     // Read Settings
-    QSettings settings("sm.ini",QSettings::IniFormat);
+    QSettings settings("sm.ini", QSettings::IniFormat);
     settings.beginGroup("Server");
-    int port = settings.value("Port",9509).toInt();
+    int port = settings.value("Port", 9509).toInt();
     bool useSSL = false;
+    QString pemFile;
+    QString keyFile;
+    QString caFile;
 #ifndef DISABLE_SSL
-    useSSL = settings.value("EnableSSL",false).toBool();
+    useSSL = settings.value("EnableSSL", false).toBool();
+    pemFile = settings.value("CertPem", "server.pem").toString();
+    keyFile = settings.value("CertKey", "server.key").toString();
+    caFile = settings.value("CertCa", "ca.pem").toString();
 #else
-    Q_UNUSED(useSSL);
+    Q_UNUSED(useSSL)
+    Q_UNUSED(pemFile)
+    Q_UNUSED(keyFile)
+    Q_UNUSED(caFile)
 #endif
     settings.endGroup();
 
@@ -49,7 +58,7 @@ int main(int argc, char *argv[])
     smgr->ServerManagerMode = ServerManager::LocalMode;
 
     // Start Server
-    server *nServer = new server(smgr, useSSL);
+    server *nServer = new server(smgr, useSSL, pemFile, keyFile, caFile);
 #ifdef QT5
     if (!nServer->listen(QHostAddress::AnyIPv4, port))
     {
@@ -63,7 +72,7 @@ int main(int argc, char *argv[])
 #endif
     else
     {
-        server *v6Server = new server(smgr, useSSL);
+        server *v6Server = new server(smgr, useSSL, pemFile, keyFile, caFile);
         if (!v6Server->listen(QHostAddress::AnyIPv6, port))
         {
             qDebug() << "IPv6 bind failed, continue...";
@@ -72,9 +81,9 @@ int main(int argc, char *argv[])
         cout << "|                               |\n";
         cout << "|       Syping SM Server        |\n";
 #if defined(Q_WS_X11)
-        cout << "|       Version 1.1.2 LR1       |\n";
+        cout << "|       Version 1.2.0 LR1       |\n";
 #else
-        cout << "|       Version 1.1.2 R1        |\n";
+        cout << "|       Version 1.2.0 R1        |\n";
 #endif
         cout << "|                               |\n";
         cout << "|       Port: ";
@@ -90,7 +99,7 @@ int main(int argc, char *argv[])
         cout << "---------------------------------\n\n";
     }
 
-    cout << "Server intialized\n";
+    cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << "]: Server intialized\n";
 
     return a.exec();
 }

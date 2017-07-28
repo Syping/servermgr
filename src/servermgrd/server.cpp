@@ -18,15 +18,15 @@
 #include "core.h"
 #include "server.h"
 
-server::server(ServerManager *smgr, bool useSSL, QObject *parent) :
-    QTcpServer(parent), smgr(smgr), useSSL(useSSL)
+server::server(ServerManager *smgr, bool useSSL, QString pemFile, QString keyFile, QString caFile, QObject *parent) :
+    QTcpServer(parent), smgr(smgr), useSSL(useSSL), pemFile(pemFile), keyFile(keyFile), caFile(caFile)
 {
 }
 
 void server::incomingConnection(qintptr handle)
 {
     qDebug() << "Client incoming";
-    core *cCore = new core(handle, smgr, useSSL, this);
+    core *cCore = new core(handle, smgr, useSSL, pemFile, keyFile, caFile, this);
     connect(cCore, SIGNAL(finished()), cCore, SLOT(deleteLater()));
     cCore->start();
 }
