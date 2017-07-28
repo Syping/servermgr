@@ -62,11 +62,14 @@ void core::run()
 
     if (useSSL)
     {
-        client->setPrivateKey(keyFile, QSsl::Rsa,QSsl::Pem);
+        client->setPrivateKey(keyFile, QSsl::Rsa, QSsl::Pem);
+        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core key " << pemFile.toStdString() << "\n";
         client->setLocalCertificate(pemFile, QSsl::Pem);
+        cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core pem " << keyFile.toStdString() << "\n";
         if (QFile::exists(caFile))
         {
             client->setCaCertificates(sslca);
+            cout << "[" << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss").toStdString() << " @ " << clientIP << "]: core ca " << caFile.toStdString() << "\n";
         }
         client->startServerEncryption();
         client->waitForEncrypted(30000);

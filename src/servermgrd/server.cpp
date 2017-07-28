@@ -25,7 +25,6 @@ server::server(ServerManager *smgr, bool useSSL, QString pemFile, QString keyFil
 
 void server::incomingConnection(qintptr handle)
 {
-    qDebug() << "Client incoming";
     core *cCore = new core(handle, smgr, useSSL, pemFile, keyFile, caFile, this);
     connect(cCore, SIGNAL(finished()), cCore, SLOT(deleteLater()));
     cCore->start();
